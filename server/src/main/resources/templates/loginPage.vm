@@ -1,0 +1,74 @@
+#set($layout="/layout/layout_no_menu.vm")
+
+<style type="text/css">
+
+    .login-body {
+        height: 400px;
+    }
+
+    .login-form {
+        width: 350px;
+        margin-top: 200px;
+        margin-left: 36%;
+        text-align: center;
+    }
+
+    .login-error{
+        display: none;
+        color: red;
+    }
+</style>
+
+<script type="text/javascript">
+
+    (function ($) {
+        $.getUrlParam = function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    })(jQuery);
+
+    $(function () {
+        if ($.getUrlParam('error')){
+            $(".login-error").show();
+        }
+    })
+
+</script>
+
+
+<div class="login-body">
+
+    <div class="login-form">
+
+        <form class="form-horizontal" method="post" action="/login">
+
+            <input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
+
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    </span>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Account">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                    </span>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default btn-block">登录</button>
+            </div>
+        </form>
+
+        <span class="login-error">您输入的账号或密码有误！请重试！</span>
+
+    </div>
+
+</div>

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/common.css" />
+</head>
+<body>
+
+    #parse("/common/header.vm")
+
+<div class="content">
+    <div class="content-info">
+        <div class="content-main">
+            $screen_content
+        </div>
+    </div>
+
+</div>
+
+    #parse("/common/footer.vm")
+
+</body>
+</html>

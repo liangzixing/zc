@@ -1,0 +1,21 @@
+
+<div class="dropdown menu">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+        下拉菜单<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">菜单1</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">菜单2</a></li>
+        <!--设置菜单项状态为当前状态（.active）-->
+        <li role="presentation" class="active"><a role="menuitem" tabindex="-1" href="#">菜单3</a></li>
+        <!--设置菜单项状态为禁用状态（.disabled）-->
+        <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">菜单4</a></li>
+        <!--下拉分隔线-->
+        <li role="presentation" class="divider"></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">菜单4</a></li>
+        <li role="presentation" class="divider"></li>
+        <li role="presentation" class="dropdown-header">菜单标题</li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">菜单5</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">菜单6</a></li>
+    </ul>
+</div>

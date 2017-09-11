@@ -1,0 +1,15 @@
+.header{
+    height: 30px;
+    text-align: center;
+    background-color: #ddd;
+    font-size: 22px;
+}
+
+.footer{
+    text-align: center;
+    margin-top: 3px;
+}
+
+.footer .copyright{
+    color: gray;
+}
