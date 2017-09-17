@@ -1,0 +1,230 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<style type="text/css">
+    .data-table {
+        width: 960px;
+        margin-left: 10px;
+    }
+
+    .search-panel {
+        float: right;
+        margin-right: 20px;
+    }
+
+    .search-panel input {
+        width: 150px;
+    }
+
+</style>
+
+<script type="text/javascript">
+
+    function doSearch(value) {
+        alert('You input: ' + value);
+    }
+
+    $(function () {
+        $('#dg').datagrid({
+            url: '/user/queryUsers',
+            toolbar: "#toolbar",
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: true,
+            idField: 'id',
+            columns: [[
+                {field: 'userName', title: '登录名', width: 50},
+                {field: 'mobile', title: '电话', width: 50},
+                {
+                    field: 'role', title: '角色', width: 150, align: 'left', formatter: function (value, row, index) {
+                    if (row.roles) {
+                        var roleList = "";
+                        for (var roleIndex in row.roles) {
+                            roleList += row.roles[roleIndex].name;
+                            roleList += ", ";
+                        }
+                        return roleList;
+                    }
+                    return "未配置角色";
+                }
+                },
+                {
+                    field: 'gmtCreate', title: '创建时间', width: 50, formatter: function (value, row, index) {
+                    return "2017-1-2 11:11:11"
+                }
+                }
+            ]],
+            queryParams: {
+                "_csrf": $("#_csrf").val()
+            }
+        });
+
+        $('#cc').combobox({
+            url: '/role/list',
+            textField: "name",
+            valueField: 'id',
+            method: 'get',
+            multiple: true,
+            panelHeight: 'auto',
+            label: '角色（多选）:',
+            width: '280px',
+            required: true
+        });
+    })
+
+</script>
+
+<div>
+    <table id="dg" title="用户列表" class="easyui-datagrid data-table" style="height: 400px">
+    </table>
+
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">New
+            User</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Edit
+            User</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+           onclick="destroyUser()">Remove User</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" plain="true"
+           onclick="resetPasswordForAdmin()">Reset Password</a>
+
+    ##        <span class="search-panel"><input class="easyui-searchbox" data-options="prompt:'请输入姓名或电话搜索',searcher:doSearch"></span>
+
+    </div>
+
+    <input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+    <div id="dlg" class="easyui-dialog" style="width:400px"
+         closed="true" buttons="#dlg-buttons">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+
+            <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc">User Information</div>
+            <div style="margin-bottom:10px">
+                <input name="userName" id="userName" class="easyui-textbox" required="true" label="登录名:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="mobile" id="mobile"class="easyui-numberbox" required="true" label="电话:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="cc" name="roleId" value="01">
+            </div>
+        </form>
+    </div>
+
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()"
+           style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    var url;
+    function newUser() {
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'New User');
+        $('#fm').form('clear');
+        $("#userName").textbox('enable');
+        url = '/user/add';
+    }
+
+    function editUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Edit User');
+            $('#fm').form('load', row);
+            url = '/user/edit?id=' + row.id;
+
+            var roles = $('#cc').combobox("getData");
+
+            var roleSelected = new Array();
+
+            for (var i in row.roles) {
+                var role = row.roles[i];
+                roleSelected.push(role.id);
+            }
+
+            $('#cc').combobox("setValues", roleSelected);
+
+            $("#userName").textbox('disable');
+        }
+    }
+    function saveUser() {
+        $('#fm').form('submit', {
+            url: url,
+            onSubmit: function (param) {
+
+                param._csrf = $("#_csrf").val();
+
+                param.roleIds = $('#cc').combobox("getValues");
+
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close');        // close the dialog
+                    $('#dg').datagrid('reload');    // reload the user data
+                }
+            }
+        });
+    }
+
+
+    function destroyUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $.messager.confirm('Confirm', 'Are you sure you want to destroy this user?', function (r) {
+                if (r) {
+                    $.get('/user/delete', {id: row.id}, function (result) {
+                        if (result.success) {
+                            $('#dg').datagrid('reload');    // reload the user data
+                        } else {
+                            $.messager.show({    // show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    function resetPasswordForAdmin() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $.messager.confirm('Confirm', 'Are you sure you want to reset this user password?', function (r) {
+                if (r) {
+                    $.get('/user/resetPassWordForAdmin', {id: row.id}, function (result) {
+                        if (result.success) {
+                            $.messager.show({    // show error message
+                                title: 'Success',
+                                msg: "Operate success!"
+                            });
+                        } else {
+                            $.messager.show({    // show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+</script>

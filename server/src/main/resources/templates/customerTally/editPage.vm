@@ -1,0 +1,64 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<div class="customer-edit">
+    <div class="easyui-panel" title="Ajax Form" style="width:300px;padding:10px;">
+        <form id="ff" action="form1_proc.php" method="post" enctype="multipart/form-data">
+
+            <input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+            <table>
+                <tr>
+                    <td>公司名称:</td>
+                    <td><input name="company" class="f1 easyui-textbox"></input></td>
+                </tr>
+                <tr>
+                    <td>公司统一信用代码:</td>
+                    <td><input name="companyCode" class="f1 easyui-textbox"></input></td>
+                </tr>
+                <tr>
+                    <td>联系人:</td>
+                    <td><input name="contactName" class="f1 easyui-textbox"></input></td>
+                </tr>
+                <tr>
+                    <td>联系电话:</td>
+                    <td><input name="contactMobile" class="f1 easyui-textbox"></input></td>
+                </tr>
+                <tr>
+                    <td>联系邮箱:</td>
+                    <td><input name="contactEmail" class="f1 easyui-textbox"></input></td>
+                </tr>
+                <tr>
+                    <td>账户类型:</td>
+                    <td><input name="accountType" class="f1 easyui-textbox" placeholder="如：招商银行卡、支付宝"></input></td>
+                </tr>
+                <tr>
+                    <td>账户名:</td>
+                    <td><input name="account" class="f1 easyui-filebox"></input></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Submit"></input></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<style scoped>
+    .f1{
+        width:200px;
+    }
+</style>
+<script type="text/javascript">
+    $(function(){
+        $('#ff').form({
+            success:function(data){
+                $.messager.alert('Info', data, 'info');
+            }
+        });
+    });
+</script>

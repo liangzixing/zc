@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.biz.customer.domain.dao.CustomerTallyDOMapper">
+  <resultMap id="BaseResultMap" type="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="from_account_type" jdbcType="VARCHAR" property="fromAccountType" />
+    <result column="from_account" jdbcType="VARCHAR" property="fromAccount" />
+    <result column="to_account_type" jdbcType="VARCHAR" property="toAccountType" />
+    <result column="to_account" jdbcType="VARCHAR" property="toAccount" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="customer_balance" jdbcType="INTEGER" property="customerBalance" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="credentials_img_url" jdbcType="VARCHAR" property="credentialsImgUrl" />
+    <result column="reporter_id" jdbcType="INTEGER" property="reporterId" />
+    <result column="reporter_name" jdbcType="VARCHAR" property="reporterName" />
+    <result column="report_date" jdbcType="TIMESTAMP" property="reportDate" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, customer_id, type, from_account_type, from_account, to_account_type, to_account, 
+    amount, customer_balance, description, credentials_img_url, reporter_id, reporter_name, 
+    report_date, is_deleted, gmt_create, creator, gmt_modified, modifier
+  </sql>
+  <select id="selectByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from customer_tally
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_tally
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from customer_tally
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDOExample">
+    delete from customer_tally
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO" useGeneratedKeys="true" keyProperty="id">
+    insert into customer_tally (customer_id, type,
+      from_account_type, from_account, to_account_type, 
+      to_account, amount, customer_balance, 
+      description, credentials_img_url, reporter_id, 
+      reporter_name, report_date, is_deleted, 
+      gmt_create, creator, gmt_modified, 
+      modifier)
+    values (#{customerId,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+      #{fromAccountType,jdbcType=VARCHAR}, #{fromAccount,jdbcType=VARCHAR}, #{toAccountType,jdbcType=VARCHAR}, 
+      #{toAccount,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{customerBalance,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{credentialsImgUrl,jdbcType=VARCHAR}, #{reporterId,jdbcType=INTEGER}, 
+      #{reporterName,jdbcType=VARCHAR}, #{reportDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
+    insert into customer_tally
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="fromAccountType != null">
+        from_account_type,
+      </if>
+      <if test="fromAccount != null">
+        from_account,
+      </if>
+      <if test="toAccountType != null">
+        to_account_type,
+      </if>
+      <if test="toAccount != null">
+        to_account,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="customerBalance != null">
+        customer_balance,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="credentialsImgUrl != null">
+        credentials_img_url,
+      </if>
+      <if test="reporterId != null">
+        reporter_id,
+      </if>
+      <if test="reporterName != null">
+        reporter_name,
+      </if>
+      <if test="reportDate != null">
+        report_date,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAccountType != null">
+        #{fromAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAccount != null">
+        #{fromAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="toAccountType != null">
+        #{toAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="toAccount != null">
+        #{toAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="customerBalance != null">
+        #{customerBalance,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsImgUrl != null">
+        #{credentialsImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="reporterId != null">
+        #{reporterId,jdbcType=INTEGER},
+      </if>
+      <if test="reporterName != null">
+        #{reporterName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null">
+        #{reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDOExample" resultType="java.lang.Long">
+    select count(*) from customer_tally
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update customer_tally
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerId != null">
+        customer_id = #{record.customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromAccountType != null">
+        from_account_type = #{record.fromAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromAccount != null">
+        from_account = #{record.fromAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toAccountType != null">
+        to_account_type = #{record.toAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toAccount != null">
+        to_account = #{record.toAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerBalance != null">
+        customer_balance = #{record.customerBalance,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.credentialsImgUrl != null">
+        credentials_img_url = #{record.credentialsImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reporterId != null">
+        reporter_id = #{record.reporterId,jdbcType=INTEGER},
+      </if>
+      <if test="record.reporterName != null">
+        reporter_name = #{record.reporterName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reportDate != null">
+        report_date = #{record.reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update customer_tally
+    set id = #{record.id,jdbcType=INTEGER},
+      customer_id = #{record.customerId,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      from_account_type = #{record.fromAccountType,jdbcType=VARCHAR},
+      from_account = #{record.fromAccount,jdbcType=VARCHAR},
+      to_account_type = #{record.toAccountType,jdbcType=VARCHAR},
+      to_account = #{record.toAccount,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=INTEGER},
+      customer_balance = #{record.customerBalance,jdbcType=INTEGER},
+      description = #{record.description,jdbcType=VARCHAR},
+      credentials_img_url = #{record.credentialsImgUrl,jdbcType=VARCHAR},
+      reporter_id = #{record.reporterId,jdbcType=INTEGER},
+      reporter_name = #{record.reporterName,jdbcType=VARCHAR},
+      report_date = #{record.reportDate,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      modifier = #{record.modifier,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
+    update customer_tally
+    <set>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAccountType != null">
+        from_account_type = #{fromAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAccount != null">
+        from_account = #{fromAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="toAccountType != null">
+        to_account_type = #{toAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="toAccount != null">
+        to_account = #{toAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="customerBalance != null">
+        customer_balance = #{customerBalance,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsImgUrl != null">
+        credentials_img_url = #{credentialsImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="reporterId != null">
+        reporter_id = #{reporterId,jdbcType=INTEGER},
+      </if>
+      <if test="reporterName != null">
+        reporter_name = #{reporterName,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null">
+        report_date = #{reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
+    update customer_tally
+    set customer_id = #{customerId,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      from_account_type = #{fromAccountType,jdbcType=VARCHAR},
+      from_account = #{fromAccount,jdbcType=VARCHAR},
+      to_account_type = #{toAccountType,jdbcType=VARCHAR},
+      to_account = #{toAccount,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      customer_balance = #{customerBalance,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      credentials_img_url = #{credentialsImgUrl,jdbcType=VARCHAR},
+      reporter_id = #{reporterId,jdbcType=INTEGER},
+      reporter_name = #{reporterName,jdbcType=VARCHAR},
+      report_date = #{reportDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,346 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<style type="text/css">
+
+    .f1 {
+        width: 300px;
+    }
+
+    .edit-table td {
+        height: 35px;
+    }
+
+    .search-customer {
+        float: right;
+        margin-right: 30px;
+    }
+
+    .dl{
+        float: left;
+        margin-left: 30px;
+    }
+
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $('#dg').datagrid({
+            url: '/customer/pagedQuery',
+            toolbar: "#toolbar",
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: true,
+            autoRowHeight: true,
+            pageSize: 20,
+            idField: 'id',
+            columns: [[
+                {field: 'company', title: '公司名', width: 120},
+                {field: 'contactName', title: '联系人', width: 50},
+                {field: 'contactMobile', title: '联系电话', width: 80},
+                {field: 'accountType', title: '账户类型', width: 80},
+                {field: 'account', title: '账户号', width: 120},
+                {field: 'balance', title: '余额(分)', width: 30},
+                {
+                    field: 'managers',
+                    title: '管理员',
+                    width: 100,
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        if (row.managers) {
+                            var managerList = "";
+                            for (var index in row.managers) {
+                                managerList += row.managers[index].userName;
+                                managerList += ", ";
+                            }
+                            return managerList;
+                        }
+                        return "未配置管理员";
+                    }
+                }
+            ]],
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+            },
+
+            onBeforeLoad: function (params) {
+                params.currentPage = params.page;
+                params.pageSize = params.rows;
+            }
+        });
+
+        $('#ss').searchbox({
+            searcher:function(value,name){
+                $('#dl-wait-choose').datalist({
+                    queryParams:{
+                        queryString:value
+                    }
+                })
+            },
+            width:'300px',
+            prompt:'请输入手机或姓名查找备选人员'
+        });
+
+        $('#dl-wait-choose').datalist({
+            url: '/user/querySimple',
+            method:'get',
+            lines: true,
+            textField:'userName',
+            valueField:'id',
+            width:'150px',
+            height: '120px',
+            onDblClickRow:function(index, row){
+
+                var rows = $('#dl-choose').datalist("getRows");
+
+                for (var i in rows){
+                    if (row.id == rows[i].id){
+                        return;
+                    }
+                }
+
+                $('#dl-choose').datalist("appendRow", row);
+            }
+        });
+
+        $('#dl-choose').datalist({
+            lines: true,
+            textField:'userName',
+            valueField:'id',
+            width:'150px',
+            height: '120px',
+            onDblClickRow:function(index, row){
+                $('#dl-choose').datalist("deleteRow", index);
+            }
+        });
+
+    })
+
+
+</script>
+
+<input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+<div class="customer-list">
+
+    <table id="dg" title="客户列表" class="easyui-datagrid data-table"></table>
+
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCustomer()">New
+            Customer</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+           onclick="editCustomer()">Edit
+            Customer</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" plain="true"
+           onclick="setManager()">Set Manager</a>
+
+        <spa class="search-customer"><input class="easyui-textbox" id="search-input" data-options="prompt:'请输入公司名称搜索'"
+                                            style="width:200px">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchCustomer()">Search</a></spa>
+    </div>
+
+</div>
+
+<div class="customer-edit" style="display: none">
+    <div id="dlg" class="easyui-dialog" style="width:500px"
+         closed="true" buttons="#dlg-buttons">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+            <table class="edit-table">
+                <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'公司名称:'" name="company" required="true"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'公司信用代码:'" name="companyCode"/></td>
+                </tr>
+                <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'联系人:'" name="contactName"
+                               required="true"/></td>
+                </tr>
+                <tr>
+                    <td><input class="easyui-numberbox f1" data-options="label:'联系电话:'" name="contactMobile"
+                               required="true"/></td>
+                </tr>
+                <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'联系邮箱:', validType:'email'"
+                               name="contactEmail"/></td>
+                </tr>
+                <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'账户类型:'" name="accountType"
+                               placeholder="如：招商银行卡、支付宝"/></td>
+                </tr>
+                <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'账户号:'" name="account"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCustomer()"
+           style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+
+<div class="customer-manager-edit" style="display: none">
+    <div id="dlg-manager" class="easyui-dialog"
+         closed="true" buttons="#dlg-manager-buttons">
+        <form id="fm-manager" method="post" novalidate style="margin:0;padding:10px 40px ">
+
+            <input type="hidden" id="customerId"/>
+
+            <table class="edit-table">
+                <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'公司名称:'" name="company" disabled/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="ss" name="queryString"></input></td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="wait-choose dl">备选:(双击添加到已选)<div id="dl-wait-choose"></div></div>
+
+        <div class="choose dl">已选：（双击删除）<div id="dl-choose"></div></div>
+
+        <div style="clear: both; height: 10px"></div>
+    </div>
+
+    <div id="dlg-manager-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveManager()"
+           style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg-manager').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var url;
+    function newCustomer() {
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'New Customer');
+        $('#fm').form('clear');
+        url = '/customer/add';
+    }
+
+    function editCustomer() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Edit Customer');
+            $('#fm').form('load', row);
+            url = '/customer/edit?id=' + row.id;
+        }
+    }
+
+    function saveCustomer() {
+        $('#fm').form('submit', {
+            url: url,
+            frame: false,
+            onSubmit: function (param) {
+                param._csrf = $("#_csrf").val();
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close');        // close the dialog
+                    $('#dg').datagrid('reload');    // reload the user data
+                }
+            }
+        });
+    }
+
+    function searchCustomer() {
+
+        var company = $("#search-input").val();
+
+        if (!company) {
+            return;
+        }
+
+        $('#dg').datagrid({
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+                "company": company
+            }
+        })
+    }
+
+    function setManager() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlg-manager').dialog('open').dialog('center').dialog('setTitle', 'Edit Manager');
+            $('#fm-manager').form('load', row);
+            $("#customerId").val(row.id);
+
+            $('#dl-wait-choose').datalist("unselectAll");
+            $('#dl-choose').datalist("unselectAll");
+            $('#dl-choose').datalist("loadData",[]);
+
+            if (row.managers){
+                for (var i in row.managers){
+                    $('#dl-choose').datalist("appendRow", row.managers[i]);
+                }
+            }
+        }
+    }
+
+    function saveManager() {
+
+        var rows = $('#dl-choose').datalist("getRows");
+
+        if (!rows || rows.length == 0){
+            $.messager.show({
+                title: 'Error',
+                msg: "必须选定至少一个人员"
+            });
+            return;
+        }
+
+        var choose = new Array();
+
+        for(var i in rows){
+            choose.push(rows[i].id);
+        }
+
+        $('#fm-manager').form('submit', {
+            url: "/customer/setManagers",
+            frame: false,
+            onSubmit: function (param) {
+                param._csrf = $("#_csrf").val();
+
+                param.choose = choose;
+                param.customerId = $("#customerId").val();
+
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg-manager').dialog('close');        // close the dialog
+                    $('#dg').datagrid('reload');    // reload the user data
+                }
+            }
+        });
+    }
+</script>
+

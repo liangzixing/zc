@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.acl.domain.dao.UserRoleRelationDOMapper">
+  <resultMap id="BaseResultMap" type="com.zc.acl.domain.dataobject.UserRoleRelationDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
+    <result column="effect_start_date" jdbcType="TIMESTAMP" property="effectStartDate" />
+    <result column="effect_end_date" jdbcType="TIMESTAMP" property="effectEndDate" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
+    <result column="is_long_effect" jdbcType="VARCHAR" property="isLongEffect" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, user_id, role_id, role_code, effect_start_date, effect_end_date, gmt_create, 
+    gmt_modified, creator, modifier, is_deleted, is_long_effect
+  </sql>
+  <select id="selectByExample" parameterType="com.zc.acl.domain.dataobject.UserRoleRelationDOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from user_role_relation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_role_relation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_role_relation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zc.acl.domain.dataobject.UserRoleRelationDOExample">
+    delete from user_role_relation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zc.acl.domain.dataobject.UserRoleRelationDO"  useGeneratedKeys="true" keyProperty="id">
+    insert into user_role_relation (user_id, role_id,
+      role_code, effect_start_date, effect_end_date, 
+      gmt_create, gmt_modified, creator, 
+      modifier, is_deleted, is_long_effect
+      )
+    values (#{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER},
+      #{roleCode,jdbcType=VARCHAR}, #{effectStartDate,jdbcType=TIMESTAMP}, #{effectEndDate,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{isDeleted,jdbcType=VARCHAR}, #{isLongEffect,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertBatch" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="id">
+    insert into user_role_relation (user_id, role_id,
+    role_code, effect_start_date, effect_end_date,
+    gmt_create, gmt_modified, creator,
+    modifier, is_deleted, is_long_effect
+    )
+    values
+     <foreach collection="list" item="item" index="index" separator=",">
+       (#{item.userId,jdbcType=INTEGER}, #{item.roleId,jdbcType=INTEGER},
+       #{item.roleCode,jdbcType=VARCHAR}, #{item.effectStartDate,jdbcType=TIMESTAMP}, #{item.effectEndDate,jdbcType=TIMESTAMP},
+       #{item.gmtCreate,jdbcType=TIMESTAMP}, #{item.gmtModified,jdbcType=TIMESTAMP}, #{item.creator,jdbcType=VARCHAR},
+       #{item.modifier,jdbcType=VARCHAR}, #{item.isDeleted,jdbcType=VARCHAR}, #{item.isLongEffect,jdbcType=VARCHAR}
+       )
+     </foreach>
+
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.zc.acl.domain.dataobject.UserRoleRelationDO">
+    insert into user_role_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleCode != null">
+        role_code,
+      </if>
+      <if test="effectStartDate != null">
+        effect_start_date,
+      </if>
+      <if test="effectEndDate != null">
+        effect_end_date,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="isLongEffect != null">
+        is_long_effect,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="effectStartDate != null">
+        #{effectStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectEndDate != null">
+        #{effectEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="isLongEffect != null">
+        #{isLongEffect,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zc.acl.domain.dataobject.UserRoleRelationDOExample" resultType="java.lang.Long">
+    select count(*) from user_role_relation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user_role_relation
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.roleCode != null">
+        role_code = #{record.roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.effectStartDate != null">
+        effect_start_date = #{record.effectStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.effectEndDate != null">
+        effect_end_date = #{record.effectEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isLongEffect != null">
+        is_long_effect = #{record.isLongEffect,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update user_role_relation
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      role_id = #{record.roleId,jdbcType=INTEGER},
+      role_code = #{record.roleCode,jdbcType=VARCHAR},
+      effect_start_date = #{record.effectStartDate,jdbcType=TIMESTAMP},
+      effect_end_date = #{record.effectEndDate,jdbcType=TIMESTAMP},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      is_long_effect = #{record.isLongEffect,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zc.acl.domain.dataobject.UserRoleRelationDO">
+    update user_role_relation
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleCode != null">
+        role_code = #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="effectStartDate != null">
+        effect_start_date = #{effectStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectEndDate != null">
+        effect_end_date = #{effectEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="isLongEffect != null">
+        is_long_effect = #{isLongEffect,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zc.acl.domain.dataobject.UserRoleRelationDO">
+    update user_role_relation
+    set user_id = #{userId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER},
+      role_code = #{roleCode,jdbcType=VARCHAR},
+      effect_start_date = #{effectStartDate,jdbcType=TIMESTAMP},
+      effect_end_date = #{effectEndDate,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      is_long_effect = #{isLongEffect,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
