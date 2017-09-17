@@ -11,7 +11,7 @@ import java.util.Collection;
 
 import javax.annotation.Resource;
 
-import com.zc.acl.model.User;
+import com.zc.acl.domain.model.User;
 import com.zc.acl.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

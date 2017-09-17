@@ -1,3 +1,10 @@
+body{
+    background-color: #f5f5f5;
+    color: #2b2b2b;
+    font-family: 'Microsoft Yahei';
+    font-size: 12px;
+}
+
 .header{
     height: 30px;
     text-align: center;
@@ -5,9 +12,150 @@
     font-size: 22px;
 }
 
+.mc-main{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.mc-warp{
+    width: 1190px;
+    margin: 0 auto;
+}
+
+.mc-main .mc-main-aside {
+    width: 180px;
+    margin-right: 10px;
+    float: left;
+}
+
+.aside {
+    width: 180px;
+    background-color: #fff;
+    height: auto;
+}
+
+.aside .menu-self {
+    padding: 5px 0;
+    border : 1px solid #ddd;
+}
+
+.aside .item {
+    font-size: 12px;
+    line-height: 30px;
+    padding-left: 53px;
+    position: relative;
+}
+.aside .item.current{
+    background-color: #f5f5f5;
+}
+
+.aside .item a {
+    color: #555;
+    text-decoration: none;
+    display:block;
+}
+
+.aside .item.current a,
+.aside .item.current:hover a {
+    color: #1e8c00;
+}
+
+.aside .item:hover {
+    color: #1e8c00;
+}
+.aside .item:hover a{
+    color: #1e8c00;
+}
+
+.aside .item-wrap {
+    padding: 6px 0;
+    border-top: 1px dashed #f2f2f2;
+}
+
+.aside .item-wrap.first {
+    border-top:0 none;
+}
+.aside .item-title {
+    padding-left: 33px;
+    font-size: 12px;
+    line-height: 33px;
+    position: relative;
+}
+
+.item-title span{
+    margin-left: 60px;
+}
+
+.aside .item-title:hover {
+    cursor: pointer;
+    color: #1D8B0D;
+}
+
+.aside .item-title i {
+    position: absolute;
+    top: 12px;
+    left: 144px;
+    color: #999;
+}
+
+.aside .item.sub {
+    padding-left: 60px;
+}
+.aside .item.sub i{
+    width: 2px;
+    height: 2px;
+    display: inline-block;
+    background-color: #555;
+    position: absolute;
+    top: 14px;
+    left: 40px;
+}
+.aside .item:hover i{
+    background-color: #1e8c00;
+}
+.aside .item.current i{
+    background-color: #1e8c00;
+}
+
+.aside .item-wrap.close-menu .sub {
+    display: none;
+}
+
+.aside .item-wrap .arrow-up {
+    display: none;
+}
+
+.aside .item-wrap .arrow-down {
+    display: block;
+}
+
+.aside .item-wrap.close-menu .arrow-up {
+    display: block;
+}
+
+.aside .item-wrap.close-menu .arrow-down {
+    display: none;
+}
+
+.mc-main .mc-main-wrap {
+    width: 1000px;
+    overflow: hidden;
+    float: left;
+    margin-bottom: 40px;
+}
+
+.content-main{
+    background-color: #fff;
+    zoom: 1;
+    overflow: hidden;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    min-height: 400px;
+}
+
 .footer{
+    clear: both;
     text-align: center;
-    margin-top: 3px;
 }
 
 .footer .copyright{

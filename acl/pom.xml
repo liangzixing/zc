@@ -19,8 +19,24 @@
             <artifactId>infrastructure</artifactId>
             <version>${pom.parent.version}</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.zc</groupId>
+            <artifactId>common</artifactId>
+            <version>${pom.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
     </dependencies>
 
 

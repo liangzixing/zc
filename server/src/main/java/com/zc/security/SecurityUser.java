@@ -8,7 +8,7 @@ package com.zc.security;
 
 import java.util.Collection;
 
-import com.zc.acl.model.User;
+import com.zc.acl.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
