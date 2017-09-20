@@ -1,0 +1,333 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<style type="text/css">
+
+    .customer-search-panel {
+        float: left;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .customer-tally-edit {
+        float: left;
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .edit-table td {
+        padding-bottom: 15px;
+    }
+
+    .edit-table td:first-child {
+        width: 34%;
+        text-align: right;
+        padding-right: 20px;
+    }
+
+    .search-result{
+        margin-top: 10px;
+    }
+
+    .f1 {
+        width: 300px;
+    }
+
+    .f2{
+        width: 80px;
+    }
+
+    .warn{
+        font-size: 16px;
+        color: red;
+        padding: 0 10px;
+    }
+
+    .improtant{
+        font-size: 24px;
+        color: red;
+        height: 40px;
+        font-family: "Microsoft YaHei";
+    }
+
+    .otherLine{
+        display: block;
+    }
+</style>
+
+
+<input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+<div class="customer-search-panel">
+    <div id="p" class="easyui-panel" title="客户搜索"
+         style="width:300px;padding:10px;background:#fafafa;"
+         data-options="iconCls:'icon-query',closable:false,
+                collapsible:true,minimizable:true,maximizable:true">
+
+        <div>
+            <input id="ss" class="easyui-searchbox" style="width:270px"
+                   data-options="searcher:searchCustomer,prompt:'输入公司名称搜索'"></input>
+        </div>
+
+        <div class="search-result">
+            <div id="dl"> </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-tally-edit">
+    <div class="easyui-panel" title="新增客户账单" style="width:600px;padding:10px;">
+        <form id="ff" action="/customerTally/add" method="post" enctype="multipart/form-data">
+
+            <input type="hidden" id="id" name="customerTallyId">
+
+            <input type="hidden" id="cutomerId" name="customerId">
+
+            <table class="edit-table" width="100%">
+                <tr>
+                    <td>
+                        <lable>客户公司名:</lable>
+                    </td>
+                    <td><lable id="company-lable" class="warn"></lable></td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>支出账户类型:</lable>
+                    </td>
+                    <td><input class="easyui-textbox f1" data-options="prompt:'如招商银行、支付宝'" id="fromAccountType" name="fromAccountType"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>支出账户:</lable>
+                    </td>
+                    <td><input class="easyui-textbox f1" data-options="" name="fromAccount" id="fromAccount"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>转入账户类型:</lable>
+                    </td>
+                    <td><input class="easyui-textbox f1" data-options="prompt:'如招商银行、支付宝'" name="toAccountType" id="toAccountType"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>转入账户:</lable>
+                    </td>
+                    <td><input class="easyui-textbox f1" data-options="" name="toAccount" id="toAccount"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>账单类型:</lable>
+                    </td>
+                    <td>
+                        <select id="type" class="easyui-combobox" name="type" style="width:150px;">
+                            <option value="out">出账</option>
+                            <option value="in">入账</option>
+                        </select>
+                        <lable class="warn">(保存后不可修改)</lable>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>金额</lable>
+                    </td>
+                    <td>
+                        <div><lable id="amountFormat" class="warn"></lable></div>
+                        <input class="easyui-numberbox f2" name="amount" id="amount" required="true"/>
+                        <lable class="warn">(单位:分,保存后不可修改)</lable>
+                    </td>
+                </tr>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>账户当前余额:</lable>
+                    </td>
+                    <td><lable id="balance-label" class="improtant"></lable><lable class="warn"> 元</lable></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <lable>记录后预计余额:</lable>
+                    </td>
+                    <td><lable id="customerBalance-label" class="improtant"></lable><lable class="warn"> 元</lable></td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable>说明:</lable>
+                    </td>
+                    <td><input class="easyui-textbox f1" data-options="height:60" multiline='true' name="description" required="true"/></td>
+                <tr>
+                    <td>
+                        <lable>截图(只接受图片,最大2M):</lable>
+                    </td>
+                    <td><input id="file" name="file" type="text" style="width:300px"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" class="btn btn-default btn-block" value="Submit"></input></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#ff').form({
+            onSubmit: function(param){
+                param._csrf = $("#_csrf").val();
+            },
+            success: function (data) {
+
+                var data = eval('(' + data + ')');
+
+                if(data && data.success){
+                    $.messager.alert('Info', "添加成功！", 'info');
+                    setTimeout(function(){
+                        window.location.href="/customerTally/listPage"
+                    },3000);
+                } else{
+                    $.messager.alert('Info', "添加失败！请刷新页面后重试", 'info');
+                }
+            }
+        });
+    });
+
+    $(function () {
+        $('#dl').datalist({
+            url: "/customer/pagedSearch",
+            queryParams: {
+                pageSize: 10,
+                _csrf: $("#_csrf").val()
+            },
+            valueField: "id",
+            textField: "company",
+            checkbox: true,
+            lines: true,
+            onSelect: function (index, row) {
+                loadCustomer(row);
+            }
+        });
+
+        $("#type").combobox({
+            onSelect : function(record){
+                loadCustomerAccount(record.value);
+                calBalance($("#amount").textbox("getValue"), record.value);
+            }
+        })
+
+        $("#amount").textbox({
+            onChange : function(newValue, oldValue){
+                calBalance(newValue);
+            }
+        })
+
+        $('#file').filebox({
+            buttonText: 'Choose File',
+            buttonAlign: 'left',
+            accept: 'image/*'
+        });
+    })
+
+    function searchCustomer(value, name) {
+        $('#dl').datalist({
+            queryParams: {
+                company: value,
+                pageSize: 10,
+                _csrf: $("#_csrf").val()
+            }
+        })
+    }
+
+    function calBalance(fen, type){
+        if(isNaN(fen)){
+            return;
+        }
+
+        var row = $('#dl').datalist("getSelected");
+        if (!row){
+            return;
+        }
+
+        var type = type || $("#type").combobox("getValue");
+
+        if ('in' == type){
+            $("#customerBalance-label").text(fenToYuan(row.balance + fen*1));
+        }
+
+        if ('out' == type){
+            $("#customerBalance-label").text(fenToYuan(row.balance - fen*1));
+        }
+
+        $("#amountFormat").text(fenToYuan(fen) + " 元");
+    }
+
+    function loadCustomer(customer){
+        $("#ff").form("clear");
+
+        $("#ff").form("load", customer);
+
+        $("#cutomerId").val(customer.id);
+
+        $("#balance-label").text(fenToYuan(customer.balance));
+        $("#customerBalance-label").text(fenToYuan(customer.balance));
+        $("#company-lable").text(customer.company);
+
+        $("#type").combobox("select", 'out');
+
+        loadCustomerAccount('out');
+    }
+
+    function loadCustomerAccount(type){
+        var row = $('#dl').datalist("getSelected");
+
+        if (!row){
+            return;
+        }
+
+        if ('out' == type){
+            if (!$("#fromAccountType").textbox("getValue")){
+                $("#fromAccountType").textbox("setValue", row.accountType);
+            }
+            if (!$("#fromAccount").textbox("getValue")){
+                $("#fromAccount").textbox("setValue", row.account);
+            }
+
+            if (row.accountType == $("#toAccountType").textbox("getValue")){
+                $("#toAccountType").textbox("clear");
+            }
+
+            if (row.account == $("#toAccount").textbox("getValue")){
+                $("#toAccount").textbox("clear");
+            }
+
+        }
+
+        if ('in' == type){
+            if (!$("#toAccountType").textbox("getValue")){
+                $("#toAccountType").textbox("setValue", row.accountType)
+            }
+
+            if (!$("#toAccount").textbox("getValue")){
+                $("#toAccount").textbox("setValue", row.account)
+            }
+            if (row.accountType == $("#fromAccountType").textbox("getValue")){
+                $("#fromAccountType").textbox("clear");
+            }
+            if (row.account == $("#fromAccount").textbox("getValue")){
+                $("#fromAccount").textbox("clear");
+            }
+        }
+    }
+
+    function fenToYuan(fen){
+        var str = (fen/100).toFixed(2) + '';
+        var intSum = str.substring(0,str.indexOf(".")).replace( /\B(?=(?:\d{3})+$)/g, ',' );//取到整数部分
+        var dot = str.substring(str.length,str.indexOf("."))//取到小数部分
+        var ret = intSum + dot;
+        return ret;
+    }
+
+</script>

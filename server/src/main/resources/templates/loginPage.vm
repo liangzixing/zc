@@ -1,9 +1,9 @@
-#set($layout="/layout/layout_no_menu.vm")
+#set($layout="/layout/layout_only_footer.vm")
 
 <style type="text/css">
 
     .login-body {
-        height: 400px;
+        height: 600px;
     }
 
     .login-form {

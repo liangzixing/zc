@@ -16,7 +16,9 @@ public class CustomerTally {
 
     private Integer id;
 
-    private String customerId;
+    private Integer customerId;
+
+    private String company;
 
     private String type;
 
@@ -30,6 +32,8 @@ public class CustomerTally {
 
     private Integer amount;
 
+    private Integer customerLastBalance;
+
     private Integer customerBalance;
 
     private String description;
@@ -42,6 +46,8 @@ public class CustomerTally {
 
     private Date reportDate;
 
+    private String display;
+
     public Integer getId() {
         return id;
     }
@@ -50,12 +56,20 @@ public class CustomerTally {
         this.id = id;
     }
 
-    public String getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getType() {
@@ -152,5 +166,21 @@ public class CustomerTally {
 
     public void setReportDate(Date reportDate) {
         this.reportDate = reportDate;
+    }
+
+    public Integer getCustomerLastBalance() {
+        return customerLastBalance;
+    }
+
+    public void setCustomerLastBalance(Integer customerLastBalance) {
+        this.customerLastBalance = customerLastBalance;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
     }
 }

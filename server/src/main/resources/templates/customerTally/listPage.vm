@@ -1,0 +1,315 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<style type="text/css">
+
+    .search-tally-panel {
+        margin-bottom: 10px;
+    }
+
+    .customer-search-panel-lable, .customer-search-panel, .search-tally-date-panel {
+        float: left;
+        margin-left: 5px;
+    }
+
+    .customer-search-panel {
+        border-left: thin dashed #b3b3b3;
+        border-right: thin dashed #b3b3b3;
+        padding-left: 5px;
+        padding-right: 5px;
+        height: 100%;
+    }
+
+    .customer-search-panel-lable {
+        margin-top: 80px;
+    }
+
+    .search-tally-date-panel {
+        margin-top: 75px;
+    }
+
+    .customer-search-result {
+        margin-top: 5px;
+    }
+
+</style>
+
+
+<div class="search-tally-panel">
+    <div id="p" class="easyui-panel" title="搜索客户账单"
+         style="width:100%;height:200px;padding:10px;background:#fafafa;"
+         data-options="iconCls:'icon-search',closable: false,
+                collapsible:true,minimizable:true,maximizable:true">
+
+        <div class="customer-search-panel-lable"><label>选择一个客户:</label></div>
+
+        <div class="customer-search-panel">
+            <div>
+
+                <input id="ss" class="easyui-searchbox" style="width:200px"
+                       data-options="searcher:searchCustomer,prompt:'输入公司名称搜索客户'"></input>
+            </div>
+
+            <div class="customer-search-result">
+                <div id="dl"></div>
+            </div>
+        </div>
+
+        <div class="search-tally-date-panel">
+            <lable> 记录时间:</lable>
+            <input class="easyui-datetimebox" id="reportDateBegin" name="reportDateBegin"
+                   data-options="showSeconds:false" style="width:150px">
+            <lable> -</lable>
+            <input class="easyui-datetimebox" id="reportDateEnd" name="reportDateEnd"
+                   data-options="showSeconds:false" style="width:150px">
+
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+               style="width:80px" onclick="searchCustomerTally()">Search</a>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+<div class="customer-tally-list">
+
+    <table id="dg" title="客户账单列表" class="easyui-datagrid data-table" style="width: 100%"></table>
+
+    <div id="toolbar">
+        <a href="/customerTally/addPage" class="easyui-linkbutton" iconCls="icon-add" plain="true">Add</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+           onclick="editCustomerTally()">Edit</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true"
+           onclick="exportExcel()">Export</a>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#dg").datagrid({
+            url: '/customerTally/pagedQuery',
+            toolbar: "#toolbar",
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: false,
+            autoRowHeight: true,
+            pageSize: 20,
+            idField: 'id',
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'company', title: '公司名', width: 90},
+                {
+                    field: 'customerLastBalance', title: '变更前余额(元)', width: 50, formatter: function (fen) {
+                    return fenToYuan(fen);
+                }
+                },
+                {
+                    field: 'type', title: '类型', width: 25, formatter: function (type) {
+                    if ('in' == type) {
+                        return "入账";
+                    }
+
+                    if ('out' == type) {
+                        return "出账";
+                    }
+
+                    return "未知";
+                }
+                },
+                {
+                    field: 'amount', title: '金额(元)', width: 40, formatter: function (fen) {
+                    return fenToYuan(fen);
+                }
+                },
+                {
+                    field: 'customerBalance', title: '变更后余额(元)', width: 50, formatter: function (fen) {
+                    return fenToYuan(fen);
+                }
+                },
+                {field: 'reporterName', title: '记录人', width: 40},
+                {field: 'reportDateStr', title: '记录时间', width: 60},
+                {
+                    field: 'credentialsImgUrl', title: '截图', width: 30, formatter: function (url) {
+                    if (!url) {
+                        return "";
+                    }
+
+                    url = "/images/customer/" + url;
+
+                    return "<a target='_blank' href='" + url + "'>查看</a>"
+                }
+                },
+                {
+                    field: 'display', title: '导出时是否忽略', width: 50, formatter: function (row) {
+                    return row.display == 'none' ? "是" : "否";
+                }
+                }
+            ]],
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+            },
+            onBeforeLoad: function (params) {
+                params.currentPage = params.page;
+                params.pageSize = params.rows;
+            }
+        });
+
+        $('#dl').datalist({
+            url: "/customer/pagedSearch",
+            queryParams: {
+                pageSize: 5,
+                _csrf: $("#_csrf").val()
+            },
+            valueField: "id",
+            width: 200,
+            heigh: 120,
+            textField: "company",
+            checkbox: true,
+            lines: true
+        });
+    })
+
+    function searchCustomer(value, name) {
+        $('#dl').datalist({
+            queryParams: {
+                company: value,
+                pageSize: 10,
+                _csrf: $("#_csrf").val()
+            }
+        })
+    };
+
+    function searchCustomerTally() {
+        var customerSelected = $("#dl").datagrid("getSelected");
+
+        var customerId = customerSelected && customerSelected.id;
+
+        var reportDateBegin = $("#reportDateBegin").datetimebox("getValue");
+        var reportDateEnd = $("#reportDateEnd").datetimebox("getValue");
+
+        if (!customerId && !reportDateBegin && !reportDateEnd) {
+            return;
+        }
+
+        $("#dg").datagrid({
+            queryParams: {
+                customerId: customerId,
+                reportDateBegin: reportDateBegin,
+                reportDateEnd: reportDateEnd,
+                "_csrf": $("#_csrf").val()
+            }
+        });
+    }
+
+    function exportExcel() {
+        var customerSelected = $("#dl").datagrid("getSelected");
+
+        var customerId = customerSelected && customerSelected.id;
+
+        var reportDateBegin = $("#reportDateBegin").datetimebox("getValue");
+        var reportDateEnd = $("#reportDateEnd").datetimebox("getValue");
+
+        var rows = $("#dg").datagrid("getChecked");
+
+        if (!customerId && !reportDateBegin && !reportDateBegin && ( !rows || rows.length == 0)) {
+            $.messager.alert('Info', "请设置搜索条件或者勾选行后进行导出操作", 'info');
+            return;
+        }
+
+        var ids = new Array();
+
+        if (rows && rows.length > 0) {
+            rows.forEach(function (row) {
+                ids.push(row.id);
+            })
+        }
+
+        var params = {
+            customerId: customerId,
+            reportDateBegin: reportDateBegin,
+            reportDateEnd: reportDateEnd,
+            ids: ids,
+            "_csrf": $("#_csrf").val()
+        };
+
+        openPostWindow("/customerTally/export", params, "_blank");
+    }
+
+    function openPostWindow(url, data, name) {
+
+        var tempForm = document.createElement("form");
+
+        tempForm.id = "tempForm1";
+
+        tempForm.method = "post";
+
+        //url
+        tempForm.action = url;
+        //open方法不能设置请求方式，一般网页的post都是通过form来实现的。
+        //如果仅仅模拟form的提交方式，那么open方法里那种可设置窗体属性的参数又不能用。
+        //最后想办法整了这么一个两者结合的方式，将form的target设置成和open的name参数一样的值，通过浏览器自动识别实现了将内容post到新窗口中
+        tempForm.target = name;
+
+        for (var attr in data){
+
+            var hideInput = document.createElement("input");
+
+            hideInput.type = "hidden";
+
+            //传入参数名,相当于get请求中的content=
+            hideInput.name = attr;
+
+            //传入传入数据，只传递了一个参数内容，实际可传递多个。
+            hideInput.value = data[attr];
+
+            tempForm.appendChild(hideInput);
+        }
+
+        document.body.appendChild(tempForm);
+
+        $(tempForm).form('submit', {
+            onSubmit: function(){
+                openWindow(name);
+            },
+            success: function () {
+                document.body.removeChild(tempForm);
+            }
+        });
+    }
+
+    function openWindow(name) {
+        window.open('about:blank', name);
+    }
+
+
+    function editCustomerTally() {
+
+        var row = $("#dg").datagrid("getSelected");
+
+        var id = row && row.id;
+
+        if (!id) {
+            return;
+        }
+
+        window.location.href = "/customerTally/editPage?id=" + id;
+    }
+
+    function fenToYuan(fen) {
+        var str = (fen / 100).toFixed(2) + '';
+        var intSum = str.substring(0, str.indexOf(".")).replace(/\B(?=(?:\d{3})+$)/g, ',');//取到整数部分
+        var dot = str.substring(str.length, str.indexOf("."))//取到小数部分
+        var ret = intSum + dot + '';
+        return ret;
+    }
+
+</script>

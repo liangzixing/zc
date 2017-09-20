@@ -13,6 +13,10 @@ spring:
       charset: UTF-8
       enabled: true
       uri-encoding: UTF-8
+    multipart:
+          enabled: true
+          max-file-size: 2MB
+          max-request-size: 3MB
 
 mybatis:
   typeAliasesPackage: com.zc.**.dataobject
@@ -35,6 +39,11 @@ logging:
 security:
   headers:
     frame: false
+
+image.save.root.path: /Users/liangzixing/tmp
+
+
+
 
 
 

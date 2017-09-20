@@ -160,6 +160,9 @@
                     <td><input class="easyui-textbox f1" data-options="label:'公司信用代码:'" name="companyCode"/></td>
                 </tr>
                 <tr>
+                    <td><input class="easyui-textbox f1" data-options="label:'状态:'" name="status"/></td>
+                </tr>
+                <tr>
                     <td><input class="easyui-textbox f1" data-options="label:'联系人:'" name="contactName"
                                required="true"/></td>
                 </tr>

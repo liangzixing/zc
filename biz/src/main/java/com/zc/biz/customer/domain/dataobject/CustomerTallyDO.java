@@ -4,9 +4,11 @@ import java.util.Date;
 
 import com.zc.dataobject.CommonDO;
 
-public class CustomerTallyDO extends CommonDO {
+public class CustomerTallyDO extends CommonDO{
 
-    private String customerId;
+    private Integer customerId;
+
+    private String company;
 
     private String type;
 
@@ -20,6 +22,8 @@ public class CustomerTallyDO extends CommonDO {
 
     private Integer amount;
 
+    private Integer customerLastBalance;
+
     private Integer customerBalance;
 
     private String description;
@@ -32,6 +36,8 @@ public class CustomerTallyDO extends CommonDO {
 
     private Date reportDate;
 
+    private String display;
+
     public Integer getId() {
         return id;
     }
@@ -40,12 +46,12 @@ public class CustomerTallyDO extends CommonDO {
         this.id = id;
     }
 
-    public String getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId == null ? null : customerId.trim();
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getType() {
@@ -80,6 +86,14 @@ public class CustomerTallyDO extends CommonDO {
         this.toAccountType = toAccountType == null ? null : toAccountType.trim();
     }
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
     public String getToAccount() {
         return toAccount;
     }
@@ -94,6 +108,14 @@ public class CustomerTallyDO extends CommonDO {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public Integer getCustomerLastBalance() {
+        return customerLastBalance;
+    }
+
+    public void setCustomerLastBalance(Integer customerLastBalance) {
+        this.customerLastBalance = customerLastBalance;
     }
 
     public Integer getCustomerBalance() {
@@ -142,6 +164,14 @@ public class CustomerTallyDO extends CommonDO {
 
     public void setReportDate(Date reportDate) {
         this.reportDate = reportDate;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display == null ? null : display.trim();
     }
 
 }

@@ -93,7 +93,7 @@ public class CustomerDomainServiceImpl implements CustomerDomainService {
 
     @Override
     public int update(Customer customer, String operator) {
-        if (NumberUtil.isNotPositive(customer.getId())){
+        if (NumberUtil.isNotPositive(customer.getId())) {
             return 0;
         }
 
@@ -104,6 +104,24 @@ public class CustomerDomainServiceImpl implements CustomerDomainService {
         CustomerDOExample customerDOExample = new CustomerDOExample();
 
         customerDOExample.createCriteria().andIdEqualTo(customer.getId());
+
+        return customerDOMapper.updateByExampleSelective(customerDO, customerDOExample);
+    }
+
+    @Override
+    public int updateBalance(int id, int balance, String operator) {
+        if (NumberUtil.isNotPositive(id)) {
+            return 0;
+        }
+
+        CustomerDO customerDO = new CustomerDO();
+        customerDO.setId(id);
+        customerDO.setBalance(balance);
+
+        DataObjectUtil.beforeUpdate(customerDO, operator);
+
+        CustomerDOExample customerDOExample = new CustomerDOExample();
+        customerDOExample.createCriteria().andIdEqualTo(id);
 
         return customerDOMapper.updateByExampleSelective(customerDO, customerDOExample);
     }

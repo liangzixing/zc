@@ -40,9 +40,13 @@ public class ViewConfig {
 
         velocityLayoutViewResolver.setLayoutUrl("/layout/layout.vm");
 
+        velocityLayoutViewResolver.setViewClass(VelocityLayoutToolboxView.class);
+
         velocityLayoutViewResolver.setPrefix("/");
         velocityLayoutViewResolver.setSuffix(".vm");
         velocityLayoutViewResolver.setContentType("text/html;charset=UTF-8");
+
+        velocityLayoutViewResolver.setToolboxConfigLocation("classpath:toolbox.xml");
 
         return velocityLayoutViewResolver;
     }

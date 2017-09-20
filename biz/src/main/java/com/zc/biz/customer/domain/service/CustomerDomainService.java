@@ -21,4 +21,6 @@ public interface CustomerDomainService {
 
     int update(Customer customer, String operator);
 
+    int updateBalance(int id, int balance, String operator);
+
 }

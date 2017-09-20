@@ -56,6 +56,18 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jeecg</groupId>
+            <artifactId>easypoi-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jeecg</groupId>
+            <artifactId>easypoi-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jeecg</groupId>
+            <artifactId>easypoi-annotation</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

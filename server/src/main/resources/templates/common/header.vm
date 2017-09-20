@@ -1,5 +1,105 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
 <div class="header">
     <div class="header-content">
-        顶部通栏 ------- 顶部通栏
+
+        <span class="welcome">欢迎你，$!sec.getUserName()</span>
+
+        <span class="logout"><a href="#" onclick="logout()">退出登录</a></span>
+
+        <span class="modifyPassword"><a href="#" onclick="openResetDlg()">修改密码</a></span>
     </div>
+
+    <form action="/logout" method="post" id="logout">
+        <input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+
+    <div id="login-dlg" style="display: none">
+        <form action="/user/resetPassWord" type="post" id="restPassword">
+            <input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <table class="password-edit">
+                <tr>
+                    <td>旧密码:</td>
+                    <td><input class="easyui-passwordbox" required="true" prompt="Old Password" iconWidth="28"
+                               style="width:200px;height:34px;padding:10px" name="oldPassword"/></td>
+                </tr>
+                <tr>
+                    <td>新密码:</td>
+                    <td><input class="easyui-passwordbox" required="true" prompt="New Password" iconWidth="28"
+                               style="width:200px;height:34px;padding:10px" name="newPassword"/></td>
+                </tr>
+                <tr>
+                    <td>新密码:</td>
+                    <td><input class="easyui-passwordbox" required="true" prompt="New Password Repeat" iconWidth="28"
+                               style="width:200px;height:34px;padding:10px" name="newPasswordRepeat"/></td>
+                </tr>
+            </table>
+        </form>
+
+        <div id="login-dlg-buttons">
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="resetPassword()"
+               style="width:90px">Save</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+               onclick="javascript:$('#login-dlg').dialog('close')" style="width:90px">Cancel</a>
+        </div>
+    </div>
+
 </div>
+
+<style type="text/css">
+    .logout .modifyPassword {
+        margin-left: 10px;
+    }
+
+    .password-edit{
+        margin: 10px 50px;
+    }
+
+    .password-edit td{
+        padding: 3px 5px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function logout() {
+        $("#logout").submit();
+    }
+
+    function openResetDlg() {
+        $('#login-dlg').dialog('open').dialog('center');
+    }
+
+    function resetPassword() {
+        $("#restPassword").form("submit");
+    }
+
+    $(function () {
+        $("#login-dlg").dialog({
+            title: 'Reset Password',
+            width: 400,
+            closed: true,
+            buttons: '#login-dlg-buttons'
+        })
+
+        $("#restPassword").form({
+            success: function (data) {
+                var data = eval('(' + data + ')');
+
+                if(data && data.success){
+                    $.messager.alert('Info', "修改成功！请重新登录", 'info');
+                    setTimeout(function(){
+                        window.location.href="/login"
+                    },3000);
+                } else{
+                    $.messager.alert('Info', "修改失败！请刷新页面后重试", 'info');
+                }
+            }
+        })
+    })
+
+</script>

@@ -3,19 +3,22 @@
 <mapper namespace="com.zc.biz.customer.domain.dao.CustomerTallyDOMapper">
   <resultMap id="BaseResultMap" type="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="from_account_type" jdbcType="VARCHAR" property="fromAccountType" />
     <result column="from_account" jdbcType="VARCHAR" property="fromAccount" />
     <result column="to_account_type" jdbcType="VARCHAR" property="toAccountType" />
     <result column="to_account" jdbcType="VARCHAR" property="toAccount" />
     <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="customer_last_balance" jdbcType="INTEGER" property="customerLastBalance" />
     <result column="customer_balance" jdbcType="INTEGER" property="customerBalance" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="credentials_img_url" jdbcType="VARCHAR" property="credentialsImgUrl" />
     <result column="reporter_id" jdbcType="INTEGER" property="reporterId" />
     <result column="reporter_name" jdbcType="VARCHAR" property="reporterName" />
     <result column="report_date" jdbcType="TIMESTAMP" property="reportDate" />
+    <result column="display" jdbcType="VARCHAR" property="display" />
     <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -81,9 +84,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, customer_id, type, from_account_type, from_account, to_account_type, to_account, 
-    amount, customer_balance, description, credentials_img_url, reporter_id, reporter_name, 
-    report_date, is_deleted, gmt_create, creator, gmt_modified, modifier
+    id, customer_id, company, type, from_account_type, from_account, to_account_type, 
+    to_account, amount, customer_last_balance, customer_balance, description, credentials_img_url, 
+    reporter_id, reporter_name, report_date, display, is_deleted, gmt_create, creator, 
+    gmt_modified, modifier
   </sql>
   <select id="selectByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDOExample" resultMap="BaseResultMap">
     select
@@ -117,18 +121,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO" useGeneratedKeys="true" keyProperty="id">
-    insert into customer_tally (customer_id, type,
-      from_account_type, from_account, to_account_type, 
-      to_account, amount, customer_balance, 
-      description, credentials_img_url, reporter_id, 
-      reporter_name, report_date, is_deleted, 
+    insert into customer_tally (customer_id, company,
+      type, from_account_type, from_account, 
+      to_account_type, to_account, amount, 
+      customer_last_balance, customer_balance, description, 
+      credentials_img_url, reporter_id, reporter_name, 
+      report_date, display, is_deleted, 
       gmt_create, creator, gmt_modified, 
       modifier)
-    values (#{customerId,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
-      #{fromAccountType,jdbcType=VARCHAR}, #{fromAccount,jdbcType=VARCHAR}, #{toAccountType,jdbcType=VARCHAR}, 
-      #{toAccount,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{customerBalance,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{credentialsImgUrl,jdbcType=VARCHAR}, #{reporterId,jdbcType=INTEGER}, 
-      #{reporterName,jdbcType=VARCHAR}, #{reportDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+    values (#{customerId,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR}, #{fromAccountType,jdbcType=VARCHAR}, #{fromAccount,jdbcType=VARCHAR}, 
+      #{toAccountType,jdbcType=VARCHAR}, #{toAccount,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
+      #{customerLastBalance,jdbcType=INTEGER}, #{customerBalance,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
+      #{credentialsImgUrl,jdbcType=VARCHAR}, #{reporterId,jdbcType=INTEGER}, #{reporterName,jdbcType=VARCHAR}, 
+      #{reportDate,jdbcType=TIMESTAMP}, #{display,jdbcType=VARCHAR}, #{isDeleted,jdbcType=VARCHAR}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
@@ -140,6 +146,9 @@
       </if>
       <if test="customerId != null">
         customer_id,
+      </if>
+      <if test="company != null">
+        company,
       </if>
       <if test="type != null">
         type,
@@ -159,6 +168,9 @@
       <if test="amount != null">
         amount,
       </if>
+      <if test="customerLastBalance != null">
+        customer_last_balance,
+      </if>
       <if test="customerBalance != null">
         customer_balance,
       </if>
@@ -176,6 +188,9 @@
       </if>
       <if test="reportDate != null">
         report_date,
+      </if>
+      <if test="display != null">
+        display,
       </if>
       <if test="isDeleted != null">
         is_deleted,
@@ -198,7 +213,10 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="customerId != null">
-        #{customerId,jdbcType=VARCHAR},
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
@@ -218,6 +236,9 @@
       <if test="amount != null">
         #{amount,jdbcType=INTEGER},
       </if>
+      <if test="customerLastBalance != null">
+        #{customerLastBalance,jdbcType=INTEGER},
+      </if>
       <if test="customerBalance != null">
         #{customerBalance,jdbcType=INTEGER},
       </if>
@@ -235,6 +256,9 @@
       </if>
       <if test="reportDate != null">
         #{reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="display != null">
+        #{display,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null">
         #{isDeleted,jdbcType=VARCHAR},
@@ -266,7 +290,10 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.customerId != null">
-        customer_id = #{record.customerId,jdbcType=VARCHAR},
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.company != null">
+        company = #{record.company,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=VARCHAR},
@@ -286,6 +313,9 @@
       <if test="record.amount != null">
         amount = #{record.amount,jdbcType=INTEGER},
       </if>
+      <if test="record.customerLastBalance != null">
+        customer_last_balance = #{record.customerLastBalance,jdbcType=INTEGER},
+      </if>
       <if test="record.customerBalance != null">
         customer_balance = #{record.customerBalance,jdbcType=INTEGER},
       </if>
@@ -303,6 +333,9 @@
       </if>
       <if test="record.reportDate != null">
         report_date = #{record.reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.display != null">
+        display = #{record.display,jdbcType=VARCHAR},
       </if>
       <if test="record.isDeleted != null">
         is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
@@ -327,19 +360,22 @@
   <update id="updateByExample" parameterType="map">
     update customer_tally
     set id = #{record.id,jdbcType=INTEGER},
-      customer_id = #{record.customerId,jdbcType=VARCHAR},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      company = #{record.company,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
       from_account_type = #{record.fromAccountType,jdbcType=VARCHAR},
       from_account = #{record.fromAccount,jdbcType=VARCHAR},
       to_account_type = #{record.toAccountType,jdbcType=VARCHAR},
       to_account = #{record.toAccount,jdbcType=VARCHAR},
       amount = #{record.amount,jdbcType=INTEGER},
+      customer_last_balance = #{record.customerLastBalance,jdbcType=INTEGER},
       customer_balance = #{record.customerBalance,jdbcType=INTEGER},
       description = #{record.description,jdbcType=VARCHAR},
       credentials_img_url = #{record.credentialsImgUrl,jdbcType=VARCHAR},
       reporter_id = #{record.reporterId,jdbcType=INTEGER},
       reporter_name = #{record.reporterName,jdbcType=VARCHAR},
       report_date = #{record.reportDate,jdbcType=TIMESTAMP},
+      display = #{record.display,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       creator = #{record.creator,jdbcType=VARCHAR},
@@ -353,7 +389,10 @@
     update customer_tally
     <set>
       <if test="customerId != null">
-        customer_id = #{customerId,jdbcType=VARCHAR},
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
@@ -373,6 +412,9 @@
       <if test="amount != null">
         amount = #{amount,jdbcType=INTEGER},
       </if>
+      <if test="customerLastBalance != null">
+        customer_last_balance = #{customerLastBalance,jdbcType=INTEGER},
+      </if>
       <if test="customerBalance != null">
         customer_balance = #{customerBalance,jdbcType=INTEGER},
       </if>
@@ -390,6 +432,9 @@
       </if>
       <if test="reportDate != null">
         report_date = #{reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="display != null">
+        display = #{display,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null">
         is_deleted = #{isDeleted,jdbcType=VARCHAR},
@@ -411,19 +456,22 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
     update customer_tally
-    set customer_id = #{customerId,jdbcType=VARCHAR},
+    set customer_id = #{customerId,jdbcType=INTEGER},
+      company = #{company,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       from_account_type = #{fromAccountType,jdbcType=VARCHAR},
       from_account = #{fromAccount,jdbcType=VARCHAR},
       to_account_type = #{toAccountType,jdbcType=VARCHAR},
       to_account = #{toAccount,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=INTEGER},
+      customer_last_balance = #{customerLastBalance,jdbcType=INTEGER},
       customer_balance = #{customerBalance,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       credentials_img_url = #{credentialsImgUrl,jdbcType=VARCHAR},
       reporter_id = #{reporterId,jdbcType=INTEGER},
       reporter_name = #{reporterName,jdbcType=VARCHAR},
       report_date = #{reportDate,jdbcType=TIMESTAMP},
+      display = #{display,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},

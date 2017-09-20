@@ -9,8 +9,6 @@
 </head>
 <body>
 
-    #parse("/common/header.vm")
-
 <div class="content">
     <div class="content-warp">
         <div class="content-main">

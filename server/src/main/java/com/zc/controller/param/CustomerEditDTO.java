@@ -18,6 +18,8 @@ public class CustomerEditDTO {
 
     private String companyCode;
 
+    private String status;
+
     private String contactName;
 
     private String contactMobile;
@@ -90,5 +92,13 @@ public class CustomerEditDTO {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

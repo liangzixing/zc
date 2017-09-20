@@ -6,7 +6,7 @@ into with Alibaba.com.*/
 
 package com.zc.controller;
 
-import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -68,6 +68,12 @@ public class CustomerController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping("/pagedSearch")
+    public List<CustomerDTO> pagedSearch(CustomerQueryParam param) {
+        return pagedQuery(param).getRows();
+    }
+
+    @ResponseBody
     @RequestMapping("/add")
     public AjaxResult<Boolean> add(CustomerEditDTO customerEditDTO) {
         try {
@@ -114,8 +120,8 @@ public class CustomerController extends BaseController {
     @RequestMapping("/setManagers")
     public AjaxResult<Boolean> setManagers(Integer customerId, Integer[] choose) {
 
-        if(NumberUtil.isNotPositive(customerId)
-            || choose == null || choose.length == 0){
+        if (NumberUtil.isNotPositive(customerId)
+            || choose == null || choose.length == 0) {
             return AjaxResult.unSuccess("illegal param");
         }
 

@@ -18,9 +18,13 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class SecurityUser implements UserDetails {
 
+    private int id;
+
     private String userName;
 
     private String password;
+
+    private Integer groupId;
 
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
@@ -67,6 +71,22 @@ public class SecurityUser implements UserDetails {
         return true;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public boolean isEnabled() {
         return true;
@@ -76,8 +96,11 @@ public class SecurityUser implements UserDetails {
 
         SecurityUser securityUser = new SecurityUser();
 
+        securityUser.setId(user.getId());
         securityUser.setUserName(user.getUsername());
         securityUser.setPassword(user.getPassword());
+
+        securityUser.setGroupId(user.getGroupId());
 
         return securityUser;
     }

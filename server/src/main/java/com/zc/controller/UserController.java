@@ -151,6 +151,8 @@ public class UserController extends BaseController {
 
         boolean result = userService.resetPassword(id, oldPassword, newPassword, getLoginUserName());
 
+        //expireNow();
+
         return AjaxResult.success(result);
     }
 
