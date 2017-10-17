@@ -9,14 +9,15 @@ package com.zc.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.google.common.io.Files;
-import java.util.List;
 import com.zc.biz.customer.domain.model.CustomerTally;
+import com.zc.biz.customer.domain.service.CustomerManageDomainService;
 import com.zc.biz.customer.domain.service.CustomerTallyDomainService;
 import com.zc.biz.customer.domain.service.param.CustomerTallyQueryCondition;
 import com.zc.biz.customer.service.CustomerTallyService;
@@ -25,6 +26,7 @@ import com.zc.controller.dto.CustomerTallyDTO;
 import com.zc.controller.dto.GridAjaxResult;
 import com.zc.controller.dto.converter.CustomerTallyDTOConverter;
 import com.zc.controller.param.CustomerTallyEditDTO;
+import com.zc.controller.param.CustomerTallyQueryParam;
 import com.zc.exception.BusinessException;
 import com.zc.result.PagedResult;
 import com.zc.utils.DateUtil;
@@ -56,6 +58,9 @@ public class CustomerTallyController extends BaseController {
     @Resource
     private CustomerTallyDomainService customerTallyDomainService;
 
+    @Resource
+    private CustomerManageDomainService customerManageDomainService;
+
     @Value("${image.save.root.path}")
     public String imgSaveRootPath;
 
@@ -79,17 +84,24 @@ public class CustomerTallyController extends BaseController {
         return "/customerTally/listPage";
     }
 
+    @RequestMapping("/my")
+    public String my() {
+        return "/customerTally/myListPage";
+    }
+
     @ResponseBody
     @RequestMapping("/pagedQuery")
-    public GridAjaxResult<CustomerTallyDTO> pagedQuery(@Valid CustomerTallyQueryCondition condition,
+    public GridAjaxResult<CustomerTallyDTO> pagedQuery(@Valid CustomerTallyQueryParam customerTallyQueryParam,
                                                        BindingResult bindingResult) {
 
         CustomerTallyQueryCondition customerTallyQueryCondition = new CustomerTallyQueryCondition();
 
-        customerTallyQueryCondition.setCustomerId(condition.getCustomerId());
-        customerTallyQueryCondition.setIds(condition.getIds());
-        customerTallyQueryCondition.setReportDateBegin(condition.getReportDateBegin());
-        customerTallyQueryCondition.setReportDateEnd(condition.getReportDateEnd());
+        customerTallyQueryCondition.getCustomerIds().add(customerTallyQueryParam.getCustomerId());
+        customerTallyQueryCondition.setIds(customerTallyQueryParam.getIds());
+        customerTallyQueryCondition.setReportDateBegin(customerTallyQueryParam.getReportDateBegin());
+        customerTallyQueryCondition.setReportDateEnd(customerTallyQueryParam.getReportDateEnd());
+        customerTallyQueryCondition.getCustomerIds().addAll(
+            customerManageDomainService.queryCustomerIdsByManagerId(customerTallyQueryParam.getUserId()));
 
         PagedResult<CustomerTally> queryResult = customerTallyDomainService.pagedQuery(customerTallyQueryCondition);
 
@@ -180,13 +192,13 @@ public class CustomerTallyController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/export")
-    public void export(@Valid CustomerTallyQueryCondition condition,
+    public void export(@Valid CustomerTallyQueryParam queryParam,
                        BindingResult bindingResult, HttpServletResponse response) throws IOException {
 
-        condition.setCurrentPage(1);
-        condition.setPageSize(1000);
+        queryParam.setCurrentPage(1);
+        queryParam.setPageSize(1000);
 
-        GridAjaxResult<CustomerTallyDTO> result = pagedQuery(condition, bindingResult);
+        GridAjaxResult<CustomerTallyDTO> result = pagedQuery(queryParam, bindingResult);
 
         List<CustomerTallyDTO> customerTallyDTOS = result.getRows();
 

@@ -17,12 +17,14 @@ import com.zc.biz.customer.domain.dao.CustomerDOMapper;
 import com.zc.biz.customer.domain.dao.CustomerManageDOMapper;
 import com.zc.biz.customer.domain.dataobject.CustomerDO;
 import com.zc.biz.customer.domain.dataobject.CustomerDOExample;
+import com.zc.biz.customer.domain.dataobject.CustomerDOExample.Criteria;
 import com.zc.biz.customer.domain.model.Customer;
 import com.zc.biz.customer.domain.model.converter.CustomerConverter;
 import com.zc.biz.customer.domain.service.CustomerDomainService;
 import com.zc.biz.customer.domain.service.param.CustomerQueryCondition;
 import com.zc.dataobject.DataObjectUtil;
 import com.zc.result.PagedResult;
+import com.zc.utils.ListUtil;
 import com.zc.utils.NumberUtil;
 import org.springframework.stereotype.Service;
 
@@ -58,8 +60,14 @@ public class CustomerDomainServiceImpl implements CustomerDomainService {
 
         customerDOExample.setOrderByClause("gmt_create desc");
 
+        Criteria criteria = customerDOExample.createCriteria();
+
         if (StringUtil.isNotEmpty(customerQueryCondition.getCompany())) {
-            customerDOExample.createCriteria().andCompanyLike("%" + customerQueryCondition.getCompany() + "%");
+            criteria.andCompanyLike("%" + customerQueryCondition.getCompany() + "%");
+        }
+
+        if (ListUtil.isNotBlank(customerQueryCondition.getIds())){
+            criteria.andIdIn(customerQueryCondition.getIds());
         }
 
         Page<CustomerDO> page = PageHelper.startPage(customerQueryCondition.getCurrentPage(),

@@ -23,6 +23,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zc</groupId>
+            <artifactId>workflow</artifactId>
+            <version>${pom.parent.version}</version>
+        </dependency>
     </dependencies>
 
 

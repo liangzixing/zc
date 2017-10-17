@@ -116,4 +116,19 @@ public class CustomerManageDomainServiceImpl implements CustomerManageDomainServ
            return customerManageDO;
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Integer> queryCustomerIdsByManagerId(Integer userId) {
+        if (NumberUtil.isNotPositive(userId)){
+            return Collections.emptyList();
+        }
+
+        CustomerManageDOExample example = new CustomerManageDOExample();
+
+        example.createCriteria().andUserIdEqualTo(userId).andIsDeletedEqualTo("n");
+
+        List<CustomerManageDO> manageDOS = customerManageDOMapper.selectByExample(example);
+
+        return ListUtil.collect(manageDOS, CustomerManageDO::getCustomerId);
+    }
 }

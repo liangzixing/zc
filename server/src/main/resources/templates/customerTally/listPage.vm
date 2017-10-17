@@ -38,6 +38,9 @@
 </style>
 
 
+#set($menuIndex = "customerTallyList")
+
+
 <div class="search-tally-panel">
     <div id="p" class="easyui-panel" title="搜索客户账单"
          style="width:100%;height:200px;padding:10px;background:#fafafa;"

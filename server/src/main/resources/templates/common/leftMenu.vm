@@ -4,42 +4,78 @@
 
             <div class="item-wrap first">
                 <div class="item-title">
-                    <a href="/home">首页</a>
+                    <a id="home" href="/home">首页</a>
                 </div>
             </div>
 
             <div class="item-wrap ">
                 <div class="item-title">
                     系统管理
-                    <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                 </div>
                 <div class="item sub">
                     <i></i>
-                    <a href="/user/list">用户管理</a>
+                    <a id="userList" href="/user/list">用户管理</a>
+                </div>
+            </div>
+
+            <div class="item-wrap ">
+                <div class="item-title">
+                    我的任务
+                </div>
+                <div class="item sub">
+                    <i></i>
+                    <a id="taskList" href="/task/list?today=1">任务管理</a>
+                </div>
+                <div class="item sub">
+                    <i></i>
+                    <a id="taskListWait" href="/task/list?status=waitProcess&today=1">今日待办</a>
                 </div>
             </div>
 
             <div class="item-wrap">
                 <div class="item-title">
                     客户管理
-                    <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                 </div>
                 <div class="item sub ">
                     <i></i>
-                    <a href="/customer/listPage">客户管理</a>
+                    <a id="customerList" href="/customer/listPage">客户管理</a>
                 </div>
                 <div class="item sub ">
                     <i></i>
-                    <a href="/customerTally/addPage">新增客户账单</a>
-                </div>
-                <div class="item sub ">
-                    <i></i>
-                    <a href="/customerTally/listPage">客户账单管理</a>
+                    <a id="customerMy" href="/customer/my">我的客户</a>
                 </div>
             </div>
+
+            <div class="item-wrap">
+                <div class="item-title">
+                    客户账单管理
+                </div>
+                <div class="item sub ">
+                    <i></i>
+                    <a id="customerTallyList" href="/customerTally/listPage">客户账单管理</a>
+                </div>
+                <div class="item sub ">
+                    <i></i>
+                    <a id="customerTallyMy" href="/customerTally/my">我的客户账单</a>
+                </div>
+                <div class="item sub ">
+                    <i></i>
+                    <a id="customerTallyAdd" href="/customerTally/addPage">新增客户账单</a>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <input type="hidden" id="menuIndex" value="$!{menuIndex}">
+
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        var menuIndexVal = $("#menuIndex").val() || "home";
+        $("#"+menuIndexVal).parent().addClass("current");
+    })
+</script>
 
 

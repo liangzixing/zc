@@ -13,6 +13,7 @@
     <module>infrastructure</module>
     <module>biz</module>
     <module>common</module>
+    <module>workflow</module>
   </modules>
 
   <name>zc-all</name>
@@ -51,6 +52,12 @@
         <groupId>com.github.pagehelper</groupId>
         <artifactId>pagehelper-spring-boot-starter</artifactId>
         <version>1.2.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.activiti</groupId>
+        <artifactId>activiti-spring-boot-starter-basic</artifactId>
+        <version>6.0.0</version>
       </dependency>
 
       <dependency>
@@ -104,11 +111,6 @@
         <artifactId>jquery-ui</artifactId>
         <version>1.12.1</version>
       </dependency>
-      <dependency>
-        <groupId>org.webjars</groupId>
-        <artifactId>jquery-file-upload</artifactId>
-        <version>9.8.1</version>
-      </dependency>
 
       <dependency>
         <groupId>commons-beanutils</groupId>
@@ -136,6 +138,12 @@
         <groupId>org.jeecg</groupId>
         <artifactId>easypoi-annotation</artifactId>
         <version>2.3.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-jdbc</artifactId>
+        <version>8.0.15</version>
       </dependency>
 
     </dependencies>

@@ -12,6 +12,8 @@ package com.zc.controller.param;
  */
 public class CustomerQueryParam extends PageQueryCondition{
 
+    private Integer userId;
+
     private String company;
 
     public String getCompany() {
@@ -20,5 +22,13 @@ public class CustomerQueryParam extends PageQueryCondition{
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

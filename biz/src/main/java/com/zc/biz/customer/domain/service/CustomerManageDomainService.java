@@ -13,10 +13,11 @@ public interface CustomerManageDomainService {
 
     List<Integer> queryManagerIdsByCustomerId(Integer customerId);
 
-
     Map<Integer, List<Integer>> queryManagersByCustomerIds(List<Integer> customerIds);
 
     boolean deletedBy(int customerId, List<Integer> userId, String operator);
 
     boolean addBy(Customer customer, String operator);
+
+    List<Integer> queryCustomerIdsByManagerId(Integer userId);
 }

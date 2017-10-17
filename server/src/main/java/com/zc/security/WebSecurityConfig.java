@@ -6,6 +6,8 @@ into with Alibaba.com.*/
 
 package com.zc.security;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 
 /**
  * @author zixing.liangzx@alibaba-inc.com
@@ -25,6 +29,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Resource
+    private SessionRegistry sessionRegistry;
 
     @Bean
     @Override
@@ -36,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //允许所有用户访问"/"和"/login"
         http.authorizeRequests()
-            .antMatchers("/webjars/**", "/css/**", "/js/**", "/images/**").permitAll()
+            .antMatchers("/webjars/**", "/css/**", "/js/**", "/images/**", "/test/**").permitAll()
             //其他地址的访问均需验证权限
             .anyRequest().authenticated()
             .and()
@@ -50,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutSuccessUrl("/login")
             .permitAll()
             .and()
-            .headers().frameOptions().disable();
+            .headers().frameOptions().disable()
+            .and().sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry);
     }
 
     @Autowired

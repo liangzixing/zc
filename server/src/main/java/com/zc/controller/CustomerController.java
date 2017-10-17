@@ -46,6 +46,12 @@ public class CustomerController extends BaseController {
         return "/customer/listPage";
     }
 
+
+    @RequestMapping("/my")
+    public String myCustomer(){
+        return "/customer/my";
+    }
+
     @ResponseBody
     @RequestMapping("/getById")
     public AjaxResult<CustomerDTO> getById(Integer id) {
@@ -61,6 +67,7 @@ public class CustomerController extends BaseController {
         customerQueryCondition.setCompany(param.getCompany());
         customerQueryCondition.setCurrentPage(param.getCurrentPage());
         customerQueryCondition.setPageSize(param.getPageSize());
+        customerQueryCondition.setUserId(param.getUserId());
 
         PagedResult<Customer> customers = customerService.pagedQuery(customerQueryCondition);
 

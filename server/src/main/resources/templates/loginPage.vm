@@ -3,14 +3,12 @@
 <style type="text/css">
 
     .login-body {
-        height: 600px;
+        height: 530px;
     }
 
     .login-form {
         width: 350px;
-        margin-top: 200px;
-        margin-left: 36%;
-        text-align: center;
+        margin: 200px auto
     }
 
     .login-error{

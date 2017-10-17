@@ -59,6 +59,8 @@
     }
 </style>
 
+#set($menuIndex = "customerTallyAdd")
+
 
 <input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
@@ -84,6 +86,7 @@
         <form id="ff" action="/customerTally/add" method="post" enctype="multipart/form-data">
 
             <input type="hidden" id="id" name="customerTallyId">
+            <input type="hidden" id="userId" name="userId" value="$!sec.getUserId()">
 
             <input type="hidden" id="cutomerId" name="customerId">
 
@@ -200,7 +203,8 @@
             url: "/customer/pagedSearch",
             queryParams: {
                 pageSize: 10,
-                _csrf: $("#_csrf").val()
+                _csrf: $("#_csrf").val(),
+                userId: $("#userId").val()
             },
             valueField: "id",
             textField: "company",

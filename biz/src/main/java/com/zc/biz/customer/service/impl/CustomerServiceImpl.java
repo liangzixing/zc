@@ -8,6 +8,7 @@ package com.zc.biz.customer.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.zc.biz.customer.service.CustomerService;
 import com.zc.result.PagedResult;
 import com.zc.utils.ListUtil;
 import com.zc.utils.MapUtils;
+import com.zc.utils.NumberUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,6 +49,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public PagedResult<Customer> pagedQuery(CustomerQueryCondition customerQueryCondition) {
 
+        if (NumberUtil.isPositive(customerQueryCondition.getUserId())){
+
+            List<Integer> customerIds = queryCompanyIdsByManagerId(customerQueryCondition.getUserId());
+
+            if (ListUtil.isBlank(customerIds)){
+                return PagedResult.success(0, new ArrayList<>());
+            }
+
+            customerQueryCondition.getIds().addAll(customerIds);
+        }
+
         PagedResult<Customer> customers = customerDomainService.pagedQuery(customerQueryCondition);
 
         if (customers == null || ListUtil.isBlank(customers.getData())) {
@@ -56,6 +69,10 @@ public class CustomerServiceImpl implements CustomerService {
         fillManagers(customers.getData());
 
         return customers;
+    }
+
+    private List<Integer> queryCompanyIdsByManagerId(Integer userId) {
+        return customerManageDomainService.queryCustomerIdsByManagerId(userId);
     }
 
     private void fillManagers(List<Customer> customers) {

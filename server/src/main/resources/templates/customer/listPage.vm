@@ -44,7 +44,9 @@
                 {field: 'contactMobile', title: '联系电话', width: 80},
                 {field: 'accountType', title: '账户类型', width: 80},
                 {field: 'account', title: '账户号', width: 120},
-                {field: 'balance', title: '余额(分)', width: 30},
+                {field: 'balance', title: '余额(元)', width: 30, formatter: function(value){
+                    return fenToYuan(value);
+                }},
                 {
                     field: 'managers',
                     title: '管理员',
@@ -122,6 +124,8 @@
 
 
 </script>
+
+#set($menuIndex = "customerList")
 
 <input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
@@ -344,6 +348,14 @@
                 }
             }
         });
+    }
+
+    function fenToYuan(fen){
+        var str = (fen/100).toFixed(2) + '';
+        var intSum = str.substring(0,str.indexOf(".")).replace( /\B(?=(?:\d{3})+$)/g, ',' );//取到整数部分
+        var dot = str.substring(str.length,str.indexOf("."))//取到小数部分
+        var ret = intSum + dot;
+        return ret;
     }
 </script>
 
