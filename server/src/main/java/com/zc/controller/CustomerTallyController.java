@@ -8,6 +8,7 @@ package com.zc.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class CustomerTallyController extends BaseController {
         CustomerTallyQueryCondition customerTallyQueryCondition = new CustomerTallyQueryCondition();
 
         customerTallyQueryCondition.getCustomerIds().add(customerTallyQueryParam.getCustomerId());
-        customerTallyQueryCondition.setIds(customerTallyQueryParam.getIds());
+        customerTallyQueryCondition.setIds(Arrays.asList(customerTallyQueryParam.getIds()));
         customerTallyQueryCondition.setReportDateBegin(customerTallyQueryParam.getReportDateBegin());
         customerTallyQueryCondition.setReportDateEnd(customerTallyQueryParam.getReportDateEnd());
         customerTallyQueryCondition.getCustomerIds().addAll(
@@ -192,11 +193,12 @@ public class CustomerTallyController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/export")
-    public void export(@Valid CustomerTallyQueryParam queryParam,
+    public void export(@Valid CustomerTallyQueryParam queryParam, @RequestParam(value = "ids[]", required = false) Integer[] ids,
                        BindingResult bindingResult, HttpServletResponse response) throws IOException {
 
         queryParam.setCurrentPage(1);
         queryParam.setPageSize(1000);
+        queryParam.setIds(ids);
 
         GridAjaxResult<CustomerTallyDTO> result = pagedQuery(queryParam, bindingResult);
 

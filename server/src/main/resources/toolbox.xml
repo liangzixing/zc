@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tools>
+    <toolbox scope="request">
+        <tool key="sec" class="com.zc.security.SecurityVelocity"/>
+    </toolbox>
+</tools>

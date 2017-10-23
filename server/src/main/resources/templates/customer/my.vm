@@ -1,0 +1,170 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<style type="text/css">
+
+    .f1 {
+        width: 300px;
+    }
+
+    .edit-table td {
+        height: 35px;
+    }
+
+    .search-customer {
+        float: right;
+        margin-right: 30px;
+    }
+
+    .dl {
+        float: left;
+        margin-left: 30px;
+    }
+
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $('#dg').datagrid({
+            url: '/customer/pagedQuery',
+            toolbar: "#toolbar",
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: false,
+            autoRowHeight: true,
+            pageSize: 20,
+            idField: 'id',
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'company', title: '公司名', width: 120},
+                {field: 'contactName', title: '联系人', width: 50},
+                {field: 'contactMobile', title: '联系电话', width: 80},
+                {field: 'accountType', title: '账户类型', width: 80},
+                {field: 'account', title: '账户号', width: 120},
+                {
+                    field: 'balance', title: '余额(元)', width: 80, formatter: function (value) {
+                    return fenToYuan(value);
+                }
+                }
+            ]],
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+            },
+
+            onBeforeLoad: function (params) {
+                params.currentPage = params.page;
+                params.pageSize = params.rows;
+                params.userId = $("#userId").val();
+            }
+        });
+    })
+</script>
+
+#set($menuIndex = "customerMy")
+
+<input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+<input type="hidden" id="userId" name="userId" value="$!sec.getUserId()"/>
+
+<div class="customer-list">
+
+    <table id="dg" title="客户列表" class="easyui-datagrid data-table"></table>
+
+    <div id="toolbar">
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+           onclick="addCustomerOperateTask()">添加客户运营任务</a>
+
+        <spa class="search-customer"><input class="easyui-textbox" id="search-input" data-options="prompt:'请输入公司名称搜索'"
+                                            style="width:200px">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchCustomer()">Search</a></spa>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    function searchCustomer() {
+
+        var company = $("#search-input").val();
+
+        if (!company) {
+            return;
+        }
+
+        $('#dg').datagrid({
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+                "company": company,
+                userId: $("#userId").val()
+            }
+        })
+    }
+
+    function fenToYuan(fen) {
+        var str = (fen / 100).toFixed(2) + '';
+        var intSum = str.substring(0, str.indexOf(".")).replace(/\B(?=(?:\d{3})+$)/g, ',');//取到整数部分
+        var dot = str.substring(str.length, str.indexOf("."))//取到小数部分
+        var ret = intSum + dot;
+        return ret;
+    }
+
+    function addCustomerOperateTask() {
+
+        var rows = $('#dg').datagrid("getSelections");
+
+        if (!rows || rows.length == 0) {
+            $.messager.alert('Info', "请至少勾选一个客户", 'info');
+            return;
+        }
+
+        var customerIds = new Array();
+        rows.forEach(function (e) {
+            customerIds.push(e.id);
+        })
+
+        $.messager.prompt({
+            title: '设定任务目标',
+            msg: '请输入任务目标:',
+            fn: function (r) {
+                if (r) {
+                    $.ajax(
+                            "/task/addCustomerOperateTask",
+                            {
+                                method:'post',
+                                dataType: 'json',
+                                data:{
+                                   _csrf : $("#_csrf").val(),
+                                    'customerIds':customerIds,
+                                    goal: r
+                                },
+                                success : function(data){
+                                    if (data && data.success){
+                                        $.messager.show({
+                                            title:'Info',
+                                            msg:'添加成功！',
+                                            timeout:5000,
+                                            showType:'slide'
+                                        });
+                                    } else {
+                                        $.messager.show({
+                                            title:'Info',
+                                            msg:'添加失败！',
+                                            timeout:5000,
+                                            showType:'slide'
+                                        });
+                                    }
+                                }
+                            }
+                    )
+                }
+            }
+        });
+
+    }
+
+</script>
+
