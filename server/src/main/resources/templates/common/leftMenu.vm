@@ -24,11 +24,11 @@
                 </div>
                 <div class="item sub">
                     <i></i>
-                    <a id="taskList" href="/task/list?today=1">任务管理</a>
+                    <a id="myTasks" href="/task/myTasks">我的任务</a>
                 </div>
                 <div class="item sub">
                     <i></i>
-                    <a id="taskListWait" href="/task/list?status=waitProcess&today=1">今日待办</a>
+                    <a id="pendingTasks" href="/task/pendingTasks">待办任务</a>
                 </div>
             </div>
 

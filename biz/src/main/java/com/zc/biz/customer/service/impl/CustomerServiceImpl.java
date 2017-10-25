@@ -9,6 +9,7 @@ package com.zc.biz.customer.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +109,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> query(CustomerQueryCondition customerQueryCondition) {
+
+        if (NumberUtil.isPositive(customerQueryCondition.getUserId())){
+
+            List<Integer> customerIds = queryCompanyIdsByManagerId(customerQueryCondition.getUserId());
+
+            if (ListUtil.isBlank(customerIds)){
+                return Collections.emptyList();
+            }
+
+            customerQueryCondition.getIds().addAll(customerIds);
+        }
 
         List <Customer> customers = customerDomainService.query(customerQueryCondition);
 

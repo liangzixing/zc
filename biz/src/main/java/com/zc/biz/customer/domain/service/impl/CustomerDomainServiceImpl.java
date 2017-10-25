@@ -85,8 +85,14 @@ public class CustomerDomainServiceImpl implements CustomerDomainService {
 
         customerDOExample.setOrderByClause("gmt_create desc");
 
+        Criteria criteria = customerDOExample.createCriteria();
+
         if (StringUtil.isNotEmpty(customerQueryCondition.getCompany())) {
-            customerDOExample.createCriteria().andCompanyLike("%" + customerQueryCondition.getCompany() + "%");
+            criteria.andCompanyLike("%" + customerQueryCondition.getCompany() + "%");
+        }
+
+        if (ListUtil.isNotBlank(customerQueryCondition.getIds())){
+            criteria.andIdIn(customerQueryCondition.getIds());
         }
 
         List<CustomerDO> customerDOS = customerDOMapper.selectByExample(customerDOExample);

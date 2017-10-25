@@ -7,6 +7,7 @@ into with Alibaba.com.*/
 package com.zc.workflow.service.param;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author zixing.liangzx@alibaba-inc.com
@@ -25,6 +26,10 @@ public class TaskQueryCondition {
     private Date createDateBegin;
 
     private Date createDateEnd;
+
+    private Map<String, Object> bizDataSearchCondition;
+
+    private Map<String, Object> localBizDataSearchCondition;
 
     public String getProcessFlowId() {
         return processFlowId;
@@ -72,5 +77,21 @@ public class TaskQueryCondition {
 
     public void setCreateDateEnd(Date createDateEnd) {
         this.createDateEnd = createDateEnd;
+    }
+
+    public Map<String, Object> getBizDataSearchCondition() {
+        return bizDataSearchCondition;
+    }
+
+    public void setBizDataSearchCondition(Map<String, Object> bizDataSearchCondition) {
+        this.bizDataSearchCondition = bizDataSearchCondition;
+    }
+
+    public Map<String, Object> getLocalBizDataSearchCondition() {
+        return localBizDataSearchCondition;
+    }
+
+    public void setLocalBizDataSearchCondition(Map<String, Object> localBizDataSearchCondition) {
+        this.localBizDataSearchCondition = localBizDataSearchCondition;
     }
 }

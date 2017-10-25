@@ -98,7 +98,11 @@ public class CustomerTallyController extends BaseController {
         CustomerTallyQueryCondition customerTallyQueryCondition = new CustomerTallyQueryCondition();
 
         customerTallyQueryCondition.getCustomerIds().add(customerTallyQueryParam.getCustomerId());
-        customerTallyQueryCondition.setIds(Arrays.asList(customerTallyQueryParam.getIds()));
+
+        if (customerTallyQueryParam.getIds() != null && customerTallyQueryParam.getIds().length > 0){
+            customerTallyQueryCondition.setIds(Arrays.asList(customerTallyQueryParam.getIds()));
+        }
+
         customerTallyQueryCondition.setReportDateBegin(customerTallyQueryParam.getReportDateBegin());
         customerTallyQueryCondition.setReportDateEnd(customerTallyQueryParam.getReportDateEnd());
         customerTallyQueryCondition.getCustomerIds().addAll(

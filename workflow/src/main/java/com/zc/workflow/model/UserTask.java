@@ -6,6 +6,7 @@ into with Alibaba.com.*/
 
 package com.zc.workflow.model;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -19,6 +20,10 @@ public class UserTask {
     private Map<String, Object> bizData;
 
     private Map<String, Object> localBizData;
+
+    private Date createDate;
+
+    private String status;
 
     public String getTaskId() {
         return taskId;
@@ -42,5 +47,21 @@ public class UserTask {
 
     public void setLocalBizData(Map<String, Object> localBizData) {
         this.localBizData = localBizData;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

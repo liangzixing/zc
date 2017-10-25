@@ -7,6 +7,7 @@ into with Alibaba.com.*/
 package com.zc.controller.dto.converter;
 
 import com.zc.controller.dto.CustomerOperateTaskDTO;
+import com.zc.utils.DateUtil;
 import com.zc.workflow.model.UserTask;
 
 /**
@@ -21,15 +22,27 @@ public class CustomerOperateTaskConverter {
 
         customerOperateTaskDTO.setTaskId(userTask.getTaskId());
 
+        customerOperateTaskDTO.setGmtCreate(userTask.getCreateDate());
+        customerOperateTaskDTO.setGmtCreateStr(DateUtil.formatTime(userTask.getCreateDate()));
+
+        customerOperateTaskDTO.setStatus(userTask.getStatus());
+
         if (userTask.getBizData() != null && userTask.getBizData().size() > 0){
 
             customerOperateTaskDTO.setCustomerId(Integer.valueOf(userTask.getBizData().get("customerId").toString()));
             customerOperateTaskDTO.setCompany(userTask.getBizData().get("company").toString());
 
             customerOperateTaskDTO.setCustomerAmountWhenTaskCreate(Long.valueOf(userTask.getBizData().get("amountSnapshot").toString()));
+        }
 
-            if (userTask.getBizData().get("goal")!= null){
-                customerOperateTaskDTO.setGoal(userTask.getBizData().get("goal").toString());
+        if (userTask.getLocalBizData() != null && userTask.getLocalBizData().size() > 0){
+
+            if (userTask.getLocalBizData().get("goal")!= null){
+                customerOperateTaskDTO.setGoal(userTask.getLocalBizData().get("goal").toString());
+            }
+
+            if (userTask.getLocalBizData().get("amountSnapshotForTask")!= null){
+                customerOperateTaskDTO.setCustomerAmountWhenTaskComplete(Long.valueOf(userTask.getLocalBizData().get("amountSnapshotForTask").toString()));
             }
         }
 

@@ -6,6 +6,8 @@ into with Alibaba.com.*/
 
 package com.zc.controller.dto;
 
+import java.util.Date;
+
 /**
  * @author zixing.liangzx@alibaba-inc.com
  * @version 17/10/21 13:30 1.0.0
@@ -22,7 +24,13 @@ public class CustomerOperateTaskDTO {
 
     private long customerAmountWhenTaskCreate;
 
-    private int status;
+    private long customerAmountWhenTaskComplete;
+
+    private Date gmtCreate;
+
+    private String gmtCreateStr;
+
+    private String status;
 
     public String getTaskId() {
         return taskId;
@@ -64,11 +72,35 @@ public class CustomerOperateTaskDTO {
         this.customerAmountWhenTaskCreate = customerAmountWhenTaskCreate;
     }
 
-    public int getStatus() {
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public String getGmtCreateStr() {
+        return gmtCreateStr;
+    }
+
+    public void setGmtCreateStr(String gmtCreateStr) {
+        this.gmtCreateStr = gmtCreateStr;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getCustomerAmountWhenTaskComplete() {
+        return customerAmountWhenTaskComplete;
+    }
+
+    public void setCustomerAmountWhenTaskComplete(long customerAmountWhenTaskComplete) {
+        this.customerAmountWhenTaskComplete = customerAmountWhenTaskComplete;
     }
 }

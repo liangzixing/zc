@@ -1,0 +1,177 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+
+<style type="text/css">
+
+    .search-tally-panel {
+        margin-bottom: 10px;
+    }
+
+    .customer-search-panel-lable, .customer-search-panel, .search-tally-date-panel {
+        float: left;
+        margin-left: 5px;
+    }
+
+    .customer-search-panel {
+        border-left: thin dashed #b3b3b3;
+        border-right: thin dashed #b3b3b3;
+        padding-left: 5px;
+        padding-right: 5px;
+        height: 100%;
+    }
+
+    .customer-search-panel-lable {
+        margin-top: 80px;
+    }
+
+    .search-tally-date-panel {
+        margin-top: 75px;
+    }
+
+    .customer-search-result {
+        margin-top: 5px;
+    }
+
+</style>
+
+#set($menuIndex = "myTasks")
+
+<input type="hidden" id="userId" name="userId" value="$!sec.getUserId()"/>
+
+<div class="search-tally-panel">
+    <div id="p" class="easyui-panel" title="搜索任务"
+         style="width:100%;height:200px;padding:10px;background:#fafafa;"
+         data-options="iconCls:'icon-search',closable: false,
+                collapsible:true,minimizable:true,maximizable:true">
+
+        <div class="customer-search-panel-lable"><label>选择一个客户:</label></div>
+
+        <div class="customer-search-panel">
+            <div>
+
+                <input id="ss" class="easyui-searchbox" style="width:200px"
+                       data-options="searcher:searchCustomer,prompt:'输入公司名称搜索客户'"></input>
+            </div>
+
+            <div class="customer-search-result">
+                <div id="dl"></div>
+            </div>
+        </div>
+
+        <div class="search-tally-date-panel">
+            <lable> 记录时间:</lable>
+            <input class="easyui-datetimebox" id="reportDateBegin" name="reportDateBegin"
+                   data-options="showSeconds:false" style="width:150px">
+            <lable> -</lable>
+            <input class="easyui-datetimebox" id="reportDateEnd" name="reportDateEnd"
+                   data-options="showSeconds:false" style="width:150px">
+
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+               style="width:80px" onclick="searchTasks()">Search</a>
+        </div>
+    </div>
+</div>
+
+<div class="customer-operate-task-list">
+    <table id="dg" title="我的任务列表" class="easyui-datagrid data-table"></table>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#dg').datagrid({
+            url: '/task/pagedQueryAll',
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: true,
+            autoRowHeight: true,
+            pageSize: 20,
+            idField: 'id',
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'taskId', title: '任务ID', width: 30},
+                {field: 'company', title: '公司名', width: 120},
+                {field: 'customerAmountWhenTaskCreate', title: '添加任务时公司余额(元)', width: 100, formatter: function(value){
+                    return fenToYuan(value);
+                }},
+                {field: 'customerAmountWhenTaskComplete', title: '任务完成时公司余额(元)', width: 100, formatter: function(value){
+                    return value > 0 ? fenToYuan(value) : '-';
+                 }},
+                {field: 'goal', title: '任务目标', width: 50},
+                {field: 'gmtCreateStr', title: '任务创建时间', width: 100},
+                {field: 'status', title: '状态', width: 80}
+            ]],
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+            },
+
+            onBeforeLoad: function (params) {
+                params.currentPage = params.page;
+                params.pageSize = params.rows;
+            }
+        });
+
+         $('#dl').datalist({
+                    url: "/customer/pagedSearch",
+                    queryParams: {
+                        pageSize: 5,
+                        _csrf: $("#_csrf").val(),
+                        userId:$("#userId").val()
+                    },
+                    valueField: "id",
+                    width: 200,
+                    heigh: 120,
+                    textField: "company",
+                    checkbox: true,
+                    lines: true
+                });
+    })
+
+    function searchCustomer(value, name) {
+            $('#dl').datalist({
+                queryParams: {
+                    company: value,
+                    pageSize: 10,
+                    _csrf: $("#_csrf").val(),
+                    userId:$("#userId").val()
+                }
+            })
+        };
+
+    function searchTasks() {
+
+        var customerSelected = $("#dl").datagrid("getSelected");
+
+        var customerId = customerSelected && customerSelected.id;
+
+        var reportDateBegin = $("#reportDateBegin").datetimebox("getValue");
+        var reportDateEnd = $("#reportDateEnd").datetimebox("getValue");
+
+        if (!customerId && !reportDateBegin && !reportDateEnd) {
+            return;
+        }
+
+        $("#dg").datagrid({
+            queryParams: {
+                customerId: customerId,
+                taskCreateBegin: reportDateBegin,
+                taskCreateEnd: reportDateEnd,
+                "_csrf": $("#_csrf").val(),
+                userId:$("#userId").val()
+            }
+        });
+    }
+
+    function fenToYuan(fen){
+        var str = (fen/100).toFixed(2) + '';
+        var intSum = str.substring(0,str.indexOf(".")).replace( /\B(?=(?:\d{3})+$)/g, ',' );//取到整数部分
+        var dot = str.substring(str.length,str.indexOf("."))//取到小数部分
+        var ret = intSum + dot;
+        return ret;
+    }
+</script>

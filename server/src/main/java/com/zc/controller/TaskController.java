@@ -14,8 +14,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
-import com.alibaba.fastjson.JSON;
-
 import com.zc.biz.customer.domain.model.Customer;
 import com.zc.biz.customer.domain.service.param.CustomerQueryCondition;
 import com.zc.biz.customer.service.CustomerService;
@@ -23,13 +21,14 @@ import com.zc.controller.dto.AjaxResult;
 import com.zc.controller.dto.CustomerOperateTaskDTO;
 import com.zc.controller.dto.GridAjaxResult;
 import com.zc.controller.dto.converter.CustomerOperateTaskConverter;
-import com.zc.controller.param.CustomerOperateTaskAddDTO;
 import com.zc.controller.param.CustomerOperateTaskQueryParam;
 import com.zc.utils.ListUtil;
 import com.zc.workflow.model.ProcessFlow;
 import com.zc.workflow.model.UserTask;
 import com.zc.workflow.service.WorkflowService;
 import com.zc.workflow.service.param.TaskQueryCondition;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +54,74 @@ public class TaskController extends BaseController {
         return "/task/myTasks";
     }
 
+    @RequestMapping("/pendingTasks")
+    public String pendingTasks() {
+        return "/task/pendingTasks";
+    }
+
+    @ResponseBody
+    @RequestMapping("/deleteTasks")
+    public AjaxResult<Boolean> deleteTasks(@RequestParam(value = "taskIds[]") String[] taskIds) {
+
+        if (taskIds == null || taskIds.length == 0) {
+            return AjaxResult.unSuccess("ILLEGAL_PARAM");
+        }
+
+        return AjaxResult.success(workflowService.deleteTasks(Arrays.asList(taskIds)));
+    }
+
+    @ResponseBody
+    @RequestMapping("/completeTasks")
+    public AjaxResult<Boolean> completeTasks(@RequestParam(value = "taskIds[]") String[] taskIds) {
+        if (taskIds == null || taskIds.length == 0) {
+            return AjaxResult.unSuccess("ILLEGAL_PARAM");
+        }
+
+        Arrays.stream(taskIds).forEach(x -> {
+
+            UserTask userTask = workflowService.getById(x);
+
+            if (userTask == null){
+                return;
+            }
+
+            int customerId = userTask.getBizData() == null || userTask.getBizData().get("customerId") == null ?
+                0 : Integer.valueOf(userTask.getBizData().get("customerId").toString());
+
+            if (customerId < 0){
+                return;
+            }
+
+            Customer customer = customerService.queryById(customerId);
+
+            if (customer == null){
+                return;
+            }
+
+            workflowService.completeTask(x, new HashMap() {{
+                put("amountSnapshotForTask", customer.getBalance());
+            }});
+        });
+
+        return AjaxResult.success(true);
+    }
+
+    @ResponseBody
+    @RequestMapping("/updateGoal")
+    public AjaxResult<Boolean> updateGoal(@RequestParam(value = "taskIds[]") String[] taskIds, String goal) {
+        if (taskIds == null || taskIds.length == 0 || StringUtils.isBlank(goal)) {
+            return AjaxResult.unSuccess("ILLEGAL_PARAM");
+        }
+
+        Arrays.stream(taskIds).forEach(taskId -> {
+            workflowService.updateTaskLocalBizData(taskId, new HashMap() {{
+                put("goal", goal);
+            }});
+        });
+
+        return AjaxResult.success(true);
+    }
+
     @ResponseBody
     @RequestMapping("/pagedQuery")
     public GridAjaxResult<CustomerOperateTaskDTO> pagedQuery(@Valid CustomerOperateTaskQueryParam param,
@@ -73,6 +140,12 @@ public class TaskController extends BaseController {
         condition.setCreateDateBegin(param.getTaskCreateBegin());
         condition.setCreateDateEnd(param.getTaskCreateEnd());
 
+        if (param.getCustomerId() > 0){
+            condition.setBizDataSearchCondition(new HashMap(){{
+                put("customerId", param.getCustomerId());
+            }});
+        }
+
         List<UserTask> tasks = workflowService.pageQueryTaskBy(condition);
 
         Long count = workflowService.countTask(condition);
@@ -81,8 +154,40 @@ public class TaskController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping("/pagedQueryAll")
+    public GridAjaxResult<CustomerOperateTaskDTO> pagedQueryAll(@Valid CustomerOperateTaskQueryParam param,
+                                                                BindingResult bindingResult) {
+
+        TaskQueryCondition condition = new TaskQueryCondition();
+
+        if (param.getUserId() > 0) {
+            condition.setUserId(param.getUserId());
+        } else {
+            condition.setUserId(getLoginUserId());
+        }
+
+        condition.setPageStart(param.getCurrentPage());
+        condition.setPageSize(param.getPageSize());
+        condition.setCreateDateBegin(param.getTaskCreateBegin());
+        condition.setCreateDateEnd(param.getTaskCreateEnd());
+
+        if (param.getCustomerId() > 0){
+            condition.setBizDataSearchCondition(new HashMap(){{
+                put("customerId", param.getCustomerId());
+            }});
+        }
+
+        List<UserTask> tasks = workflowService.pageQueryHistoryTaskBy(condition);
+
+        Long count = workflowService.countHistoryTask(condition);
+
+        return GridAjaxResult.success(count, ListUtil.convert(tasks, CustomerOperateTaskConverter::toDTO));
+    }
+
+    @ResponseBody
     @RequestMapping("/addCustomerOperateTask")
-    public AjaxResult<Boolean> addCustomerOperateTask(@RequestParam(value = "customerIds[]")Integer[] customerIds, String goal) {
+    public AjaxResult<Boolean> addCustomerOperateTask(@RequestParam(value = "customerIds[]") Integer[] customerIds,
+                                                      String goal) {
 
         CustomerQueryCondition queryCondition = new CustomerQueryCondition();
         queryCondition.setIds(Arrays.asList(customerIds));
@@ -109,14 +214,20 @@ public class TaskController extends BaseController {
 
             Map<String, Object> bizData = new HashMap<>();
 
+            bizData.put("taskType", "customerOperate");
             bizData.put("customerId", c.getId());
             bizData.put("company", c.getCompany());
             bizData.put("amountSnapshot", c.getBalance());
 
-            bizData.put("goal", goal);
+            Map<String, Object> taskBizData = new HashMap<>();
+            taskBizData.put("goal", goal);
+            taskBizData.put("status", "PENDING");
 
             // 更新业务数据
-            taskIds.parallelStream().forEach(id -> workflowService.updateTaskBizData(id, bizData));
+            taskIds.parallelStream().forEach(id -> {
+                workflowService.updateTaskBizData(id, bizData);
+                workflowService.updateTaskLocalBizData(id, taskBizData);
+            });
         });
 
         return AjaxResult.success(Boolean.TRUE);

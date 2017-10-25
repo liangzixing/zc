@@ -18,11 +18,19 @@ public interface WorkflowService {
 
     List<UserTask> pageQueryTaskBy(TaskQueryCondition taskQueryCondition);
 
+    List<UserTask> pageQueryHistoryTaskBy(TaskQueryCondition taskQueryCondition);
+
+    UserTask getById(String taskId);
+
     long countTask(TaskQueryCondition taskQueryCondition);
 
-    boolean completeTask(String taskId);
+    long countHistoryTask(TaskQueryCondition taskQueryCondition);
+
+    boolean completeTask(String taskId, Map<String, Object> localBizData);
 
     boolean updateTaskBizData(String taskId, Map<String, Object> bizData);
+
+    boolean updateTaskLocalBizData(String taskId, Map<String, Object> localBizData);
 
     boolean claimTask(String taskId, int userId);
 
