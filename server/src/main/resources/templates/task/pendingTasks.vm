@@ -1,0 +1,187 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+
+#set($menuIndex = "pendingTasks")
+
+<input type="hidden" id="userId" name="userId" value="$!sec.getUserId()"/>
+
+<div class="customer-operate-task-list">
+
+    <table id="dg" title="客户运营待办任务列表" class="easyui-datagrid data-table"></table>
+
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+           onclick="editTask()">Update Goal</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+           onclick="deleteTasks()">Delete Task</a>
+
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" plain="true"
+           onclick="completeTask()">Complete Task</a>
+
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#dg').datagrid({
+            url: '/task/pagedQuery',
+            toolbar: "#toolbar",
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: false,
+            autoRowHeight: true,
+            pageSize: 20,
+            idField: 'taskId',
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'taskId', title: '任务ID', width: 30},
+                {field: 'company', title: '公司名', width: 120},
+                {field: 'customerAmountWhenTaskCreate', title: '添加任务时公司余额(元)', width: 100, formatter: function(value){
+                    return fenToYuan(value);
+                }},
+                {field: 'goal', title: '任务目标', width: 80},
+                {field: 'gmtCreateStr', title: '任务创建时间', width: 80}
+            ]],
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+            },
+
+            onBeforeLoad: function (params) {
+                params.currentPage = params.page;
+                params.pageSize = params.rows;
+            }
+        });
+    })
+
+    function editTask() {
+
+        var rows = $('#dg').datagrid('getChecked');
+
+        var ids = new Array();
+        if (rows){
+            for (var i in rows){
+                ids.push(rows[i].taskId);
+            }
+        }
+
+        if (ids) {
+            $.messager.prompt({
+                title: '更新任务目标',
+                msg: '请输入新的任务目标:',
+                fn: function (r) {
+                    if (r) {
+                        $.ajax(
+                                "/task/updateGoal",
+                                {
+                                    method: 'post',
+                                    dataType: 'json',
+                                    data: {
+                                        _csrf: $("#_csrf").val(),
+                                        'taskIds': ids,
+                                        goal: r
+                                    },
+                                    success: function (data) {
+                                        if (data && data.success) {
+                                            $.messager.show({
+                                                title: 'Info',
+                                                msg: '更新成功！',
+                                                timeout: 5000,
+                                                showType: 'slide'
+                                            });
+                                            $('#dg').datagrid('reload');
+                                        } else {
+                                            $.messager.show({
+                                                title: 'Info',
+                                                msg: '更新失败！',
+                                                timeout: 5000,
+                                                showType: 'slide'
+                                            });
+                                        }
+                                    }
+                                }
+                        )
+                    }
+                }
+            });
+        }
+    }
+
+    function deleteTasks() {
+        var rows = $('#dg').datagrid('getChecked');
+
+        var ids = new Array();
+        if (rows){
+            for (var i in rows){
+                ids.push(rows[i].taskId);
+            }
+        }
+
+        if (ids) {
+            $.messager.confirm('Confirm', '确定删除任务?', function (r) {
+                if (r) {
+                    $.post('/task/deleteTasks', {taskIds:ids, _csrf:$("#_csrf").val()}, function (result) {
+                        if (result.success) {
+                            $('#dg').datagrid('reload');    // reload the user data
+                        } else {
+                            $.messager.show({    // show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    function searchTasks() {
+
+
+    }
+
+    function completeTask() {
+        var rows = $('#dg').datagrid('getChecked');
+
+        var ids = new Array();
+        if (rows){
+            for (var i in rows){
+                ids.push(rows[i].taskId);
+            }
+        }
+
+        if (ids) {
+            $.messager.confirm('Confirm', '确定完成任务?', function (r) {
+                if (r) {
+                    $.post('/task/completeTasks', {taskIds:ids, _csrf:$("#_csrf").val()}, function (result) {
+                        if (result.success) {
+                            $('#dg').datagrid('reload');    // reload the user data
+                        } else {
+                            $.messager.show({    // show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    function fenToYuan(fen){
+        var str = (fen/100).toFixed(2) + '';
+        var intSum = str.substring(0,str.indexOf(".")).replace( /\B(?=(?:\d{3})+$)/g, ',' );//取到整数部分
+        var dot = str.substring(str.length,str.indexOf("."))//取到小数部分
+        var ret = intSum + dot;
+        return ret;
+    }
+</script>
+
+
