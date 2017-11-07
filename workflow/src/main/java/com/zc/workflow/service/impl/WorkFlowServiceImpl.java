@@ -147,6 +147,8 @@ public class WorkFlowServiceImpl implements WorkflowService {
         userTask.setBizData(historicTaskInstance.getProcessVariables());
         userTask.setTaskId(historicTaskInstance.getId());
 
+        userTask.setCompleteDate(historicTaskInstance.getEndTime());
+
         userTask.setStatus(historicTaskInstance.getTaskLocalVariables() != null ? String.valueOf(historicTaskInstance.getTaskLocalVariables().get("status")) : null);
 
         return userTask;

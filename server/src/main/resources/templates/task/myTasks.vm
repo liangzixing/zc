@@ -94,17 +94,19 @@
             idField: 'id',
             columns: [[
                 {field: 'ck', checkbox: true},
-                {field: 'taskId', title: '任务ID', width: 30},
-                {field: 'company', title: '公司名', width: 120},
-                {field: 'customerAmountWhenTaskCreate', title: '添加任务时公司余额(元)', width: 100, formatter: function(value){
+                {field: 'company', title: '公司名', width: 70},
+                {field: 'customerAmountWhenTaskCreate', title: '添加时余额(元)', width: 40, formatter: function(value){
                     return fenToYuan(value);
                 }},
-                {field: 'customerAmountWhenTaskComplete', title: '任务完成时公司余额(元)', width: 100, formatter: function(value){
+                {field: 'customerAmountWhenTaskComplete', title: '完成时余额(元)', width: 40, formatter: function(value){
                     return value > 0 ? fenToYuan(value) : '-';
                  }},
-                {field: 'goal', title: '任务目标', width: 50},
-                {field: 'gmtCreateStr', title: '任务创建时间', width: 100},
-                {field: 'status', title: '状态', width: 80}
+                {field: 'goal', title: '任务目标', width: 40},
+                {field: 'gmtCreateStr', title: '任务创建时间', width: 60},
+                {field: 'status', title: '状态', width: 40},
+                {field: 'completeDateStr', title: '任务完成时间', width: 60, formatter: function(value, row){
+                    return row.status == 'COMPLETE' ? value : '-';
+                }}
             ]],
             queryParams: {
                 "_csrf": $("#_csrf").val(),

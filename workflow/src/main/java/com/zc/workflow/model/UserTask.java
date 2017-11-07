@@ -23,6 +23,8 @@ public class UserTask {
 
     private Date createDate;
 
+    private Date completeDate;
+
     private String status;
 
     public String getTaskId() {
@@ -63,5 +65,13 @@ public class UserTask {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getCompleteDate() {
+        return completeDate;
+    }
+
+    public void setCompleteDate(Date completeDate) {
+        this.completeDate = completeDate;
     }
 }

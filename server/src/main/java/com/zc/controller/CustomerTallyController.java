@@ -8,21 +8,29 @@ package com.zc.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.google.common.io.Files;
+import com.zc.biz.customer.domain.model.Customer;
 import com.zc.biz.customer.domain.model.CustomerTally;
 import com.zc.biz.customer.domain.service.CustomerManageDomainService;
 import com.zc.biz.customer.domain.service.CustomerTallyDomainService;
 import com.zc.biz.customer.domain.service.param.CustomerTallyQueryCondition;
+import com.zc.biz.customer.service.CustomerService;
 import com.zc.biz.customer.service.CustomerTallyService;
 import com.zc.controller.dto.AjaxResult;
+import com.zc.controller.dto.CustomerReconciliationDTO;
 import com.zc.controller.dto.CustomerTallyDTO;
 import com.zc.controller.dto.GridAjaxResult;
 import com.zc.controller.dto.converter.CustomerTallyDTOConverter;
@@ -31,15 +39,19 @@ import com.zc.controller.param.CustomerTallyQueryParam;
 import com.zc.exception.BusinessException;
 import com.zc.result.PagedResult;
 import com.zc.utils.DateUtil;
+import com.zc.utils.ListUtil;
 import com.zc.utils.MD5Util;
 import com.zc.utils.NumberUtil;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jeecgframework.poi.excel.ExcelExportUtil;
 import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,6 +73,9 @@ public class CustomerTallyController extends BaseController {
 
     @Resource
     private CustomerManageDomainService customerManageDomainService;
+
+    @Resource
+    private CustomerService customerService;
 
     @Value("${image.save.root.path}")
     public String imgSaveRootPath;

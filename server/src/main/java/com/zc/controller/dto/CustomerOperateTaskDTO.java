@@ -30,6 +30,10 @@ public class CustomerOperateTaskDTO {
 
     private String gmtCreateStr;
 
+    private Date completeDate;
+
+    private String completeDateStr;
+
     private String status;
 
     public String getTaskId() {
@@ -102,5 +106,21 @@ public class CustomerOperateTaskDTO {
 
     public void setCustomerAmountWhenTaskComplete(long customerAmountWhenTaskComplete) {
         this.customerAmountWhenTaskComplete = customerAmountWhenTaskComplete;
+    }
+
+    public Date getCompleteDate() {
+        return completeDate;
+    }
+
+    public void setCompleteDate(Date completeDate) {
+        this.completeDate = completeDate;
+    }
+
+    public String getCompleteDateStr() {
+        return completeDateStr;
+    }
+
+    public void setCompleteDateStr(String completeDateStr) {
+        this.completeDateStr = completeDateStr;
     }
 }

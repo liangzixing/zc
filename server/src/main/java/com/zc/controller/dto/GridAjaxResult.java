@@ -6,6 +6,7 @@ into with Alibaba.com.*/
 
 package com.zc.controller.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class GridAjaxResult<T> {
 
     protected long total;
 
-    protected List<T> rows;
+    protected List<T> rows = new ArrayList<T>();
 
     public boolean isSuccess() {
         return success;

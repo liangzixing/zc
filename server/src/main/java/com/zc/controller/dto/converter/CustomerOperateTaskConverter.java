@@ -27,6 +27,9 @@ public class CustomerOperateTaskConverter {
 
         customerOperateTaskDTO.setStatus(userTask.getStatus());
 
+        customerOperateTaskDTO.setCompleteDate(userTask.getCompleteDate());
+        customerOperateTaskDTO.setCompleteDateStr(DateUtil.formatTime(userTask.getCompleteDate()));
+
         if (userTask.getBizData() != null && userTask.getBizData().size() > 0){
 
             customerOperateTaskDTO.setCustomerId(Integer.valueOf(userTask.getBizData().get("customerId").toString()));

@@ -62,6 +62,10 @@
                     <i></i>
                     <a id="customerTallyAdd" href="/customerTally/addPage">新增客户账单</a>
                 </div>
+                <div class="item sub ">
+                    <i></i>
+                    <a id="customerTallyRecon" href="/tallyRecon/reconciliationPage">对账</a>
+                </div>
             </div>
 
         </div>
