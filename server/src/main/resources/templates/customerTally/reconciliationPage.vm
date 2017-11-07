@@ -1,0 +1,190 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<style type="text/css">
+
+    .customer-tally-recon-search-panel {
+        float: left;
+        margin-left: 10px;
+        margin-top: 10px;
+        width: 300px;
+    }
+
+    .date-info{
+        font-size: 12px;
+        color: grey;
+        display: block;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .search-tally-date-panel, customer-search-panel, .customer-tally-recon{
+        float: left;
+    }
+
+    .customer-tally-edit {
+        float: left;
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .search-result{
+        margin-top: 10px;
+    }
+
+    .customer-tally-recon{
+        padding-top: 10px;
+        padding-left: 10px;
+        width: 700px;
+    }
+
+</style>
+
+#set($menuIndex = "customerTallyRecon")
+
+<input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+<input type="hidden" id="userId" name="userId" value="$!sec.getUserId()"/>
+
+<div class="customer-tally-recon-search-panel">
+
+    <div class="search-tally-date-panel">
+        <input class="easyui-datebox" id="beginDate" name="beginDate" required="true" style="width:100px">
+        <lable> -</lable>
+        <input class="easyui-datebox" id="endDate" name="beginDate" style="width:100px">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+           style="width:80px" onclick="reconciliation()">Search</a>
+
+        <span class="date-info">结束时间不写默认当前，最大账期时间不超过30天</span>
+    </div>
+
+    <div class="customer-search-panel">
+        <div id="p" class="easyui-panel" title="客户搜索"
+             style="width:300px;padding:10px;background:#fafafa;"
+             data-options="iconCls:'icon-query',closable:false,
+                collapsible:true,minimizable:true,maximizable:true">
+
+            <div>
+                <input id="ss" class="easyui-searchbox" style="width:270px"
+                       data-options="searcher:searchCustomer,prompt:'输入公司名称搜索'"></input>
+            </div>
+
+            <div class="search-result">
+                <div id="dl"> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-tally-recon" >
+    <table id="dg" title="对账清单" class="easyui-datagrid data-table" style="width: 100%"></table>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#dl').datalist({
+            url: "/customer/pagedSearch",
+            queryParams: {
+                pageSize: 50,
+                _csrf: $("#_csrf").val(),
+                userId: $("#userId").val()
+            },
+            valueField: "id",
+            textField: "company",
+            singleSelect: false,
+            checkbox: true,
+            lines: true
+        });
+
+        $("#dg").datagrid({
+            url: '/tallyRecon/reconciliation',
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: false,
+            autoRowHeight: true,
+            pageSize: 20,
+            columns: [[
+                {
+                    field: 'company', title: '公司名', width: 250, formatter: function (v,row) {
+                    return row.total ? "合计" : v ;}
+                },
+                {
+                    field: 'lastBalanceTotal', title: '账期前余额(元)', width: 130, formatter: function (fen) {
+                    return fenToYuan(fen);}
+                 },
+                {
+                    field: 'inTotal', title: '入账(元)', width: 100, formatter: function (fen) {
+                    return '+' + fenToYuan(fen);}
+                },
+                {
+                    field: 'outTotal', title: '出账(元)', width: 100, formatter: function (fen) {
+                    return '-' + fenToYuan(fen);}
+                },
+                {
+                    field: 'balanceTotal', title: '账期结束后余额(元)', width: 150, formatter: function (fen) {
+                    return fenToYuan(fen);}
+                }
+            ]],
+
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+            },
+
+            onBeforeLoad: function (params) {
+                params.currentPage = params.page;
+                params.pageSize = params.rows;
+            }
+        });
+    })
+
+    function searchCustomer(value, name) {
+        $('#dl').datalist({
+            queryParams: {
+                company: value,
+                pageSize: 50,
+                _csrf: $("#_csrf").val()
+            }
+        })
+    }
+
+    function reconciliation(){
+
+        var rows = $("#dl").datalist("getChecked");
+
+        if (!$('#beginDate').datebox("isValid") || !rows || rows.length ==0){
+            $.messager.alert('Warn','请设定账期查询起始时间并勾选客户后搜索!','info');
+            return;
+        }
+
+        var customerIds = new Array();
+
+        if (rows && rows.length > 0) {
+            rows.forEach(function (row) {
+                customerIds.push(row.id);
+            })
+        }
+
+        $("#dg").datagrid({
+            queryParams: {
+                customerIds: customerIds,
+                begin: $('#beginDate').datebox("getValue"),
+                end: $('#endDate').datebox("getValue"),
+                "_csrf": $("#_csrf").val()
+            }
+        });
+    }
+
+    function fenToYuan(fen){
+        var str = (fen/100).toFixed(2) + '';
+        var intSum = str.substring(0,str.indexOf(".")).replace( /\B(?=(?:\d{3})+$)/g, ',' );//取到整数部分
+        var dot = str.substring(str.length,str.indexOf("."))//取到小数部分
+        var ret = intSum + dot;
+        return ret;
+    }
+
+</script>
