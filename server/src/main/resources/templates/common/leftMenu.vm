@@ -8,15 +8,29 @@
                 </div>
             </div>
 
-            <div class="item-wrap ">
-                <div class="item-title">
-                    系统管理
+            #if($sec.hasAnyRole('admin','manager'))
+                <div class="item-wrap ">
+                    <div class="item-title">
+                        系统管理
+                    </div>
+
+                   #if($sec.hasAnyRole('admin'))
+                        <div class="item sub">
+                            <i></i>
+                            <a id="userList" href="/user/list">用户管理</a>
+                        </div>
+                    #end
+
+                    <div class="item sub ">
+                        <i></i>
+                        <a id="customerList" href="/customer/listPage">客户管理</a>
+                    </div>
+                    <div class="item sub ">
+                        <i></i>
+                        <a id="customerTallyList" href="/customerTally/listPage">客户账单管理</a>
+                    </div>
                 </div>
-                <div class="item sub">
-                    <i></i>
-                    <a id="userList" href="/user/list">用户管理</a>
-                </div>
-            </div>
+            #end
 
             <div class="item-wrap ">
                 <div class="item-title">
@@ -36,10 +50,7 @@
                 <div class="item-title">
                     客户管理
                 </div>
-                <div class="item sub ">
-                    <i></i>
-                    <a id="customerList" href="/customer/listPage">客户管理</a>
-                </div>
+
                 <div class="item sub ">
                     <i></i>
                     <a id="customerMy" href="/customer/my">我的客户</a>
@@ -49,10 +60,6 @@
             <div class="item-wrap">
                 <div class="item-title">
                     客户账单管理
-                </div>
-                <div class="item sub ">
-                    <i></i>
-                    <a id="customerTallyList" href="/customerTally/listPage">客户账单管理</a>
                 </div>
                 <div class="item sub ">
                     <i></i>

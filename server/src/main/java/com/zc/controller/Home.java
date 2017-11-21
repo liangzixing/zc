@@ -6,6 +6,14 @@ into with Alibaba.com.*/
 
 package com.zc.controller;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+
+import com.zc.security.SecurityUser;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 

@@ -6,6 +6,7 @@ into with Alibaba.com.*/
 
 package com.zc.security;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -32,6 +33,9 @@ public class SecurityVelocity {
         if(null == roles || roles.length <= 0){
             return false;
         }
+
+        System.out.println(Arrays.toString(roles));
+
         /** 获取当前用户登录对象 */
         UserDetails userDetails = null;
         try {

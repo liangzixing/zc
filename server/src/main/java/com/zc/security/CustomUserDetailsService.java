@@ -11,8 +11,10 @@ import java.util.Collection;
 
 import javax.annotation.Resource;
 
+import com.zc.acl.domain.model.Role;
 import com.zc.acl.domain.model.User;
 import com.zc.acl.service.UserService;
+import com.zc.utils.ListUtil;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,7 +44,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         SecurityUser securityUser = SecurityUser.from(user);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        if (ListUtil.isNotBlank(user.getRoles())){
+            for (Role role : user.getRoles()){
+                authorities.add(new SimpleGrantedAuthority(role.getCode()));
+            }
+        }
 
         securityUser.setGrantedAuthorities(authorities);
 
