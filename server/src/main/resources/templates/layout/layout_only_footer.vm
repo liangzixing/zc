@@ -18,7 +18,7 @@
 
 </div>
 
-    #parse("/common/footer.vm")
+    #parse("common/footer.vm")
 
 </body>
 </html>

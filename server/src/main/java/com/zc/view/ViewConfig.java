@@ -23,7 +23,7 @@ public class ViewConfig {
     public VelocityConfigurer velocityConfigurer() {
         VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
 
-        velocityConfigurer.setResourceLoaderPath("classpath:/templates/");
+        velocityConfigurer.setResourceLoaderPath("classpath:/templates");
         velocityConfigurer.setVelocityPropertiesMap(new HashedMap() {{
             put("input.encoding", "UTF-8");
             put("out.encoding", "UTF-8");
@@ -38,11 +38,11 @@ public class ViewConfig {
 
         velocityLayoutViewResolver.setCache(false);
 
-        velocityLayoutViewResolver.setLayoutUrl("/layout/layout.vm");
+        velocityLayoutViewResolver.setLayoutUrl("layout/layout.vm");
 
         velocityLayoutViewResolver.setViewClass(VelocityLayoutToolboxView.class);
 
-        velocityLayoutViewResolver.setPrefix("/");
+        //velocityLayoutViewResolver.setPrefix("/");
         velocityLayoutViewResolver.setSuffix(".vm");
         velocityLayoutViewResolver.setContentType("text/html;charset=UTF-8");
 

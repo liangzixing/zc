@@ -54,7 +54,7 @@ public class TallyReconciliationController extends BaseController{
 
     @RequestMapping("/reconciliationPage")
     public String reconciliationPage(){
-        return "/customerTally/reconciliationPage";
+        return "customerTally/reconciliationPage";
     }
 
     @InitBinder

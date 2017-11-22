@@ -9,11 +9,11 @@
 </head>
 <body>
 
-#parse("/common/header.vm")
+#parse("common/header.vm")
 
 <div class="mc-main">
     <div class="mc-warp">
-        #parse("/common/leftMenu.vm")
+        #parse("common/leftMenu.vm")
         <div class="mc-main-wrap">
             <div class="content-main">
                 $screen_content
@@ -22,7 +22,7 @@
     </div>
 </div>
 
-#parse("/common/footer.vm")
+#parse("common/footer.vm")
 
 </body>
 </html>

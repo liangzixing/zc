@@ -45,7 +45,7 @@ public class UserController extends BaseController {
 
     @RequestMapping("/user/list")
     public String list() {
-        return "/user/list";
+        return "user/list";
     }
 
     @ResponseBody

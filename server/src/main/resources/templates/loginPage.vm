@@ -1,4 +1,4 @@
-#set($layout="/layout/layout_only_footer.vm")
+#set($layout="layout/layout_only_footer.vm")
 
 <style type="text/css">
 

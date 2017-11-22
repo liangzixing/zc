@@ -82,7 +82,7 @@ public class CustomerTallyController extends BaseController {
 
     @RequestMapping("/addPage")
     public String addPage() {
-        return "/customerTally/addPage";
+        return "customerTally/addPage";
     }
 
     @RequestMapping("/editPage")
@@ -97,12 +97,12 @@ public class CustomerTallyController extends BaseController {
 
     @RequestMapping("/listPage")
     public String listPage() {
-        return "/customerTally/listPage";
+        return "customerTally/listPage";
     }
 
     @RequestMapping("/my")
     public String my() {
-        return "/customerTally/myListPage";
+        return "customerTally/myListPage";
     }
 
     @ResponseBody

@@ -51,12 +51,12 @@ public class TaskController extends BaseController {
 
     @RequestMapping("/myTasks")
     public String myTasks() {
-        return "/task/myTasks";
+        return "task/myTasks";
     }
 
     @RequestMapping("/pendingTasks")
     public String pendingTasks() {
-        return "/task/pendingTasks";
+        return "task/pendingTasks";
     }
 
     @ResponseBody

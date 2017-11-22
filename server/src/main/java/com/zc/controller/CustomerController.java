@@ -43,13 +43,13 @@ public class CustomerController extends BaseController {
 
     @RequestMapping("/listPage")
     public String listPage() {
-        return "/customer/listPage";
+        return "customer/listPage";
     }
 
 
     @RequestMapping("/my")
     public String myCustomer(){
-        return "/customer/my";
+        return "customer/my";
     }
 
     @ResponseBody
