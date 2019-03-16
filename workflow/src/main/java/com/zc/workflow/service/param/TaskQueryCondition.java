@@ -17,7 +17,7 @@ public class TaskQueryCondition {
 
     private String processFlowId;
 
-    private int userId;
+    private Long userId;
 
     private int pageStart;
 
@@ -39,11 +39,11 @@ public class TaskQueryCondition {
         this.processFlowId = processFlowId;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

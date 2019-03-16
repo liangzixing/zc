@@ -93,7 +93,7 @@ public class CustomerTallyDomainServiceImpl implements CustomerTallyDomainServic
     }
 
     @Override
-    public CustomerTally queryById(Integer id) {
+    public CustomerTally queryById(Long id) {
         if (NumberUtil.isNotPositive(id)) {
             return null;
         }
@@ -102,7 +102,7 @@ public class CustomerTallyDomainServiceImpl implements CustomerTallyDomainServic
     }
 
     @Override
-    public int insert(CustomerTally customerTally, String operator) {
+    public long insert(CustomerTally customerTally, String operator) {
         if (customerTally == null) {
             return 0;
         }
@@ -144,7 +144,7 @@ public class CustomerTallyDomainServiceImpl implements CustomerTallyDomainServic
     }
 
     @Override
-    public int hide(int id, String operator) {
+    public int hide(long id, String operator) {
         if (NumberUtil.isNotPositive(id)) {
             return 0;
         }

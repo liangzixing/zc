@@ -14,9 +14,9 @@ import java.util.Date;
  */
 public class CustomerTally {
 
-    private Integer id;
+    private Long id;
 
-    private Integer customerId;
+    private Long customerId;
 
     private String company;
 
@@ -30,17 +30,17 @@ public class CustomerTally {
 
     private String toAccount;
 
-    private Integer amount;
+    private Long amount;
 
-    private Integer customerLastBalance;
+    private Long customerLastBalance;
 
-    private Integer customerBalance;
+    private Long customerBalance;
 
     private String description;
 
     private String credentialsImgUrl;
 
-    private Integer reporterId;
+    private Long reporterId;
 
     private String reporterName;
 
@@ -48,19 +48,19 @@ public class CustomerTally {
 
     private String display;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
@@ -112,19 +112,27 @@ public class CustomerTally {
         this.toAccount = toAccount;
     }
 
-    public Integer getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
-    public Integer getCustomerBalance() {
+    public Long getCustomerLastBalance() {
+        return customerLastBalance;
+    }
+
+    public void setCustomerLastBalance(Long customerLastBalance) {
+        this.customerLastBalance = customerLastBalance;
+    }
+
+    public Long getCustomerBalance() {
         return customerBalance;
     }
 
-    public void setCustomerBalance(Integer customerBalance) {
+    public void setCustomerBalance(Long customerBalance) {
         this.customerBalance = customerBalance;
     }
 
@@ -144,11 +152,11 @@ public class CustomerTally {
         this.credentialsImgUrl = credentialsImgUrl;
     }
 
-    public Integer getReporterId() {
+    public Long getReporterId() {
         return reporterId;
     }
 
-    public void setReporterId(Integer reporterId) {
+    public void setReporterId(Long reporterId) {
         this.reporterId = reporterId;
     }
 
@@ -166,14 +174,6 @@ public class CustomerTally {
 
     public void setReportDate(Date reportDate) {
         this.reportDate = reportDate;
-    }
-
-    public Integer getCustomerLastBalance() {
-        return customerLastBalance;
-    }
-
-    public void setCustomerLastBalance(Integer customerLastBalance) {
-        this.customerLastBalance = customerLastBalance;
     }
 
     public String getDisplay() {

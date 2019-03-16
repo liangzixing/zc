@@ -10,7 +10,7 @@ public interface RoleDOMapper {
 
     int deleteByExample(RoleDOExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(RoleDO record);
 
@@ -18,7 +18,7 @@ public interface RoleDOMapper {
 
     List<RoleDO> selectByExample(RoleDOExample example);
 
-    RoleDO selectByPrimaryKey(Integer id);
+    RoleDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") RoleDO record, @Param("example") RoleDOExample example);
 

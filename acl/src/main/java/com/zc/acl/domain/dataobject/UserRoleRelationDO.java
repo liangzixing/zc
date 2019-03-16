@@ -1,14 +1,14 @@
 package com.zc.acl.domain.dataobject;
 
-import java.util.Date;
-
 import com.zc.dataobject.CommonDO;
+
+import java.util.Date;
 
 public class UserRoleRelationDO extends CommonDO {
 
-    private Integer userId;
+    private Long userId;
 
-    private Integer roleId;
+    private Long roleId;
 
     private String roleCode;
 
@@ -18,19 +18,67 @@ public class UserRoleRelationDO extends CommonDO {
 
     private String isLongEffect;
 
-    public Integer getUserId() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted == null ? null : isDeleted.trim();
+    }
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Integer getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 

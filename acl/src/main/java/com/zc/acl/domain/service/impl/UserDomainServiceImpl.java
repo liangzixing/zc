@@ -76,7 +76,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
 
         if (NumberUtil.isNotPositive(id)){
             return null;
@@ -96,7 +96,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public List<User> getByIds(List<Integer> ids) {
+    public List<User> getByIds(List<Long> ids) {
 
         if(ListUtil.isBlank(ids)){
             return Collections.emptyList();
@@ -110,7 +110,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public List<User> getSimpleUserByIds(List<Integer> ids) {
+    public List<User> getSimpleUserByIds(List<Long> ids) {
 
         if(ListUtil.isBlank(ids)){
             return Collections.emptyList();
@@ -153,7 +153,7 @@ public class UserDomainServiceImpl implements UserDomainService {
             return;
         }
 
-        List<Integer> roleIds = ListUtil.collectWithOutRepeat(userRoleRelationDOS, o -> o.getRoleId());
+        List<Long> roleIds = ListUtil.collectWithOutRepeat(userRoleRelationDOS, o -> o.getRoleId());
 
         if (ListUtil.isBlank(roleIds)) {
             return;
@@ -168,17 +168,17 @@ public class UserDomainServiceImpl implements UserDomainService {
             return;
         }
 
-        Map<Integer, List<UserRoleRelationDO>> userIdToRelations = ListUtil
+        Map<Long, List<UserRoleRelationDO>> userIdToRelations = ListUtil
             .splitByKey(userRoleRelationDOS, r -> r.getUserId());
 
-        Map<Integer, RoleDO> roleIdToRole = ListUtil.toMap(roleDOS, r -> r.getId());
+        Map<Long, RoleDO> roleIdToRole = ListUtil.toMap(roleDOS, r -> r.getId());
 
         users.parallelStream().forEach(x -> fillRoleInfo(x, userIdToRelations.get(x.getId()), roleIdToRole));
 
     }
 
     private void fillRoleInfo(User user, List<UserRoleRelationDO> userRoleRelationDOS,
-                              Map<Integer, RoleDO> roleIdToRole) {
+                              Map<Long, RoleDO> roleIdToRole) {
         user.setRoles(UserRoleRelationConverter.toRole(userRoleRelationDOS, roleIdToRole));
     }
 
@@ -237,7 +237,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public int insert(User user, String operator) {
+    public long insert(User user, String operator) {
 
         if (getByUserName(user.getUsername()) != null) {
             throw new BusinessException("101", "the user with same name already exist");
@@ -249,7 +249,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         userDOMapper.insert(userDO);
 
-        int userId = userDO.getId();
+        long userId = userDO.getId();
 
         if (ListUtil.isNotBlank(user.getRoles())) {
             insertUserRoleRelations(userId, user.getRoles(), operator);
@@ -258,7 +258,7 @@ public class UserDomainServiceImpl implements UserDomainService {
         return userId;
     }
 
-    private void insertUserRoleRelations(int userId, List<Role> roles, String operator) {
+    private void insertUserRoleRelations(long userId, List<Role> roles, String operator) {
 
         List<UserRoleRelationDO> userRoleRelationDOS = UserRoleRelationConverter.toDOS(userId, roles);
 
@@ -337,7 +337,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public int resetPassword(int userId, String oldPassword, String newPassword, String operator) {
+    public int resetPassword(long userId, String oldPassword, String newPassword, String operator) {
         if (NumberUtil.isNotPositive(userId)) {
             return 0;
         }
@@ -366,7 +366,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public boolean delete(int id, String operator) {
+    public boolean delete(long id, String operator) {
         if (NumberUtil.isNotPositive(id)) {
             return false;
         }

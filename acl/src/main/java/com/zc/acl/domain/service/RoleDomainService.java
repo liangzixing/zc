@@ -7,6 +7,7 @@ into with Alibaba.com.*/
 package com.zc.acl.domain.service;
 
 import com.zc.acl.domain.model.Role;
+
 import java.util.List;
 
 /**
@@ -17,5 +18,5 @@ public interface RoleDomainService {
 
     List<Role> queryAll();
 
-    List<Role> queryByIds(List<Integer> roleIds);
+    List<Role> queryByIds(List<Long> roleIds);
 }

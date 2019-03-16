@@ -79,7 +79,7 @@ public class SecurityVelocity {
         return getUser() == null ? "" : getUser().getUsername();
     }
 
-    public int getUserId(){
+    public long getUserId(){
         return getUser() == null ? 0 : getUser().getId();
     }
 }

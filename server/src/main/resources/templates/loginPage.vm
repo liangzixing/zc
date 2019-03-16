@@ -8,7 +8,7 @@
 
     .login-form {
         width: 350px;
-        margin: 200px auto
+        margin: 20% auto
     }
 
     .login-error{

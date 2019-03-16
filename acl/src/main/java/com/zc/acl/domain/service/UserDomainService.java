@@ -18,21 +18,21 @@ public interface UserDomainService {
 
     User getByUserName(String userName);
 
-    User getById(int id);
+    User getById(long id);
 
-    List<User> getByIds(List<Integer> ids);
+    List<User> getByIds(List<Long> ids);
 
-    List<User> getSimpleUserByIds(List<Integer> ids);
+    List<User> getSimpleUserByIds(List<Long> ids);
 
     List<User> querySimpleBy(User user, int currentPage, int pageSize);
 
     PagedResult<User> pagedQuery(User user, int currentPage, int pageSize);
 
-    int insert(User user, String operator);
+    long insert(User user, String operator);
 
     int update(User user, String operator);
 
-    int resetPassword(int userId, String oldPassword, String newPassword, String operator);
+    int resetPassword(long userId, String oldPassword, String newPassword, String operator);
 
-    boolean delete(int id, String operator);
+    boolean delete(long id, String operator);
 }

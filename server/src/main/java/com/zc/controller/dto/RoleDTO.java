@@ -12,7 +12,7 @@ package com.zc.controller.dto;
  */
 public class RoleDTO {
 
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -20,11 +20,11 @@ public class RoleDTO {
 
     private String code;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

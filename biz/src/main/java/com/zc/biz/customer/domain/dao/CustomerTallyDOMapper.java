@@ -12,7 +12,7 @@ public interface CustomerTallyDOMapper {
 
     int deleteByExample(CustomerTallyDOExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(CustomerTallyDO record);
 
@@ -20,7 +20,7 @@ public interface CustomerTallyDOMapper {
 
     List<CustomerTallyDO> selectByExample(CustomerTallyDOExample example);
 
-    CustomerTallyDO selectByPrimaryKey(Integer id);
+    CustomerTallyDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") CustomerTallyDO record,
                                  @Param("example") CustomerTallyDOExample example);

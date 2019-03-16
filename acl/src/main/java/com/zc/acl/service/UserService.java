@@ -18,15 +18,15 @@ public interface UserService{
 
     User getByName(String username);
 
-    User getById(int id);
+    User getById(long id);
 
-    int insert(User user, Integer[] roleIds, String operator);
+    long insert(User user, Long[] roleIds, String operator);
 
-    int update(User user, Integer[] roleIds, String operator);
+    int update(User user, Long[] roleIds, String operator);
 
-    boolean resetPassword(int id, String oldPassword, String newPassword, String operator);
+    boolean resetPassword(long id, String oldPassword, String newPassword, String operator);
 
-    boolean resetPasswordForAdmin(int id, String operator);
+    boolean resetPasswordForAdmin(long id, String operator);
 
     PagedResult<User> pagedQuery(UserQueryParam userQueryParam);
 

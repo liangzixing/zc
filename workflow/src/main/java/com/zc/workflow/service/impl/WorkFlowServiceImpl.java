@@ -252,13 +252,13 @@ public class WorkFlowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public boolean claimTask(String taskId, int userId) {
+    public boolean claimTask(String taskId, long userId) {
         taskService.claim(taskId, String.valueOf(userId));
         return true;
     }
 
     @Override
-    public boolean batchClaimTask(List<String> taskIds, int userId) {
+    public boolean batchClaimTask(List<String> taskIds, long userId) {
         taskIds.parallelStream().forEach(x -> taskService.claim(x, String.valueOf(userId)));
         return true;
     }

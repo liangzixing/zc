@@ -19,9 +19,9 @@ public class CustomerQueryCondition extends PageParam{
 
     private String company;
 
-    private Integer userId;
+    private Long userId;
 
-    private List<Integer> ids = new ArrayList<>();
+    private List<Long> ids = new ArrayList<>();
 
     public String getCompany() {
         return company;
@@ -31,19 +31,19 @@ public class CustomerQueryCondition extends PageParam{
         this.company = company;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public List<Integer> getIds() {
+    public List<Long> getIds() {
         return ids;
     }
 
-    public void setIds(List<Integer> ids) {
+    public void setIds(List<Long> ids) {
         this.ids = ids;
     }
 }

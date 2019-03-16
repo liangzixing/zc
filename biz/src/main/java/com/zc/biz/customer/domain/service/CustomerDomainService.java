@@ -11,16 +11,16 @@ import com.zc.result.PagedResult;
  */
 public interface CustomerDomainService {
 
-    int insert(Customer customer, String operator);
+    long insert(Customer customer, String operator);
 
     PagedResult<Customer> pagedQuery(CustomerQueryCondition customerQueryCondition);
 
     List<Customer> query(CustomerQueryCondition customerQueryCondition);
 
-    Customer queryById(int id);
+    Customer queryById(long id);
 
     int update(Customer customer, String operator);
 
-    int updateBalance(int id, int balance, String operator);
+    int updateBalance(long id, long balance, String operator);
 
 }

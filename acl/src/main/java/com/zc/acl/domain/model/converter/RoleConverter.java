@@ -31,7 +31,7 @@ public class RoleConverter {
         Role role = new Role();
         role.setId(roleDO.getId());
         role.setCode(roleDO.getCode());
-        role.setDesc(roleDO.getDesc());
+        role.setDesc(roleDO.getRoleDesc());
         role.setName(roleDO.getName());
 
         return role;

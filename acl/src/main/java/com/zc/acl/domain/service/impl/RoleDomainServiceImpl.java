@@ -35,7 +35,7 @@ public class RoleDomainServiceImpl implements RoleDomainService {
     }
 
     @Override
-    public List<Role> queryByIds(List<Integer> roleIds) {
+    public List<Role> queryByIds(List<Long> roleIds) {
         RoleDOExample roleDOExample = new RoleDOExample();
 
         roleDOExample.createCriteria().andIdIn(roleIds);

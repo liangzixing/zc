@@ -14,9 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class CustomerTallyEditDTO {
 
-    private Integer id;
+    private Long id;
 
-    private Integer customerId;
+    private Long customerId;
 
     private String type;
 
@@ -28,7 +28,7 @@ public class CustomerTallyEditDTO {
 
     private String toAccount;
 
-    private Integer amount;
+    private Long amount;
 
     private String description;
 
@@ -36,19 +36,19 @@ public class CustomerTallyEditDTO {
 
     private MultipartFile file;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
@@ -92,11 +92,11 @@ public class CustomerTallyEditDTO {
         this.toAccount = toAccount;
     }
 
-    public Integer getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 

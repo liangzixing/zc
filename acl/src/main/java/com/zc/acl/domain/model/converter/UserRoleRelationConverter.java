@@ -23,11 +23,11 @@ import com.zc.utils.MapUtils;
  */
 public class UserRoleRelationConverter {
 
-    public static List<UserRoleRelationDO> toDOS(int userId, List<Role> roles) {
+    public static List<UserRoleRelationDO> toDOS(long userId, List<Role> roles) {
         return roles.stream().map(r -> toDO(userId, r)).collect(Collectors.toList());
     }
 
-    private static UserRoleRelationDO toDO(int userId, Role r) {
+    private static UserRoleRelationDO toDO(long userId, Role r) {
         UserRoleRelationDO userRoleRelationDO = new UserRoleRelationDO();
 
         userRoleRelationDO.setIsLongEffect("y");
@@ -38,7 +38,7 @@ public class UserRoleRelationConverter {
         return userRoleRelationDO;
     }
 
-    public static List<Role> toRole(List<UserRoleRelationDO> dos, Map<Integer, RoleDO> roles) {
+    public static List<Role> toRole(List<UserRoleRelationDO> dos, Map<Long, RoleDO> roles) {
 
         if (ListUtil.isBlank(dos) || MapUtils.isBlank(roles)){
             return Collections.emptyList();

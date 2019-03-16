@@ -21,12 +21,12 @@ public interface CustomerTallyDomainService {
 
     List<CustomerTally> query(CustomerTallyQueryCondition CustomerTallyQueryCondition);
 
-    CustomerTally queryById(Integer id);
+    CustomerTally queryById(Long id);
 
-    int insert(CustomerTally customerTally, String operator);
+    long insert(CustomerTally customerTally, String operator);
 
     int update(CustomerTally customerTally, String operator);
 
-    int hide(int id, String operator);
+    int hide(long id, String operator);
 
 }

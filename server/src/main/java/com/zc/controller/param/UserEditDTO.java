@@ -12,21 +12,15 @@ package com.zc.controller.param;
  */
 public class UserEditDTO {
 
-    private Integer id;
+    private Long id;
 
     private String userName;
 
     private String mobile;
 
-    private Integer[] roleIds;
+    private Long[] roleIds;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;
@@ -44,11 +38,19 @@ public class UserEditDTO {
         this.mobile = mobile;
     }
 
-    public Integer[] getRoleIds() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long[] getRoleIds() {
         return roleIds;
     }
 
-    public void setRoleIds(Integer[] roleIds) {
+    public void setRoleIds(Long[] roleIds) {
         this.roleIds = roleIds;
     }
 }

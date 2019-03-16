@@ -186,7 +186,7 @@ public class TaskController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/addCustomerOperateTask")
-    public AjaxResult<Boolean> addCustomerOperateTask(@RequestParam(value = "customerIds[]") Integer[] customerIds,
+    public AjaxResult<Boolean> addCustomerOperateTask(@RequestParam(value = "customerIds[]") Long[] customerIds,
                                                       String goal) {
 
         CustomerQueryCondition queryCondition = new CustomerQueryCondition();
@@ -194,7 +194,7 @@ public class TaskController extends BaseController {
 
         List<Customer> customers = customerService.query(queryCondition);
 
-        int userId = getLoginUserId();
+        long userId = getLoginUserId();
 
         customers.parallelStream().forEach(c -> {
 
@@ -209,8 +209,9 @@ public class TaskController extends BaseController {
 
             List<String> taskIds = ListUtil.collect(tasks, UserTask::getTaskId);
 
+
             // 设定处理人
-            workflowService.batchClaimTask(ListUtil.collect(tasks, UserTask::getTaskId), userId);
+            workflowService.batchClaimTask(taskIds, userId);
 
             Map<String, Object> bizData = new HashMap<>();
 

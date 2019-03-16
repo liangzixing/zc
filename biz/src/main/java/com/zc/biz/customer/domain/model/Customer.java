@@ -6,9 +6,10 @@ into with Alibaba.com.*/
 
 package com.zc.biz.customer.domain.model;
 
+import com.zc.acl.domain.model.User;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.zc.acl.domain.model.User;
 
 /**
  * @author zixing.liangzx@alibaba-inc.com
@@ -16,7 +17,7 @@ import com.zc.acl.domain.model.User;
  */
 public class Customer {
 
-    private Integer id;
+    private Long id;
 
     private String company;
 
@@ -34,17 +35,9 @@ public class Customer {
 
     private String status;
 
-    private Integer balance = 0;
+    private Long balance = 0L;
 
     private List<User> manager = new ArrayList<>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCompany() {
         return company;
@@ -110,19 +103,27 @@ public class Customer {
         this.status = status;
     }
 
-    public Integer getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Integer balance) {
-        this.balance = balance;
-    }
-
     public List<User> getManager() {
         return manager;
     }
 
     public void setManager(List<User> manager) {
         this.manager = manager;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Long balance) {
+        this.balance = balance;
     }
 }

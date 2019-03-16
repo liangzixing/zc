@@ -11,13 +11,13 @@ import com.zc.biz.customer.domain.model.Customer;
  */
 public interface CustomerManageDomainService {
 
-    List<Integer> queryManagerIdsByCustomerId(Integer customerId);
+    List<Long> queryManagerIdsByCustomerId(Long customerId);
 
-    Map<Integer, List<Integer>> queryManagersByCustomerIds(List<Integer> customerIds);
+    Map<Long, List<Long>> queryManagersByCustomerIds(List<Long> customerIds);
 
-    boolean deletedBy(int customerId, List<Integer> userId, String operator);
+    boolean deletedBy(long customerId, List<Long> userId, String operator);
 
     boolean addBy(Customer customer, String operator);
 
-    List<Integer> queryCustomerIdsByManagerId(Integer userId);
+    List<Long> queryCustomerIdsByManagerId(Long userId);
 }

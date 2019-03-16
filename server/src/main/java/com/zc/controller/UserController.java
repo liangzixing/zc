@@ -111,7 +111,7 @@ public class UserController extends BaseController {
         user.setUsername(userEditDTO.getUserName());
         user.setMobile(userEditDTO.getMobile());
 
-        int id = userService.insert(user, userEditDTO.getRoleIds(), getLoginUserName());
+        long id = userService.insert(user, userEditDTO.getRoleIds(), getLoginUserName());
 
         if (id > 0) {
             return AjaxResult.success(true);

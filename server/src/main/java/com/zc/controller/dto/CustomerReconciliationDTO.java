@@ -6,8 +6,6 @@ into with Alibaba.com.*/
 
 package com.zc.controller.dto;
 
-import java.util.List;
-
 /**
  * @author zixing.liangzx@alibaba-inc.com
  * @version 17/10/25 21:07 1.0.0
@@ -16,21 +14,21 @@ public class CustomerReconciliationDTO {
 
     private boolean isTotal;
 
-    private int customerId;
+    private Long customerId;
 
     private String company;
 
     // 账期前所有客户的余额总和
-    public long lastBalanceTotal;
+    public Long lastBalanceTotal;
 
     // 账期后所有客户的余额总和
-    public long balanceTotal;
+    public Long balanceTotal;
 
     // 所有出账总和
-    public long outTotal;
+    public Long outTotal;
 
     // 所有入账总和
-    public long inTotal;
+    public Long inTotal;
 
     public long getLastBalanceTotal() {
         return lastBalanceTotal;
@@ -72,12 +70,28 @@ public class CustomerReconciliationDTO {
         isTotal = total;
     }
 
-    public int getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public void setLastBalanceTotal(Long lastBalanceTotal) {
+        this.lastBalanceTotal = lastBalanceTotal;
+    }
+
+    public void setBalanceTotal(Long balanceTotal) {
+        this.balanceTotal = balanceTotal;
+    }
+
+    public void setOutTotal(Long outTotal) {
+        this.outTotal = outTotal;
+    }
+
+    public void setInTotal(Long inTotal) {
+        this.inTotal = inTotal;
     }
 
     public String getCompany() {

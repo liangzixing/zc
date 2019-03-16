@@ -10,7 +10,7 @@ public interface UserRoleRelationDOMapper {
 
     int deleteByExample(UserRoleRelationDOExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(UserRoleRelationDO record);
 
@@ -20,7 +20,7 @@ public interface UserRoleRelationDOMapper {
 
     List<UserRoleRelationDO> selectByExample(UserRoleRelationDOExample example);
 
-    UserRoleRelationDO selectByPrimaryKey(Integer id);
+    UserRoleRelationDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") UserRoleRelationDO record,
                                  @Param("example") UserRoleRelationDOExample example);

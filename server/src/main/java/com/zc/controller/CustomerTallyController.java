@@ -86,7 +86,7 @@ public class CustomerTallyController extends BaseController {
     }
 
     @RequestMapping("/editPage")
-    public String editPage(@RequestParam Integer id, Model model) {
+    public String editPage(@RequestParam Long id, Model model) {
 
         CustomerTally customerTally = customerTallyDomainService.queryById(id);
 
@@ -151,12 +151,12 @@ public class CustomerTallyController extends BaseController {
         customerTally.setType(customerTallyEditDTO.getType());
         customerTally.setDisplay("normal");
 
-        int id = customerTallyService.insert(customerTally, getLoginUserName());
+        long id = customerTallyService.insert(customerTally, getLoginUserName());
 
         return AjaxResult.success(id > 0);
     }
 
-    private String saveImage(Integer customerId, MultipartFile file) {
+    private String saveImage(Long customerId, MultipartFile file) {
         if (file == null || file.isEmpty() || NumberUtil.isNotPositive(customerId)) {
             return null;
         }
@@ -212,7 +212,7 @@ public class CustomerTallyController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/export")
-    public void export(@Valid CustomerTallyQueryParam queryParam, @RequestParam(value = "ids[]", required = false) Integer[] ids,
+    public void export(@Valid CustomerTallyQueryParam queryParam, @RequestParam(value = "ids[]", required = false) Long[] ids,
                        BindingResult bindingResult, HttpServletResponse response) throws IOException {
 
         queryParam.setCurrentPage(1);

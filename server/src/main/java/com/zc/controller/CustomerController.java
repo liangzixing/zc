@@ -125,7 +125,7 @@ public class CustomerController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/setManagers")
-    public AjaxResult<Boolean> setManagers(Integer customerId, Integer[] choose) {
+    public AjaxResult<Boolean> setManagers(Long customerId, Long[] choose) {
 
         if (NumberUtil.isNotPositive(customerId)
             || choose == null || choose.length == 0) {

@@ -1,12 +1,12 @@
 package com.zc.biz.customer.domain.dataobject;
 
-import java.util.Date;
-
 import com.zc.dataobject.CommonDO;
 
-public class CustomerTallyDO extends CommonDO{
+import java.util.Date;
 
-    private Integer customerId;
+public class CustomerTallyDO extends CommonDO {
+
+    private Long customerId;
 
     private String company;
 
@@ -20,17 +20,17 @@ public class CustomerTallyDO extends CommonDO{
 
     private String toAccount;
 
-    private Integer amount;
+    private Long amount;
 
-    private Integer customerLastBalance;
+    private Long customerLastBalance;
 
-    private Integer customerBalance;
+    private Long customerBalance;
 
     private String description;
 
     private String credentialsImgUrl;
 
-    private Integer reporterId;
+    private Long reporterId;
 
     private String reporterName;
 
@@ -38,20 +38,68 @@ public class CustomerTallyDO extends CommonDO{
 
     private String display;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getCustomerId() {
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted == null ? null : isDeleted.trim();
+    }
+
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company == null ? null : company.trim();
     }
 
     public String getType() {
@@ -86,14 +134,6 @@ public class CustomerTallyDO extends CommonDO{
         this.toAccountType = toAccountType == null ? null : toAccountType.trim();
     }
 
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
     public String getToAccount() {
         return toAccount;
     }
@@ -102,27 +142,27 @@ public class CustomerTallyDO extends CommonDO{
         this.toAccount = toAccount == null ? null : toAccount.trim();
     }
 
-    public Integer getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
-    public Integer getCustomerLastBalance() {
+    public Long getCustomerLastBalance() {
         return customerLastBalance;
     }
 
-    public void setCustomerLastBalance(Integer customerLastBalance) {
+    public void setCustomerLastBalance(Long customerLastBalance) {
         this.customerLastBalance = customerLastBalance;
     }
 
-    public Integer getCustomerBalance() {
+    public Long getCustomerBalance() {
         return customerBalance;
     }
 
-    public void setCustomerBalance(Integer customerBalance) {
+    public void setCustomerBalance(Long customerBalance) {
         this.customerBalance = customerBalance;
     }
 
@@ -142,11 +182,11 @@ public class CustomerTallyDO extends CommonDO{
         this.credentialsImgUrl = credentialsImgUrl == null ? null : credentialsImgUrl.trim();
     }
 
-    public Integer getReporterId() {
+    public Long getReporterId() {
         return reporterId;
     }
 
-    public void setReporterId(Integer reporterId) {
+    public void setReporterId(Long reporterId) {
         this.reporterId = reporterId;
     }
 
@@ -173,5 +213,4 @@ public class CustomerTallyDO extends CommonDO{
     public void setDisplay(String display) {
         this.display = display == null ? null : display.trim();
     }
-
 }

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class UserDTO {
 
-    private Integer id;
+    private Long id;
 
     private String userName;
 
@@ -46,11 +46,11 @@ public class UserDTO {
         this.roles = roles;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

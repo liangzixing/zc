@@ -18,13 +18,13 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class SecurityUser implements UserDetails {
 
-    private int id;
+    private Long id;
 
     private String userName;
 
     private String password;
 
-    private Integer groupId;
+    private Long groupId;
 
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
@@ -71,19 +71,19 @@ public class SecurityUser implements UserDetails {
         return true;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 

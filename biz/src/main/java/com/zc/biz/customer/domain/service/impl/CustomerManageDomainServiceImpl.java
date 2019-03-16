@@ -37,7 +37,7 @@ public class CustomerManageDomainServiceImpl implements CustomerManageDomainServ
     private CustomerManageDOMapper customerManageDOMapper;
 
     @Override
-    public List<Integer> queryManagerIdsByCustomerId(Integer customerId) {
+    public List<Long> queryManagerIdsByCustomerId(Long customerId) {
 
         if (NumberUtil.isNotPositive(customerId)){
             return Collections.emptyList();
@@ -51,7 +51,7 @@ public class CustomerManageDomainServiceImpl implements CustomerManageDomainServ
     }
 
     @Override
-    public Map<Integer, List<Integer>> queryManagersByCustomerIds(List<Integer> customerIds) {
+    public Map<Long, List<Long>> queryManagersByCustomerIds(List<Long> customerIds) {
 
         if (ListUtil.isBlank(customerIds)){
             return Collections.emptyMap();
@@ -63,9 +63,9 @@ public class CustomerManageDomainServiceImpl implements CustomerManageDomainServ
 
         List<CustomerManageDO> customerManageDOS = customerManageDOMapper.selectByExample(example);
 
-        Map<Integer, List<CustomerManageDO>> map = ListUtil.splitByKey(customerManageDOS, CustomerManageDO::getCustomerId);
+        Map<Long, List<CustomerManageDO>> map = ListUtil.splitByKey(customerManageDOS, CustomerManageDO::getCustomerId);
 
-        Map<Integer, List<Integer>> result = new HashMap<>();
+        Map<Long, List<Long>> result = new HashMap<>();
 
         map.keySet().forEach(k -> result.put(k, ListUtil.collect(map.get(k), CustomerManageDO::getUserId)));
 
@@ -73,7 +73,7 @@ public class CustomerManageDomainServiceImpl implements CustomerManageDomainServ
     }
 
     @Override
-    public boolean deletedBy(int customerId, List<Integer> userIds, String operator) {
+    public boolean deletedBy(long customerId, List<Long> userIds, String operator) {
         if (ListUtil.isBlank(userIds) || NumberUtil.isNotPositive(customerId)){
             return false;
         }
@@ -118,7 +118,7 @@ public class CustomerManageDomainServiceImpl implements CustomerManageDomainServ
     }
 
     @Override
-    public List<Integer> queryCustomerIdsByManagerId(Integer userId) {
+    public List<Long> queryCustomerIdsByManagerId(Long userId) {
         if (NumberUtil.isNotPositive(userId)){
             return Collections.emptyList();
         }

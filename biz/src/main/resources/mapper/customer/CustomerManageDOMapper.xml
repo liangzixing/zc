@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zc.biz.customer.domain.dao.CustomerManageDOMapper">
   <resultMap id="BaseResultMap" type="com.zc.biz.customer.domain.dataobject.CustomerManageDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="user_group_id" jdbcType="INTEGER" property="userGroupId" />
-    <result column="user_group_name" jdbcType="VARCHAR" property="userGroupName" />
-    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_group_id" jdbcType="BIGINT" property="userGroupId" />
+    <result column="user_group_name" jdbcType="VARCHAR" property="userGroupName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, customer_id, user_id, user_name, user_group_id, user_group_name, is_deleted, 
-    gmt_create, creator, gmt_modified, modifier
+    id, creator, modifier, gmt_create, gmt_modified, is_deleted, customer_id, user_id, 
+    user_name, user_group_id, user_group_name
   </sql>
   <select id="selectByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDOExample" resultMap="BaseResultMap">
     select
@@ -91,15 +91,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from customer_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from customer_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDOExample">
     delete from customer_manage
@@ -107,35 +107,36 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDO" useGeneratedKeys="true" keyProperty="id">
-    insert into customer_manage (customer_id, user_id,
-      user_name, user_group_id, user_group_name, 
-      is_deleted, gmt_create, creator, 
-      gmt_modified, modifier)
-    values (#{customerId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
-      #{userName,jdbcType=VARCHAR}, #{userGroupId,jdbcType=INTEGER}, #{userGroupName,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{gmtModified,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR})
+  <insert id="insert"  useGeneratedKeys="true" keyProperty="id" keyColumn="id"  parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDO">
+    insert into customer_manage (id, creator, modifier, 
+      gmt_create, gmt_modified, is_deleted, 
+      customer_id, user_id, user_name, 
+      user_group_id, user_group_name)
+    values (#{id,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, 
+      #{userGroupId,jdbcType=BIGINT}, #{userGroupName,jdbcType=VARCHAR})
   </insert>
-
-  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-    insert into customer_manage (customer_id, user_id,
-    user_name, user_group_id, user_group_name,
-    is_deleted, gmt_create, creator,
-    gmt_modified, modifier)
-    values
-    <foreach collection="list" item="item" index="index" separator=",">
-     (#{item.customerId,jdbcType=INTEGER}, #{item.userId,jdbcType=INTEGER},
-    #{item.userName,jdbcType=VARCHAR}, #{item.userGroupId,jdbcType=INTEGER}, #{item.userGroupName,jdbcType=VARCHAR},
-    #{item.isDeleted,jdbcType=VARCHAR}, #{item.gmtCreate,jdbcType=TIMESTAMP}, #{item.creator,jdbcType=VARCHAR},
-    #{item.gmtModified,jdbcType=TIMESTAMP}, #{item.modifier,jdbcType=VARCHAR})
-    </foreach>
-  </insert>
-  <insert id="insertSelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDO">
+  <insert id="insertSelective"  useGeneratedKeys="true" keyProperty="id" keyColumn="id"  parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDO">
     insert into customer_manage
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
       </if>
       <if test="customerId != null">
         customer_id,
@@ -152,55 +153,40 @@
       <if test="userGroupName != null">
         user_group_name,
       </if>
-      <if test="isDeleted != null">
-        is_deleted,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="customerId != null">
-        #{customerId,jdbcType=INTEGER},
+        #{customerId,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
       <if test="userGroupId != null">
-        #{userGroupId,jdbcType=INTEGER},
+        #{userGroupId,jdbcType=BIGINT},
       </if>
       <if test="userGroupName != null">
         #{userGroupName,jdbcType=VARCHAR},
-      </if>
-      <if test="isDeleted != null">
-        #{isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -214,37 +200,37 @@
     update customer_manage
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="record.customerId != null">
-        customer_id = #{record.customerId,jdbcType=INTEGER},
+        customer_id = #{record.customerId,jdbcType=BIGINT},
       </if>
       <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
       <if test="record.userGroupId != null">
-        user_group_id = #{record.userGroupId,jdbcType=INTEGER},
+        user_group_id = #{record.userGroupId,jdbcType=BIGINT},
       </if>
       <if test="record.userGroupName != null">
         user_group_name = #{record.userGroupName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isDeleted != null">
-        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gmtModified != null">
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.modifier != null">
-        modifier = #{record.modifier,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -253,17 +239,17 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update customer_manage
-    set id = #{record.id,jdbcType=INTEGER},
-      customer_id = #{record.customerId,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER},
-      user_name = #{record.userName,jdbcType=VARCHAR},
-      user_group_id = #{record.userGroupId,jdbcType=INTEGER},
-      user_group_name = #{record.userGroupName,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
-      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+    set id = #{record.id,jdbcType=BIGINT},
       creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      modifier = #{record.modifier,jdbcType=VARCHAR}
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      customer_id = #{record.customerId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      user_group_id = #{record.userGroupId,jdbcType=BIGINT},
+      user_group_name = #{record.userGroupName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -271,51 +257,51 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDO">
     update customer_manage
     <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
       <if test="customerId != null">
-        customer_id = #{customerId,jdbcType=INTEGER},
+        customer_id = #{customerId,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
       <if test="userGroupId != null">
-        user_group_id = #{userGroupId,jdbcType=INTEGER},
+        user_group_id = #{userGroupId,jdbcType=BIGINT},
       </if>
       <if test="userGroupName != null">
         user_group_name = #{userGroupName,jdbcType=VARCHAR},
       </if>
-      <if test="isDeleted != null">
-        is_deleted = #{isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zc.biz.customer.domain.dataobject.CustomerManageDO">
     update customer_manage
-    set customer_id = #{customerId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
-      user_name = #{userName,jdbcType=VARCHAR},
-      user_group_id = #{userGroupId,jdbcType=INTEGER},
-      user_group_name = #{userGroupName,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      modifier = #{modifier,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_group_id = #{userGroupId,jdbcType=BIGINT},
+      user_group_name = #{userGroupName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -2,6 +2,8 @@ package com.zc.acl.domain.dataobject;
 
 import com.zc.dataobject.CommonDO;
 
+import java.util.Date;
+
 public class UserDO extends CommonDO {
 
     private String name;
@@ -10,11 +12,11 @@ public class UserDO extends CommonDO {
 
     private String mobile;
 
-    private String isEnable = "y";
+    private String isEnable;
 
-    private String isBlack = "n";
+    private String isBlack;
 
-    private String isLock = "n";
+    private String isLock;
 
     public String getName() {
         return name;
@@ -63,5 +65,4 @@ public class UserDO extends CommonDO {
     public void setIsLock(String isLock) {
         this.isLock = isLock == null ? null : isLock.trim();
     }
-
 }

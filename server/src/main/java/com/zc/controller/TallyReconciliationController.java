@@ -65,7 +65,7 @@ public class TallyReconciliationController extends BaseController{
 
     @ResponseBody
     @RequestMapping("/reconciliation")
-    public GridAjaxResult<CustomerReconciliationDTO> reconciliation(@RequestParam(value = "customerIds[]")Integer[] customerIds,
+    public GridAjaxResult<CustomerReconciliationDTO> reconciliation(@RequestParam(value = "customerIds[]")Long[] customerIds,
                                                                     Date begin, Date end){
 
         if (end == null){
@@ -87,7 +87,7 @@ public class TallyReconciliationController extends BaseController{
             return GridAjaxResult.success(0, new ArrayList<>());
         }
 
-        Map<Integer, List<CustomerTally>> customerIdTOTally = ListUtil.splitByKey(customerTallies, CustomerTally::getCustomerId);
+        Map<Long, List<CustomerTally>> customerIdTOTally = ListUtil.splitByKey(customerTallies, CustomerTally::getCustomerId);
 
         List<CustomerReconciliationDTO> list = Collections.synchronizedList(new ArrayList<>(customerIds.length + 1));
 
@@ -129,7 +129,7 @@ public class TallyReconciliationController extends BaseController{
         return GridAjaxResult.success(list.size(), list);
     }
 
-    private CustomerReconciliationDTO buildReconForNOTallyCustomer(Date beginCopy, Integer customerId) {
+    private CustomerReconciliationDTO buildReconForNOTallyCustomer(Date beginCopy, Long customerId) {
 
         // find last Tally
         CustomerTally customerTally = findLastCustomerTally(customerId, beginCopy);
@@ -158,7 +158,7 @@ public class TallyReconciliationController extends BaseController{
         return null;
     }
 
-    private CustomerTally findLastCustomerTally(Integer customerId, Date date) {
+    private CustomerTally findLastCustomerTally(Long customerId, Date date) {
 
         CustomerTallyQueryCondition customerTallyQueryCondition = new CustomerTallyQueryCondition();
         customerTallyQueryCondition.getCustomerIds().addAll(Arrays.asList(customerId));

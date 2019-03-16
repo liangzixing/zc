@@ -32,9 +32,9 @@ public interface WorkflowService {
 
     boolean updateTaskLocalBizData(String taskId, Map<String, Object> localBizData);
 
-    boolean claimTask(String taskId, int userId);
+    boolean claimTask(String taskId, long userId);
 
-    boolean batchClaimTask(List<String> taskIds, int userId);
+    boolean batchClaimTask(List<String> taskIds, long userId);
 
     boolean deleteTasks(List<String> taskIds);
 

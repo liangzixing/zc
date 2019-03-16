@@ -19,9 +19,9 @@ import com.zc.param.PageParam;
 public class CustomerTallyQueryCondition extends PageParam {
 
 
-    private List<Integer> ids = new ArrayList<>();
+    private List<Long> ids = new ArrayList<>();
 
-    private Integer reporterId;
+    private Long reporterId;
 
     private String description;
 
@@ -29,32 +29,23 @@ public class CustomerTallyQueryCondition extends PageParam {
 
     private Date reportDateEnd;
 
-    private List<Integer> customerIds = new ArrayList<>();
+    private List<Long> customerIds = new ArrayList<>();
 
-    public List<Integer> getCustomerIds() {
-        return customerIds;
-    }
-
-    public void setCustomerIds(List<Integer> customerIds) {
-        this.customerIds = customerIds;
-    }
-
-    public Integer getReporterId() {
-        return reporterId;
-    }
-
-    public void setReporterId(Integer reporterId) {
-        this.reporterId = reporterId;
-    }
-
-    public List<Integer> getIds() {
+    public List<Long> getIds() {
         return ids;
     }
 
-    public void setIds(List<Integer> ids) {
+    public void setIds(List<Long> ids) {
         this.ids = ids;
     }
 
+    public Long getReporterId() {
+        return reporterId;
+    }
+
+    public void setReporterId(Long reporterId) {
+        this.reporterId = reporterId;
+    }
 
     public String getDescription() {
         return description;
@@ -80,5 +71,11 @@ public class CustomerTallyQueryCondition extends PageParam {
         this.reportDateEnd = reportDateEnd;
     }
 
+    public List<Long> getCustomerIds() {
+        return customerIds;
+    }
 
+    public void setCustomerIds(List<Long> customerIds) {
+        this.customerIds = customerIds;
+    }
 }

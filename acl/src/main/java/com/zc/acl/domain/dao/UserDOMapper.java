@@ -11,7 +11,7 @@ public interface UserDOMapper {
 
     int deleteByExample(UserDOExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(UserDO record);
 
@@ -19,7 +19,7 @@ public interface UserDOMapper {
 
     List<UserDO> selectByExample(UserDOExample example);
 
-    UserDO selectByPrimaryKey(Integer id);
+    UserDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") UserDO record, @Param("example") UserDOExample example);
 

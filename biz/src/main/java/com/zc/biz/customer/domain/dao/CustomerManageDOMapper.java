@@ -11,7 +11,7 @@ public interface CustomerManageDOMapper {
 
     int deleteByExample(CustomerManageDOExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(CustomerManageDO record);
 
@@ -21,7 +21,7 @@ public interface CustomerManageDOMapper {
 
     List<CustomerManageDO> selectByExample(CustomerManageDOExample example);
 
-    CustomerManageDO selectByPrimaryKey(Integer id);
+    CustomerManageDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") CustomerManageDO record,
                                  @Param("example") CustomerManageDOExample example);

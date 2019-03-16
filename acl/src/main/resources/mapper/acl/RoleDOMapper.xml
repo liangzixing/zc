@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zc.acl.domain.dao.RoleDOMapper">
   <resultMap id="BaseResultMap" type="com.zc.acl.domain.dataobject.RoleDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
-    <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="role_desc" jdbcType="VARCHAR" property="roleDesc" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, 'desc', code, gmt_create, gmt_modified, creator, modifier, is_deleted
+    id, creator, modifier, gmt_create, gmt_modified, is_deleted, name, code, role_desc
   </sql>
   <select id="selectByExample" parameterType="com.zc.acl.domain.dataobject.RoleDOExample" resultMap="BaseResultMap">
     select
@@ -80,7 +80,7 @@
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from role
+    from zc_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,52 +88,37 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from role
-    where id = #{id,jdbcType=INTEGER}
+    from zc_role
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from role
-    where id = #{id,jdbcType=INTEGER}
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from zc_role
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.zc.acl.domain.dataobject.RoleDOExample">
-    delete from role
+    delete from zc_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zc.acl.domain.dataobject.RoleDO"  useGeneratedKeys="true" keyProperty="id">
-    insert into role (name, 'desc',
-      code, gmt_create, gmt_modified, 
-      creator, modifier, is_deleted
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.zc.acl.domain.dataobject.RoleDO">
+    insert into zc_role (id, creator, modifier, 
+      gmt_create, gmt_modified, is_deleted, 
+      name, code, role_desc
       )
-    values ( #{name,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR},
-      #{code,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP},
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{isDeleted,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{roleDesc,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zc.acl.domain.dataobject.RoleDO">
-    insert into role
+  <insert id="insertSelective"  useGeneratedKeys="true" keyColumn="id" keyProperty="id"  parameterType="com.zc.acl.domain.dataobject.RoleDO">
+    insert into zc_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="desc != null">
-        desc,
-      </if>
-      <if test="code != null">
-        code,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
       </if>
       <if test="creator != null">
         creator,
@@ -141,28 +126,28 @@
       <if test="modifier != null">
         modifier,
       </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
       <if test="isDeleted != null">
         is_deleted,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="roleDesc != null">
+        role_desc,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="desc != null">
-        #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="code != null">
-        #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=TIMESTAMP},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -170,37 +155,37 @@
       <if test="modifier != null">
         #{modifier,jdbcType=VARCHAR},
       </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDeleted != null">
         #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDesc != null">
+        #{roleDesc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.zc.acl.domain.dataobject.RoleDOExample" resultType="java.lang.Long">
-    select count(*) from role
+    select count(*) from zc_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update role
+    update zc_role
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.desc != null">
-        desc = #{record.desc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.code != null">
-        code = #{record.code,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.gmtModified != null">
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=VARCHAR},
@@ -208,8 +193,23 @@
       <if test="record.modifier != null">
         modifier = #{record.modifier,jdbcType=VARCHAR},
       </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.isDeleted != null">
         is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleDesc != null">
+        role_desc = #{record.roleDesc,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -217,31 +217,28 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update role
-    set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      'desc' = #{record.desc,jdbcType=VARCHAR},
-      code = #{record.code,jdbcType=VARCHAR},
-      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+    update zc_role
+    set id = #{record.id,jdbcType=BIGINT},
       creator = #{record.creator,jdbcType=VARCHAR},
       modifier = #{record.modifier,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=VARCHAR}
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      role_desc = #{record.roleDesc,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.zc.acl.domain.dataobject.RoleDO">
-    update role
+    update zc_role
     <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null">
-        'desc' = #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="code != null">
-        code = #{code,jdbcType=VARCHAR},
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -249,28 +246,31 @@
       <if test="gmtModified != null">
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
       <if test="isDeleted != null">
         is_deleted = #{isDeleted,jdbcType=VARCHAR},
       </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDesc != null">
+        role_desc = #{roleDesc,jdbcType=VARCHAR},
+      </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zc.acl.domain.dataobject.RoleDO">
-    update role
-    set name = #{name,jdbcType=VARCHAR},
-      'desc' = #{desc,jdbcType=VARCHAR},
-      code = #{code,jdbcType=VARCHAR},
+    update zc_role
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      role_desc = #{roleDesc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

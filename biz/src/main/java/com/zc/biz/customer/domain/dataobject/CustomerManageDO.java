@@ -2,39 +2,33 @@ package com.zc.biz.customer.domain.dataobject;
 
 import com.zc.dataobject.CommonDO;
 
+import java.util.Date;
+
 public class CustomerManageDO extends CommonDO {
 
-    private Integer customerId;
+    private Long customerId;
 
-    private Integer userId;
+    private Long userId;
 
     private String userName;
 
-    private Integer userGroupId;
+    private Long userGroupId;
 
     private String userGroupName;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -46,11 +40,11 @@ public class CustomerManageDO extends CommonDO {
         this.userName = userName == null ? null : userName.trim();
     }
 
-    public Integer getUserGroupId() {
+    public Long getUserGroupId() {
         return userGroupId;
     }
 
-    public void setUserGroupId(Integer userGroupId) {
+    public void setUserGroupId(Long userGroupId) {
         this.userGroupId = userGroupId;
     }
 
@@ -61,5 +55,4 @@ public class CustomerManageDO extends CommonDO {
     public void setUserGroupName(String userGroupName) {
         this.userGroupName = userGroupName == null ? null : userGroupName.trim();
     }
-
 }

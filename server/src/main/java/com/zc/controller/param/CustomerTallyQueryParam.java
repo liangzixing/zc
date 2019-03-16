@@ -17,21 +17,21 @@ import com.zc.param.PageParam;
  */
 public class CustomerTallyQueryParam extends PageParam {
 
-    private Integer customerId;
+    private Long customerId;
 
     private Date reportDateBegin;
 
     private Date reportDateEnd;
 
-    private Integer[] ids ;
+    private Long[] ids ;
 
-    private Integer userId;
+    private Long userId;
 
-    public Integer getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
@@ -51,19 +51,19 @@ public class CustomerTallyQueryParam extends PageParam {
         this.reportDateEnd = reportDateEnd;
     }
 
-    public Integer[] getIds() {
+    public Long[] getIds() {
         return ids;
     }
 
-    public void setIds(Integer[] ids) {
+    public void setIds(Long[] ids) {
         this.ids = ids;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

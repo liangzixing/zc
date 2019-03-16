@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class CommonDO {
 
-    protected Integer id;
+    protected Long id;
 
     protected String creator;
 
@@ -26,11 +26,11 @@ public class CommonDO {
 
     protected String isDeleted;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

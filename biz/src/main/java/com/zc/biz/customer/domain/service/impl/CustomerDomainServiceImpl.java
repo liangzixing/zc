@@ -42,7 +42,7 @@ public class CustomerDomainServiceImpl implements CustomerDomainService {
     private CustomerManageDOMapper customerManageDOMapper;
 
     @Override
-    public int insert(Customer customer, String operator) {
+    public long insert(Customer customer, String operator) {
 
         CustomerDO customerDO = CustomerConverter.toDO(customer);
 
@@ -101,7 +101,7 @@ public class CustomerDomainServiceImpl implements CustomerDomainService {
     }
 
     @Override
-    public Customer queryById(int id) {
+    public Customer queryById(long id) {
         return CustomerConverter.toDomainModel(customerDOMapper.selectByPrimaryKey(id));
     }
 
@@ -123,7 +123,7 @@ public class CustomerDomainServiceImpl implements CustomerDomainService {
     }
 
     @Override
-    public int updateBalance(int id, int balance, String operator) {
+    public int updateBalance(long id, long balance, String operator) {
         if (NumberUtil.isNotPositive(id)) {
             return 0;
         }

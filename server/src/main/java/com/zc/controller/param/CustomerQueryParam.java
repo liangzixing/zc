@@ -12,7 +12,7 @@ package com.zc.controller.param;
  */
 public class CustomerQueryParam extends PageQueryCondition{
 
-    private Integer userId;
+    private Long userId;
 
     private String company;
 
@@ -24,11 +24,11 @@ public class CustomerQueryParam extends PageQueryCondition{
         this.company = company;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

@@ -2,6 +2,8 @@ package com.zc.biz.customer.domain.dataobject;
 
 import com.zc.dataobject.CommonDO;
 
+import java.util.Date;
+
 public class CustomerDO extends CommonDO {
 
     private String company;
@@ -20,15 +22,7 @@ public class CustomerDO extends CommonDO {
 
     private String status;
 
-    private Integer balance;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private Long balance;
 
     public String getCompany() {
         return company;
@@ -94,12 +88,11 @@ public class CustomerDO extends CommonDO {
         this.status = status == null ? null : status.trim();
     }
 
-    public Integer getBalance() {
+    public Long getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(Long balance) {
         this.balance = balance;
     }
-
 }

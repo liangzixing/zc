@@ -14,6 +14,6 @@ import com.zc.biz.customer.domain.model.CustomerTally;
  */
 public interface CustomerTallyService {
 
-    int insert(CustomerTally customerTally, String operator);
+    long insert(CustomerTally customerTally, String operator);
 
 }

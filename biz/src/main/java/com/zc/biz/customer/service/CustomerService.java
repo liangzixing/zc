@@ -15,8 +15,8 @@ public interface CustomerService {
 
     List<Customer> query(CustomerQueryCondition customerQueryCondition);
 
-    Customer queryById(int id);
+    Customer queryById(long id);
 
-    boolean updateManager(int customerId, Integer[] managerId, String operator);
+    boolean updateManager(long customerId, Long[] managerId, String operator);
 
 }

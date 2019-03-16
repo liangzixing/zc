@@ -18,9 +18,9 @@ public class CustomerOperateTaskQueryParam extends PageQueryCondition {
 
     private Date taskCreateEnd;
 
-    private int customerId;
+    private Long customerId;
 
-    private int userId;
+    private Long userId;
 
     public Date getTaskCreateBegin() {
         return taskCreateBegin;
@@ -38,19 +38,19 @@ public class CustomerOperateTaskQueryParam extends PageQueryCondition {
         this.taskCreateEnd = taskCreateEnd;
     }
 
-    public int getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

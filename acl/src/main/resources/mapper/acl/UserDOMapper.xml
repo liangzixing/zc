@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zc.acl.domain.dao.UserDOMapper">
   <resultMap id="BaseResultMap" type="com.zc.acl.domain.dataobject.UserDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="is_enable" jdbcType="VARCHAR" property="isEnable" />
     <result column="is_black" jdbcType="VARCHAR" property="isBlack" />
     <result column="is_lock" jdbcType="VARCHAR" property="isLock" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, password, mobile, is_enable, is_black, is_lock, gmt_create, gmt_modified, 
-    creator, modifier, is_deleted
+    id, creator, modifier, gmt_create, gmt_modified, is_deleted, name, password, mobile, 
+    is_enable, is_black, is_lock
   </sql>
   <select id="selectByExample" parameterType="com.zc.acl.domain.dataobject.UserDOExample" resultMap="BaseResultMap">
     select
@@ -84,7 +84,7 @@
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from user
+    from zc_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,54 +92,54 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="findByPage" parameterType="com.zc.acl.domain.dataobject.UserDOExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    'true' as QUERYID,
-    <include refid="Base_Column_List" />
-    from user
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from user
-    where id = #{id,jdbcType=INTEGER}
+    from zc_user
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from user
-    where id = #{id,jdbcType=INTEGER}
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from zc_user
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.zc.acl.domain.dataobject.UserDOExample">
-    delete from user
+    delete from zc_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zc.acl.domain.dataobject.UserDO" useGeneratedKeys="true" keyProperty="id" >
-    insert into user (name, password,
-      mobile, is_enable, is_black, 
-      is_lock, gmt_create, gmt_modified, 
-      creator, modifier, is_deleted
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.zc.acl.domain.dataobject.UserDO">
+    insert into zc_user (id, creator, modifier, 
+      gmt_create, gmt_modified, is_deleted, 
+      name, password, mobile, 
+      is_enable, is_black, is_lock
       )
-    values ( #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-      #{mobile,jdbcType=VARCHAR}, #{isEnable,jdbcType=VARCHAR}, #{isBlack,jdbcType=VARCHAR}, 
-      #{isLock,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{isDeleted,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{isEnable,jdbcType=VARCHAR}, #{isBlack,jdbcType=VARCHAR}, #{isLock,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zc.acl.domain.dataobject.UserDO">
-    insert into user
+  <insert id="insertSelective" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.zc.acl.domain.dataobject.UserDO">
+    insert into zc_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
       </if>
       <if test="name != null">
         name,
@@ -159,25 +159,25 @@
       <if test="isLock != null">
         is_lock,
       </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
-      <if test="isDeleted != null">
-        is_deleted,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -197,34 +197,34 @@
       <if test="isLock != null">
         #{isLock,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDeleted != null">
-        #{isDeleted,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.zc.acl.domain.dataobject.UserDOExample" resultType="java.lang.Long">
-    select count(*) from user
+    select count(*) from zc_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update user
+    update zc_user
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -244,47 +244,47 @@
       <if test="record.isLock != null">
         is_lock = #{record.isLock,jdbcType=VARCHAR},
       </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.gmtModified != null">
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=VARCHAR},
-      </if>
-      <if test="record.modifier != null">
-        modifier = #{record.modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isDeleted != null">
-        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update user
-    set id = #{record.id,jdbcType=INTEGER},
+    update zc_user
+    set id = #{record.id,jdbcType=BIGINT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       mobile = #{record.mobile,jdbcType=VARCHAR},
       is_enable = #{record.isEnable,jdbcType=VARCHAR},
       is_black = #{record.isBlack,jdbcType=VARCHAR},
-      is_lock = #{record.isLock,jdbcType=VARCHAR},
-      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      creator = #{record.creator,jdbcType=VARCHAR},
-      modifier = #{record.modifier,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=VARCHAR}
+      is_lock = #{record.isLock,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.zc.acl.domain.dataobject.UserDO">
-    update user
+    update zc_user
     <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -303,37 +303,22 @@
       <if test="isLock != null">
         is_lock = #{isLock,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDeleted != null">
-        is_deleted = #{isDeleted,jdbcType=VARCHAR},
-      </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zc.acl.domain.dataobject.UserDO">
-    update user
-    set name = #{name,jdbcType=VARCHAR},
+    update zc_user
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       mobile = #{mobile,jdbcType=VARCHAR},
       is_enable = #{isEnable,jdbcType=VARCHAR},
       is_black = #{isBlack,jdbcType=VARCHAR},
-      is_lock = #{isLock,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+      is_lock = #{isLock,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

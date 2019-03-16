@@ -41,12 +41,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
         return userDomainService.getById(id);
     }
 
     @Override
-    public int insert(User user, Integer[] roleIds, String operator) {
+    public long insert(User user, Long[] roleIds, String operator) {
 
         if (roleIds != null) {
             List<Role> roles = roleDomainService.queryByIds(Arrays.asList(roleIds));
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int update(User user, Integer[] roleIds, String operator) {
+    public int update(User user, Long[] roleIds, String operator) {
 
         if (roleIds != null) {
             List<Role> roles = roleDomainService.queryByIds(Arrays.asList(roleIds));
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean resetPassword(int id, String oldPassword, String newPassword, String operator) {
+    public boolean resetPassword(long id, String oldPassword, String newPassword, String operator) {
 
         if (StringUtils.isBlank(newPassword)) {
             newPassword = "123456";
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean resetPasswordForAdmin(int id, String operator) {
+    public boolean resetPasswordForAdmin(long id, String operator) {
         User user = getById(id);
 
         if (user == null) {

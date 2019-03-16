@@ -52,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (NumberUtil.isPositive(customerQueryCondition.getUserId())){
 
-            List<Integer> customerIds = queryCompanyIdsByManagerId(customerQueryCondition.getUserId());
+            List<Long> customerIds = queryCompanyIdsByManagerId(customerQueryCondition.getUserId());
 
             if (ListUtil.isBlank(customerIds)){
                 return PagedResult.success(0, new ArrayList<>());
@@ -72,30 +72,30 @@ public class CustomerServiceImpl implements CustomerService {
         return customers;
     }
 
-    private List<Integer> queryCompanyIdsByManagerId(Integer userId) {
+    private List<Long> queryCompanyIdsByManagerId(Long userId) {
         return customerManageDomainService.queryCustomerIdsByManagerId(userId);
     }
 
     private void fillManagers(List<Customer> customers) {
 
-        Map<Integer, List<Integer>> customerIdTOUserIds = customerManageDomainService
+        Map<Long, List<Long>> customerIdTOUserIds = customerManageDomainService
             .queryManagersByCustomerIds(ListUtil.collect(customers, Customer::getId));
 
         if(MapUtils.isBlank(customerIdTOUserIds)){
             return;
         }
 
-        Set<Integer> userIds = new HashSet<>();
+        Set<Long> userIds = new HashSet<>();
 
         customerIdTOUserIds.values().stream().forEach(l -> userIds.addAll(l));
 
         List<User> users = userDomainService.getSimpleUserByIds(new ArrayList<>(userIds));
 
-        Map<Integer, User> userIdToUser = ListUtil.toMap(users, User::getId);
+        Map<Long, User> userIdToUser = ListUtil.toMap(users, User::getId);
 
         customers.stream().forEach(c -> {
 
-            List<Integer> managerIds = customerIdTOUserIds.get(c.getId());
+            List<Long> managerIds = customerIdTOUserIds.get(c.getId());
 
             if (ListUtil.isBlank(managerIds)){
                 return;
@@ -112,7 +112,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (NumberUtil.isPositive(customerQueryCondition.getUserId())){
 
-            List<Integer> customerIds = queryCompanyIdsByManagerId(customerQueryCondition.getUserId());
+            List<Long> customerIds = queryCompanyIdsByManagerId(customerQueryCondition.getUserId());
 
             if (ListUtil.isBlank(customerIds)){
                 return Collections.emptyList();
@@ -133,7 +133,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer queryById(int id) {
+    public Customer queryById(long id) {
 
         Customer customer = customerDomainService.queryById(id);
 
@@ -147,15 +147,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean updateManager(int customerId, Integer[] managerId, String operator) {
+    public boolean updateManager(long customerId, Long[] managerId, String operator) {
 
-        List<Integer> oldManagerIds = customerManageDomainService.queryManagerIdsByCustomerId(customerId);
+        List<Long> oldManagerIds = customerManageDomainService.queryManagerIdsByCustomerId(customerId);
 
-        List<Integer> newManagerIds = new ArrayList<>(Arrays.asList(managerId)) ;
+        List<Long> newManagerIds = new ArrayList<>(Arrays.asList(managerId)) ;
 
-        List<Integer> ignore = new ArrayList<>();
+        List<Long> ignore = new ArrayList<>();
 
-        for(Integer userId : newManagerIds){
+        for(Long userId : newManagerIds){
             if (oldManagerIds.contains(userId)){
                 ignore.add(userId);
             }

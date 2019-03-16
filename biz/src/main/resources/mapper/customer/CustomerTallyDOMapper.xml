@@ -2,28 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zc.biz.customer.domain.dao.CustomerTallyDOMapper">
   <resultMap id="BaseResultMap" type="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="company" jdbcType="VARCHAR" property="company" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="from_account_type" jdbcType="VARCHAR" property="fromAccountType" />
     <result column="from_account" jdbcType="VARCHAR" property="fromAccount" />
     <result column="to_account_type" jdbcType="VARCHAR" property="toAccountType" />
     <result column="to_account" jdbcType="VARCHAR" property="toAccount" />
-    <result column="amount" jdbcType="INTEGER" property="amount" />
-    <result column="customer_last_balance" jdbcType="INTEGER" property="customerLastBalance" />
-    <result column="customer_balance" jdbcType="INTEGER" property="customerBalance" />
+    <result column="amount" jdbcType="BIGINT" property="amount" />
+    <result column="customer_last_balance" jdbcType="BIGINT" property="customerLastBalance" />
+    <result column="customer_balance" jdbcType="BIGINT" property="customerBalance" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="credentials_img_url" jdbcType="VARCHAR" property="credentialsImgUrl" />
-    <result column="reporter_id" jdbcType="INTEGER" property="reporterId" />
+    <result column="reporter_id" jdbcType="BIGINT" property="reporterId" />
     <result column="reporter_name" jdbcType="VARCHAR" property="reporterName" />
     <result column="report_date" jdbcType="TIMESTAMP" property="reportDate" />
     <result column="display" jdbcType="VARCHAR" property="display" />
-    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,10 +84,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, customer_id, company, type, from_account_type, from_account, to_account_type, 
-    to_account, amount, customer_last_balance, customer_balance, description, credentials_img_url, 
-    reporter_id, reporter_name, report_date, display, is_deleted, gmt_create, creator, 
-    gmt_modified, modifier
+    id, creator, modifier, gmt_create, gmt_modified, is_deleted, customer_id, company, 
+    type, from_account_type, from_account, to_account_type, to_account, amount, customer_last_balance, 
+    customer_balance, description, credentials_img_url, reporter_id, reporter_name, report_date, 
+    display
   </sql>
   <select id="selectByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDOExample" resultMap="BaseResultMap">
     select
@@ -104,15 +104,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from customer_tally
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from customer_tally
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDOExample">
     delete from customer_tally
@@ -120,29 +120,44 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO" useGeneratedKeys="true" keyProperty="id">
-    insert into customer_tally (customer_id, company,
-      type, from_account_type, from_account, 
-      to_account_type, to_account, amount, 
-      customer_last_balance, customer_balance, description, 
-      credentials_img_url, reporter_id, reporter_name, 
-      report_date, display, is_deleted, 
-      gmt_create, creator, gmt_modified, 
-      modifier)
-    values (#{customerId,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR},
-      #{type,jdbcType=VARCHAR}, #{fromAccountType,jdbcType=VARCHAR}, #{fromAccount,jdbcType=VARCHAR}, 
-      #{toAccountType,jdbcType=VARCHAR}, #{toAccount,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
-      #{customerLastBalance,jdbcType=INTEGER}, #{customerBalance,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
-      #{credentialsImgUrl,jdbcType=VARCHAR}, #{reporterId,jdbcType=INTEGER}, #{reporterName,jdbcType=VARCHAR}, 
-      #{reportDate,jdbcType=TIMESTAMP}, #{display,jdbcType=VARCHAR}, #{isDeleted,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{modifier,jdbcType=VARCHAR})
+  <insert id="insert"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
+    insert into customer_tally (id, creator, modifier, 
+      gmt_create, gmt_modified, is_deleted, 
+      customer_id, company, type, 
+      from_account_type, from_account, to_account_type, 
+      to_account, amount, customer_last_balance, 
+      customer_balance, description, credentials_img_url, 
+      reporter_id, reporter_name, report_date, 
+      display)
+    values (#{id,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=BIGINT}, #{company,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{fromAccountType,jdbcType=VARCHAR}, #{fromAccount,jdbcType=VARCHAR}, #{toAccountType,jdbcType=VARCHAR}, 
+      #{toAccount,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, #{customerLastBalance,jdbcType=BIGINT}, 
+      #{customerBalance,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{credentialsImgUrl,jdbcType=VARCHAR}, 
+      #{reporterId,jdbcType=BIGINT}, #{reporterName,jdbcType=VARCHAR}, #{reportDate,jdbcType=TIMESTAMP}, 
+      #{display,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" keyColumn="id"  parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
     insert into customer_tally
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
       </if>
       <if test="customerId != null">
         customer_id,
@@ -192,28 +207,28 @@
       <if test="display != null">
         display,
       </if>
-      <if test="isDeleted != null">
-        is_deleted,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="customerId != null">
-        #{customerId,jdbcType=INTEGER},
+        #{customerId,jdbcType=BIGINT},
       </if>
       <if test="company != null">
         #{company,jdbcType=VARCHAR},
@@ -234,13 +249,13 @@
         #{toAccount,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
-        #{amount,jdbcType=INTEGER},
+        #{amount,jdbcType=BIGINT},
       </if>
       <if test="customerLastBalance != null">
-        #{customerLastBalance,jdbcType=INTEGER},
+        #{customerLastBalance,jdbcType=BIGINT},
       </if>
       <if test="customerBalance != null">
-        #{customerBalance,jdbcType=INTEGER},
+        #{customerBalance,jdbcType=BIGINT},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -249,7 +264,7 @@
         #{credentialsImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="reporterId != null">
-        #{reporterId,jdbcType=INTEGER},
+        #{reporterId,jdbcType=BIGINT},
       </if>
       <if test="reporterName != null">
         #{reporterName,jdbcType=VARCHAR},
@@ -259,21 +274,6 @@
       </if>
       <if test="display != null">
         #{display,jdbcType=VARCHAR},
-      </if>
-      <if test="isDeleted != null">
-        #{isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -287,10 +287,25 @@
     update customer_tally
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="record.customerId != null">
-        customer_id = #{record.customerId,jdbcType=INTEGER},
+        customer_id = #{record.customerId,jdbcType=BIGINT},
       </if>
       <if test="record.company != null">
         company = #{record.company,jdbcType=VARCHAR},
@@ -311,13 +326,13 @@
         to_account = #{record.toAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=INTEGER},
+        amount = #{record.amount,jdbcType=BIGINT},
       </if>
       <if test="record.customerLastBalance != null">
-        customer_last_balance = #{record.customerLastBalance,jdbcType=INTEGER},
+        customer_last_balance = #{record.customerLastBalance,jdbcType=BIGINT},
       </if>
       <if test="record.customerBalance != null">
-        customer_balance = #{record.customerBalance,jdbcType=INTEGER},
+        customer_balance = #{record.customerBalance,jdbcType=BIGINT},
       </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
@@ -326,7 +341,7 @@
         credentials_img_url = #{record.credentialsImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.reporterId != null">
-        reporter_id = #{record.reporterId,jdbcType=INTEGER},
+        reporter_id = #{record.reporterId,jdbcType=BIGINT},
       </if>
       <if test="record.reporterName != null">
         reporter_name = #{record.reporterName,jdbcType=VARCHAR},
@@ -337,21 +352,6 @@
       <if test="record.display != null">
         display = #{record.display,jdbcType=VARCHAR},
       </if>
-      <if test="record.isDeleted != null">
-        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gmtModified != null">
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.modifier != null">
-        modifier = #{record.modifier,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -359,28 +359,28 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update customer_tally
-    set id = #{record.id,jdbcType=INTEGER},
-      customer_id = #{record.customerId,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      customer_id = #{record.customerId,jdbcType=BIGINT},
       company = #{record.company,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
       from_account_type = #{record.fromAccountType,jdbcType=VARCHAR},
       from_account = #{record.fromAccount,jdbcType=VARCHAR},
       to_account_type = #{record.toAccountType,jdbcType=VARCHAR},
       to_account = #{record.toAccount,jdbcType=VARCHAR},
-      amount = #{record.amount,jdbcType=INTEGER},
-      customer_last_balance = #{record.customerLastBalance,jdbcType=INTEGER},
-      customer_balance = #{record.customerBalance,jdbcType=INTEGER},
+      amount = #{record.amount,jdbcType=BIGINT},
+      customer_last_balance = #{record.customerLastBalance,jdbcType=BIGINT},
+      customer_balance = #{record.customerBalance,jdbcType=BIGINT},
       description = #{record.description,jdbcType=VARCHAR},
       credentials_img_url = #{record.credentialsImgUrl,jdbcType=VARCHAR},
-      reporter_id = #{record.reporterId,jdbcType=INTEGER},
+      reporter_id = #{record.reporterId,jdbcType=BIGINT},
       reporter_name = #{record.reporterName,jdbcType=VARCHAR},
       report_date = #{record.reportDate,jdbcType=TIMESTAMP},
-      display = #{record.display,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
-      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      creator = #{record.creator,jdbcType=VARCHAR},
-      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      modifier = #{record.modifier,jdbcType=VARCHAR}
+      display = #{record.display,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -388,8 +388,23 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
     update customer_tally
     <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
       <if test="customerId != null">
-        customer_id = #{customerId,jdbcType=INTEGER},
+        customer_id = #{customerId,jdbcType=BIGINT},
       </if>
       <if test="company != null">
         company = #{company,jdbcType=VARCHAR},
@@ -410,13 +425,13 @@
         to_account = #{toAccount,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
-        amount = #{amount,jdbcType=INTEGER},
+        amount = #{amount,jdbcType=BIGINT},
       </if>
       <if test="customerLastBalance != null">
-        customer_last_balance = #{customerLastBalance,jdbcType=INTEGER},
+        customer_last_balance = #{customerLastBalance,jdbcType=BIGINT},
       </if>
       <if test="customerBalance != null">
-        customer_balance = #{customerBalance,jdbcType=INTEGER},
+        customer_balance = #{customerBalance,jdbcType=BIGINT},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -425,7 +440,7 @@
         credentials_img_url = #{credentialsImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="reporterId != null">
-        reporter_id = #{reporterId,jdbcType=INTEGER},
+        reporter_id = #{reporterId,jdbcType=BIGINT},
       </if>
       <if test="reporterName != null">
         reporter_name = #{reporterName,jdbcType=VARCHAR},
@@ -436,47 +451,32 @@
       <if test="display != null">
         display = #{display,jdbcType=VARCHAR},
       </if>
-      <if test="isDeleted != null">
-        is_deleted = #{isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zc.biz.customer.domain.dataobject.CustomerTallyDO">
     update customer_tally
-    set customer_id = #{customerId,jdbcType=INTEGER},
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT},
       company = #{company,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       from_account_type = #{fromAccountType,jdbcType=VARCHAR},
       from_account = #{fromAccount,jdbcType=VARCHAR},
       to_account_type = #{toAccountType,jdbcType=VARCHAR},
       to_account = #{toAccount,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=INTEGER},
-      customer_last_balance = #{customerLastBalance,jdbcType=INTEGER},
-      customer_balance = #{customerBalance,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=BIGINT},
+      customer_last_balance = #{customerLastBalance,jdbcType=BIGINT},
+      customer_balance = #{customerBalance,jdbcType=BIGINT},
       description = #{description,jdbcType=VARCHAR},
       credentials_img_url = #{credentialsImgUrl,jdbcType=VARCHAR},
-      reporter_id = #{reporterId,jdbcType=INTEGER},
+      reporter_id = #{reporterId,jdbcType=BIGINT},
       reporter_name = #{reporterName,jdbcType=VARCHAR},
       report_date = #{reportDate,jdbcType=TIMESTAMP},
-      display = #{display,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      modifier = #{modifier,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+      display = #{display,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -42,7 +42,7 @@ public class BaseController {
         return (SecurityUser)getSecurityContext().getAuthentication().getPrincipal();
     }
 
-    protected int getLoginUserId() {
+    protected long getLoginUserId() {
         return getLoginUser().getId();
     }
 

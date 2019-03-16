@@ -2,7 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zc.biz.customer.domain.dao.CustomerDOMapper">
   <resultMap id="BaseResultMap" type="com.zc.biz.customer.domain.dataobject.CustomerDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
     <result column="company" jdbcType="VARCHAR" property="company" />
     <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
@@ -11,12 +16,7 @@
     <result column="account_type" jdbcType="VARCHAR" property="accountType" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="balance" jdbcType="INTEGER" property="balance" />
-    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="balance" jdbcType="BIGINT" property="balance" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,8 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, company, company_code, contact_name, contact_mobile, contact_email, account_type, 
-    account, status, balance, is_deleted, gmt_create, creator, gmt_modified, modifier
+    id, creator, modifier, gmt_create, gmt_modified, is_deleted, company, company_code, 
+    contact_name, contact_mobile, contact_email, account_type, account, status, balance
   </sql>
   <select id="selectByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerDOExample" resultMap="BaseResultMap">
     select
@@ -95,15 +95,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from customer
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from customer
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.zc.biz.customer.domain.dataobject.CustomerDOExample">
     delete from customer
@@ -111,25 +111,40 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zc.biz.customer.domain.dataobject.CustomerDO" useGeneratedKeys="true" keyProperty="id">
-    insert into customer (company, company_code,
-      contact_name, contact_mobile, contact_email, 
-      account_type, account, status, 
-      balance, is_deleted, gmt_create, 
-      creator, gmt_modified, modifier
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.zc.biz.customer.domain.dataobject.CustomerDO">
+    insert into customer (id, creator, modifier, 
+      gmt_create, gmt_modified, is_deleted, 
+      company, company_code, contact_name, 
+      contact_mobile, contact_email, account_type, 
+      account, status, balance
       )
-    values (#{company,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR},
-      #{contactName,jdbcType=VARCHAR}, #{contactMobile,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
-      #{accountType,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{balance,jdbcType=INTEGER}, #{isDeleted,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{contactMobile,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{accountType,jdbcType=VARCHAR}, 
+      #{account,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{balance,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerDO">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" keyColumn="id"  parameterType="com.zc.biz.customer.domain.dataobject.CustomerDO">
     insert into customer
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
       </if>
       <if test="company != null">
         company,
@@ -158,25 +173,25 @@
       <if test="balance != null">
         balance,
       </if>
-      <if test="isDeleted != null">
-        is_deleted,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="company != null">
         #{company,jdbcType=VARCHAR},
@@ -203,22 +218,7 @@
         #{status,jdbcType=VARCHAR},
       </if>
       <if test="balance != null">
-        #{balance,jdbcType=INTEGER},
-      </if>
-      <if test="isDeleted != null">
-        #{isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
+        #{balance,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -232,7 +232,22 @@
     update customer
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
       </if>
       <if test="record.company != null">
         company = #{record.company,jdbcType=VARCHAR},
@@ -259,22 +274,7 @@
         status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.balance != null">
-        balance = #{record.balance,jdbcType=INTEGER},
-      </if>
-      <if test="record.isDeleted != null">
-        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gmtModified != null">
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.modifier != null">
-        modifier = #{record.modifier,jdbcType=VARCHAR},
+        balance = #{record.balance,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -283,7 +283,12 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update customer
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
       company = #{record.company,jdbcType=VARCHAR},
       company_code = #{record.companyCode,jdbcType=VARCHAR},
       contact_name = #{record.contactName,jdbcType=VARCHAR},
@@ -292,12 +297,7 @@
       account_type = #{record.accountType,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
-      balance = #{record.balance,jdbcType=INTEGER},
-      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
-      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      creator = #{record.creator,jdbcType=VARCHAR},
-      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      modifier = #{record.modifier,jdbcType=VARCHAR}
+      balance = #{record.balance,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -305,6 +305,21 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zc.biz.customer.domain.dataobject.CustomerDO">
     update customer
     <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
       <if test="company != null">
         company = #{company,jdbcType=VARCHAR},
       </if>
@@ -330,29 +345,19 @@
         status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="balance != null">
-        balance = #{balance,jdbcType=INTEGER},
-      </if>
-      <if test="isDeleted != null">
-        is_deleted = #{isDeleted,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
+        balance = #{balance,jdbcType=BIGINT},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zc.biz.customer.domain.dataobject.CustomerDO">
     update customer
-    set company = #{company,jdbcType=VARCHAR},
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
       company_code = #{companyCode,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},
       contact_mobile = #{contactMobile,jdbcType=VARCHAR},
@@ -360,12 +365,7 @@
       account_type = #{accountType,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
-      balance = #{balance,jdbcType=INTEGER},
-      is_deleted = #{isDeleted,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      modifier = #{modifier,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+      balance = #{balance,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -33,7 +33,7 @@ public class CustomerTallyServiceImpl implements CustomerTallyService {
 
     @Transactional
     @Override
-    public int insert(CustomerTally customerTally, String operator) {
+    public long insert(CustomerTally customerTally, String operator) {
         if (customerTally == null){
             return 0;
         }
@@ -44,9 +44,9 @@ public class CustomerTallyServiceImpl implements CustomerTallyService {
             return 0;
         }
 
-        int customerLastBalance = customer.getBalance() == null? 0 : customer.getBalance();
+        long customerLastBalance = customer.getBalance() == null? 0 : customer.getBalance();
 
-        int customerBalance = 0;
+        long customerBalance = 0;
 
         if ("in".equalsIgnoreCase(customerTally.getType())){
             customerBalance = customerLastBalance + customerTally.getAmount();
