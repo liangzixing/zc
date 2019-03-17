@@ -1,23 +1,15 @@
-package com.zc.biz.logistics.domain.model;
+package com.zc.biz.logistics.service.param;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.List;
 
-// 异常的物流单
 @Getter
 @Setter
-public class AbnormalLocOrder {
+public class AbnormalLocOrderUpdateParam {
 
     private Long id;
-
-    private Date gmtCreate;
-
-    private String outBizType;
-
-    private String outBizOrderNO;
 
     private String outLocCompany;
 
@@ -44,4 +36,9 @@ public class AbnormalLocOrder {
     private List<String> attachFileUrl;
 
     private String memo;
+
+    private Long currentUserId;
+
+    private String currentUserName;
+
 }

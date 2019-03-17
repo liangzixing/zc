@@ -1,19 +1,8 @@
 package com.zc.biz.logistics.domain.dataobject;
 
-import java.util.Date;
+import com.zc.dataobject.CommonDO;
 
-public class AbLocOrderOPLogDO {
-    private Long id;
-
-    private String creator;
-
-    private String modifier;
-
-    private Date gmtCreate;
-
-    private Date gmtModified;
-
-    private String isDeleted;
+public class AbLocOrderOPLogDO extends CommonDO {
 
     private Long abLocOrderId;
 
@@ -24,54 +13,6 @@ public class AbLocOrderOPLogDO {
     private String statusBefore;
 
     private String statusAfter;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
-    }
-
-    public String getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(String isDeleted) {
-        this.isDeleted = isDeleted == null ? null : isDeleted.trim();
-    }
 
     public Long getAbLocOrderId() {
         return abLocOrderId;
