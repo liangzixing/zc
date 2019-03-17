@@ -8,6 +8,7 @@ import com.zc.biz.logistics.domain.dataobject.AbLocOrderOPLogDOExample;
 import com.zc.biz.logistics.domain.model.AblLocOrderOperateLog;
 import com.zc.biz.logistics.service.param.AbLocOrderOPLogQueryParam;
 import com.zc.result.PagedResult;
+import com.zc.utils.DateUtil;
 import com.zc.utils.ListUtil;
 import com.zc.utils.NumberUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,7 @@ public class AbLocOrderOperateLogReadServiceImpl implements AbLocOrderOperateLog
         log.setUserName(logDO.getUserName());
         log.setStatusBefore(logDO.getStatusBefore());
         log.setStatusAfter(logDO.getStatusAfter());
+        log.setGmtCreateStr(DateUtil.formatTime(logDO.getGmtCreate()));
 
         return log;
     }

@@ -23,8 +23,15 @@
                 </div>
             #end
 
-
-
+            <div class="item-wrap ">
+                <div class="item-title">
+                    物流管理
+                </div>
+                <div class="item sub">
+                    <i></i>
+                    <a id="abLocOrderList" href="/abnormal/loc/order/list">异常物流单管理</a>
+                </div>
+            </div>
 
         </div>
     </div>

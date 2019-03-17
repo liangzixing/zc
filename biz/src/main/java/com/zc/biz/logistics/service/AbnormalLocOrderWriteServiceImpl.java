@@ -64,7 +64,11 @@ public class AbnormalLocOrderWriteServiceImpl implements AbnormalLocOrderWriteSe
         }
         orderDO.setMemo(createParam.getMemo());
 
-        orderDO.setOrderStatus(AbLocOrderStatusEnum.WAIT_LOC_COMPANY_PROCESS.name());
+        if (StringUtils.isNotBlank(createParam.getOrderStatus())){
+            orderDO.setOrderStatus(createParam.getOrderStatus());
+        } else {
+            orderDO.setOrderStatus(AbLocOrderStatusEnum.WAIT_LOC_COMPANY_PROCESS.name());
+        }
 
         DataObjectUtil.beforeInsert(orderDO, createParam.getOperatorName());
 

@@ -1,14 +1,13 @@
-package com.zc.biz.logistics.service.param;
+package com.zc.controller.ablocorder.param;
 
-import com.zc.param.PageParam;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
-public class AbnormalLocOrderQueryParam extends PageParam {
+public class AbLocOrderCreateParamVO {
 
     private String outBizOrderNO;
 
@@ -28,11 +27,11 @@ public class AbnormalLocOrderQueryParam extends PageParam {
 
     private String processResult;
 
+    // 附件--文件url
+    private List<String> attachFileUrl;
+
     private String memo;
 
-    private Date createDateBegin;
-
-    private Date createDateEnd;
-
     private String orderStatus;
+
 }

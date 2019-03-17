@@ -8,6 +8,7 @@ import com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDOExample;
 import com.zc.biz.logistics.domain.model.AbnormalLocOrder;
 import com.zc.biz.logistics.service.param.AbnormalLocOrderQueryParam;
 import com.zc.result.PagedResult;
+import com.zc.utils.DateUtil;
 import com.zc.utils.ListUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -50,6 +51,7 @@ public class AbnormalLocOrderReadServiceImpl implements AbnormalLocOrderReadServ
 
         abnormalLocOrder.setId(orderDO.getId());
         abnormalLocOrder.setGmtCreate(orderDO.getGmtCreate());
+        abnormalLocOrder.setGmtCreateStr(DateUtil.formatTime(orderDO.getGmtCreate()));
         abnormalLocOrder.setOutBizType(orderDO.getOutBizType());
         abnormalLocOrder.setOutBizOrderNO(orderDO.getOutBizOrderNo());
         abnormalLocOrder.setOutLocCompany(orderDO.getOutLocCompany());
@@ -123,6 +125,10 @@ public class AbnormalLocOrderReadServiceImpl implements AbnormalLocOrderReadServ
 
         if (queryParam.getCreateDateEnd() != null) {
             criteria.andGmtCreateLessThanOrEqualTo(queryParam.getCreateDateEnd());
+        }
+
+        if (StringUtils.isNotBlank(queryParam.getOrderStatus())){
+            criteria.andOrderStatusEqualTo(queryParam.getOrderStatus());
         }
 
         return example;

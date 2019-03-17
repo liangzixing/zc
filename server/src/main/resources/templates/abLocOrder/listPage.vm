@@ -1,0 +1,478 @@
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
+
+<script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+
+<style type="text/css">
+
+    .f1 {
+        width: 200px;
+    }
+
+    .margin-left5 {
+        margin-left: 5px;
+    }
+
+    .edit-table {
+        width: 95%;
+        margin: 10px auto;
+    }
+
+    .edit-table td {
+        height: 35px;
+    }
+
+    .search-customer {
+        float: right;
+        margin-right: 30px;
+    }
+
+    .dl {
+        float: left;
+        margin-left: 30px;
+    }
+
+</style>
+
+<script type="text/javascript">
+    $(function () {
+
+        var urgencyMap = {
+            "NORMAL": "一般",
+            "URGENCY": "紧急",
+            "VERY_URGENCY": "非常紧急",
+        }
+        var abnormalMap = {
+            "OVER_AREA": "超区",
+            "URGE_SEND": "催派",
+            "CHANGE_ADDRESS": "改址",
+            "CALL_BACK": "退回/召回",
+            "GOODS_LOST": "丢失",
+            "GOODS_NO_ENOUGH": "少发/错发",
+            "CONSUMER_ABNORMAL": "收货客户异常",
+            "UN_RECEIVE_BUT_RECORD": "签收未收",
+            "OTHER": "其他",
+        }
+
+        var orderStatusMap = {
+            "WAIT_LOC_COMPANY_PROCESS": "等待物流公司处理",
+            "WAIT_LOC_COMPANY_CONFIRM": "等待物流公司确认",
+            "WAIT_TP_CONFIRM": "等待TP确认",
+            "TP_CONFIRM_DONE": "TP已确认",
+            "LOC_COMPANY_CONFIRM_DONE": "物流公司已确认",
+        }
+
+        $('#dg').datagrid({
+            url: '/abnormal/loc/order/pagedQueryAbLocOrder',
+            toolbar: "#toolbar",
+            pagination: true,
+            rownumbers: true,
+            fitColumns: true,
+            singleSelect: true,
+            autoRowHeight: true,
+            pageSize: 40,
+            idField: 'id',
+            columns: [[
+                {field: 'gmtCreateStr', title: '创建时间', width: 100},
+                {field: 'outBizOrderNO', title: '订单号', width: 80},
+                {field: 'outLocOrderNO', title: '物流单号', width: 80},
+                {
+                    field: 'urgencyLevel', title: '紧急级别', width: 40, formatter: function (text) {
+                        return urgencyMap[text];
+                    }
+                }, {
+                    field: 'abnormalType', title: '异常类型', width: 80, formatter: function (text) {
+                        return abnormalMap[text];
+                    }
+                }, {
+                    field: 'inputReporter', title: '记录人', width: 50
+                }, {
+                    field: 'processor', title: '处理人', width: 50
+                }, {
+                    field: 'orderStatus', title: '单据状态', width: 60, formatter: function (text) {
+                        return orderStatusMap[text];
+                    }
+                }
+            ]],
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+            },
+
+            onBeforeLoad: function (params) {
+                params.currentPage = params.page;
+                params.pageSize = params.rows;
+            }
+        });
+    })
+</script>
+
+#set($menuIndex = "abLocOrderList")
+
+<input type="hidden" id="_csrf" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+<div style="padding: 10px; background-color: #f7f7f7;margin-bottom: 10px">
+
+    <table style="width: 95%">
+        <tr>
+            <td style="padding: 10px 0"><label>紧急程度：</label></td>
+            <td>
+                <select id="seachUrgencyLevel" class="easyui-combobox margin-left5" style="width:145px;"
+                        editable="false">
+                    <option value="">-</option>
+                    <option value="NORMAL">一般</option>
+                    <option value="URGENCY">紧急</option>
+                    <option value="VERY_URGENCY">非常紧急</option>
+                </select>
+            </td>
+            <td><label>异常类型：</label></td>
+            <td>
+                <select id="searchAbnormalType" class="easyui-combobox margin-left5" style="width:145px;"
+                        editable="false">
+                    <option value="">-</option>
+                    <option value="OVER_AREA">超区</option>
+                    <option value="URGE_SEND">催派</option>
+                    <option value="CHANGE_ADDRESS">改址</option>
+                    <option value="CALL_BACK">退回/召回</option>
+                    <option value="GOODS_LOST">丢失</option>
+                    <option value="GOODS_NO_ENOUGH">少发/错发</option>
+                    <option value="CONSUMER_ABNORMAL">收货客户异常</option>
+                    <option value="UN_RECEIVE_BUT_RECORD">签收未收</option>
+                    <option value="OTHER">其他</option>
+                </select>
+            </td>
+            <td><label>异常信息:</label></td>
+            <td><input class="easyui-textbox margin-left5" style="width:150px" id="searchAbnormalInfo"></td>
+            <td><label>录入人:</label></td>
+            <td><input class="easyui-textbox margin-left5" style="width:150px" id="searchInputReporter"></td>
+        </tr>
+        <tr>
+            <td style="padding: 10px 0"><label>订单号:</label></td>
+            <td><input class="easyui-textbox margin-left5" style="width:150px" id="searchOutBizOrderId"></td>
+            <td><label>物流单号:</label></td>
+            <td><input class="easyui-textbox margin-left5" style="width:150px" id="searcheOutLocOrderId"></td>
+            <td><label>处理人:</label></td>
+            <td><input class="easyui-textbox margin-left5" style="width:150px" id="searchProcessor"></td>
+            <td><label>处理结果:</label></td>
+            <td><input class="easyui-textbox margin-left5" style="width:150px" id="searchProcessResult"></td>
+        </tr>
+        <tr>
+            <td style="padding: 10px 0"><label>记录时间:</label></td>
+            <td colspan="3">
+                <input class="easyui-datetimebox" style="width:190px" id="searchCreateDateBegin">
+                -
+                <input class="easyui-datetimebox" style="width:190px" id="searchCreateDateEnd">
+            </td>
+            <td><label>单据状态:</label></td>
+            <td>
+                <select id="cc" name="searchOrderStatus" class="easyui-combobox" style="width:195px;" required="true"
+                        editable="false">
+                    <option value="WAIT_LOC_COMPANY_PROCESS">等待物流公司处理</option>
+                    <option value="WAIT_LOC_COMPANY_CONFIRM">等待物流公司确认</option>
+                    <option value="WAIT_TP_CONFIRM">等待TP确认</option>
+                    <option value="TP_CONFIRM_DONE">TP已确认</option>
+                    <option value="LOC_COMPANY_CONFIRM_DONE">物流公司已确认</option>
+                </select>
+            </td>
+            <td colspan="2" style="text-align: center">
+                <button value="搜索" style="width: 150px; height: 30px" onclick="searchAbLocOrder()">搜索</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div>
+
+    <table id="dg" title="异常物流单列表" class="easyui-datagrid data-table"></table>
+
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+           onclick="newAbLocOrder()">新增异常单</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+           onclick="editAbLocOrder()">查看/编辑异常单</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+           onclick="deleteAbLocOrder()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-tip" plain="true"
+           onclick="showOPLog()">操作日志</a>
+    </div>
+
+</div>
+
+<div style="display: none">
+    <div id="dlg" class="easyui-dialog" style="width:800px"
+         closed="true" buttons="#dlg-buttons">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+            <table class="edit-table">
+                <tr>
+                    <td style="width: 60px;">订单号:</td>
+                    <td style="width: 220px;">
+                        <input class="easyui-textbox f1" name="outBizOrderNO" required="true"/>
+                    </td>
+                    <td style="width: 60px;">物流单号:</td>
+                    <td><input class="easyui-textbox f1" name="outLocOrderNO" required="true"/></td>
+                </tr>
+                <tr>
+                    <td>录入人:</td>
+                    <td><input class="easyui-textbox f1" name="inputReporter" required="true"/></td>
+                    <td>紧急程度:</td>
+                    <td>
+                        <select id="cc" name="urgencyLevel" class="easyui-combobox" style="width:195px;" required="true"
+                                editable="false">
+                            <option value="NORMAL" selected="true">一般</option>
+                            <option value="URGENCY">紧急</option>
+                            <option value="VERY_URGENCY">非常紧急</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>异常场景:</td>
+                    <td>
+                        <select id="cc" name="abnormalType" class="easyui-combobox" style="width:195px;" required="true"
+                                editable="false">
+                            <option value="OVER_AREA">超区</option>
+                            <option value="URGE_SEND">催派</option>
+                            <option value="CHANGE_ADDRESS">改址</option>
+                            <option value="CALL_BACK">退回/召回</option>
+                            <option value="GOODS_LOST">丢失</option>
+                            <option value="GOODS_NO_ENOUGH">少发/错发</option>
+                            <option value="CONSUMER_ABNORMAL">收货客户异常</option>
+                            <option value="UN_RECEIVE_BUT_RECORD">签收未收</option>
+                            <option value="OTHER">其他</option>
+                        </select>
+                    </td>
+                    <td>当前状态</td>
+                    <td>
+                        <select id="cc" name="orderStatus" class="easyui-combobox" style="width:195px;" required="true"
+                                editable="false">
+                            <option value="WAIT_LOC_COMPANY_PROCESS">等待物流公司处理</option>
+                            <option value="WAIT_LOC_COMPANY_CONFIRM">等待物流公司确认</option>
+                            <option value="WAIT_TP_CONFIRM">等待TP确认</option>
+                            <option value="TP_CONFIRM_DONE">TP已确认</option>
+                            <option value="LOC_COMPANY_CONFIRM_DONE">物流公司已确认</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>异常信息:</td>
+                    <td colspan="3" style="padding: 3px 0"><input class="easyui-textbox" style="width: 580px;"
+                                                                  name="abnormalInfo" multiline="true"/></td>
+                </tr>
+
+                <tr>
+                    <td>收货信息:</td>
+                    <td colspan="3" style="padding: 3px 0"><input class="easyui-textbox" style="width: 580px;"
+                                                                  name="consumerReceiveInfo" multiline="true"/></td>
+                </tr>
+
+                <tr>
+                    <td>处理人:</td>
+                    <td><input class="easyui-textbox f1" name="processor"/></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>处理结果:</td>
+                    <td colspan="3" style="padding: 3px 0"><input class="easyui-textbox" style="width: 580px;"
+                                                                  name="processResult" multiline="true"/></td>
+                </tr>
+
+                <tr>
+                    <td>备注:</td>
+                    <td colspan="3" style="padding: 3px 0"><input class="easyui-textbox" style="width: 580px;"
+                                                                  name="memo" multiline="true"/></td>
+                </tr>
+
+            ##                <tr>
+            ##                    <td>附件:</td>
+            ##                    <td colspan="3" style="padding: 3px 0">
+            ##                        <input class="easyui-filebox" style="width:300px"
+            ##                               accept="image/gif,image/jp2,image/jpeg,image/png">
+            ##                    </td>
+            ##                </tr>
+
+            </table>
+        </form>
+    </div>
+
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveAbLocOrder()"
+           style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+
+<div id="oplog" style="width:580px" class="easyui-dialog" closed="true">
+    <table id="oplogDataTable" class="easyui-datagrid data-table"></table>
+</div>
+
+<script type="text/javascript">
+
+    var url;
+
+    function newAbLocOrder() {
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle', '新增异常单');
+        $('#fm').form('clear');
+        url = '/abnormal/loc/order/createAbLocOrder';
+    }
+
+    function saveAbLocOrder() {
+        $('#fm').form('submit', {
+            url: url,
+            frame: false,
+            onSubmit: function (param) {
+                param._csrf = $("#_csrf").val();
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close');        // close the dialog
+                    $('#dg').datagrid('reload');    // reload the user data
+                }
+            }
+        });
+    }
+
+    function searchAbLocOrder() {
+
+        var urgencyLevel = $("#seachUrgencyLevel").combobox('getValue');
+        var abnormalType = $("#searchAbnormalType").combobox('getValue');
+        var abnormalInfo = $("#searchAbnormalInfo").textbox('getValue');
+        var inputReporter = $("#searchInputReporter").textbox('getValue');
+        var outBizOrderNO = $("#searchOutBizOrderId").textbox('getValue');
+        var outLocOrderNO = $("#searcheOutLocOrderId").textbox('getValue');
+        var processor = $("#searchProcessor").textbox('getValue');
+        var processResult = $("#searchProcessResult").textbox('getValue');
+        var orderStatus = $("#searchOrderStatus").textbox('getValue');
+        var createDateBeginStr = $("#searchCreateDateBegin").datetimebox('getValue');
+        var createDateEndStr = $("#searchCreateDateEnd").datetimebox('getValue');
+
+        var createDateBegin;
+        var createDateEnd;
+
+        if (createDateBeginStr) {
+            createDateBegin = Date.parse(createDateBeginStr);
+        }
+
+        if (createDateEndStr) {
+            createDateEnd = Date.parse(createDateEndStr);
+        }
+
+        $('#dg').datagrid({
+            queryParams: {
+                "_csrf": $("#_csrf").val(),
+                "urgencyLevel": urgencyLevel,
+                "abnormalType": abnormalType,
+                "abnormalInfo": abnormalInfo,
+                "inputReporter": inputReporter,
+                "outBizOrderNO": outBizOrderNO,
+                "outLocOrderNO": outLocOrderNO,
+                "processor": processor,
+                "processResult": processResult,
+                "orderStatus": orderStatus,
+                "createDateBegin": createDateBegin,
+                "createDateEnd": createDateEnd,
+            }
+        })
+    }
+
+    function editAbLocOrder() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle', '编辑异常单');
+            $('#fm').form('load', row);
+            url = '/abnormal/loc/order/updateAbLocOrder?id=' + row.id;
+        }
+    }
+
+    function deleteAbLocOrder() {
+
+        var row = $('#dg').datagrid('getSelected');
+
+        if (row) {
+            $.messager.confirm('Confirm', '确认删除该记录么？?', function (r) {
+                if (r) {
+                    url = '/abnormal/loc/order/deleteAbLocOrder';
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        data: {
+                            "locOrderId": row.id,
+                            "_csrf": $("#_csrf").val()
+                        },
+                        success: function (result) {
+                            var result = eval('(' + result + ')');
+                            if (result.errorMsg) {
+                                $.messager.show({
+                                    title: 'Error',
+                                    msg: result.errorMsg
+                                });
+                            } else {
+                                $.messager.show({
+                                    title: 'Success',
+                                    msg: "删除成功！"
+                                });
+                                $('#dg').datagrid('reload');    // reload the user data
+                            }
+                        }
+                    })
+                }
+            });
+        }
+    }
+
+
+    function showOPLog() {
+
+        var row = $('#dg').datagrid('getSelected');
+
+        var orderStatusMap = {
+            "WAIT_LOC_COMPANY_PROCESS": "等待物流公司处理",
+            "WAIT_LOC_COMPANY_CONFIRM": "等待物流公司确认",
+            "WAIT_TP_CONFIRM": "等待TP确认",
+            "TP_CONFIRM_DONE": "TP已确认",
+            "LOC_COMPANY_CONFIRM_DONE": "物流公司已确认",
+        }
+
+        if (row) {
+            url = '/abnormal/loc/order/pagedQueryAbLocOrderOPLog';
+
+            $('#oplogDataTable').datagrid({
+                url: "/abnormal/loc/order/pagedQueryAbLocOrderOPLog",
+                queryParams: {
+                    "locOrderId": row.id,
+                    "_csrf": $("#_csrf").val(),
+                    "currentPage": 1,
+                    "pageSize": 40
+                },
+                columns: [[
+                    {field: 'gmtCreateStr', title: '修改时间', width: 150},
+                    {field: 'userName', title: '操作人', width: 100},
+                    {
+                        field: 'statusBefore', title: '操作前状态', width: 150,  formatter: function (text) {
+                            return orderStatusMap[text];
+                        }
+                    },
+                    {
+                        field: 'statusBefore', title: '操作后状态', width: 150, formatter: function (text) {
+                            return orderStatusMap[text];
+                        }
+                    }
+                ]]
+            }).datagrid('reload');
+
+            $('#oplog').dialog({modal:true}).dialog('open').dialog('center').dialog('setTitle', '操作日志');
+        }
+    }
+
+
+</script>
+

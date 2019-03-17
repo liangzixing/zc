@@ -15,6 +15,8 @@ public class AblLocOrderOperateLog {
 
     private Date gmtCreate;
 
+    private String gmtCreateStr;
+
     private Long userId;
 
     private String userName;

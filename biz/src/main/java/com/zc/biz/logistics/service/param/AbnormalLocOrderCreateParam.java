@@ -40,4 +40,6 @@ public class AbnormalLocOrderCreateParam {
 
     private String operatorName;
 
+    private String orderStatus;
+
 }
