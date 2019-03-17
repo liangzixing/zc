@@ -8,7 +8,7 @@
                 </div>
             </div>
 
-            #if($sec.hasAnyRole('admin','manager'))
+            #if($sec.hasAnyRole('admin'))
                 <div class="item-wrap ">
                     <div class="item-title">
                         系统管理
@@ -20,60 +20,11 @@
                             <a id="userList" href="/user/list">用户管理</a>
                         </div>
                     #end
-
-                    <div class="item sub ">
-                        <i></i>
-                        <a id="customerList" href="/customer/listPage">客户管理</a>
-                    </div>
-                    <div class="item sub ">
-                        <i></i>
-                        <a id="customerTallyList" href="/customerTally/listPage">客户账单管理</a>
-                    </div>
                 </div>
             #end
 
-            <div class="item-wrap ">
-                <div class="item-title">
-                    我的任务
-                </div>
-                <div class="item sub">
-                    <i></i>
-                    <a id="myTasks" href="/task/myTasks">我的任务</a>
-                </div>
-                <div class="item sub">
-                    <i></i>
-                    <a id="pendingTasks" href="/task/pendingTasks">待办任务</a>
-                </div>
-            </div>
 
-            <div class="item-wrap">
-                <div class="item-title">
-                    客户管理
-                </div>
 
-                <div class="item sub ">
-                    <i></i>
-                    <a id="customerMy" href="/customer/my">我的客户</a>
-                </div>
-            </div>
-
-            <div class="item-wrap">
-                <div class="item-title">
-                    客户账单管理
-                </div>
-                <div class="item sub ">
-                    <i></i>
-                    <a id="customerTallyMy" href="/customerTally/my">我的客户账单</a>
-                </div>
-                <div class="item sub ">
-                    <i></i>
-                    <a id="customerTallyAdd" href="/customerTally/addPage">新增客户账单</a>
-                </div>
-                <div class="item sub ">
-                    <i></i>
-                    <a id="customerTallyRecon" href="/tallyRecon/reconciliationPage">对账</a>
-                </div>
-            </div>
 
         </div>
     </div>

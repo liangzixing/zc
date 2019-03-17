@@ -28,6 +28,11 @@
             <artifactId>workflow</artifactId>
             <version>${pom.parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
 

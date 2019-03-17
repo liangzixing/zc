@@ -14,8 +14,6 @@ public interface UserRoleRelationDOMapper {
 
     int insert(UserRoleRelationDO record);
 
-    void insertBatch(List<UserRoleRelationDO> records);
-
     int insertSelective(UserRoleRelationDO record);
 
     List<UserRoleRelationDO> selectByExample(UserRoleRelationDOExample example);

@@ -51,6 +51,7 @@ public class UserConverter {
         user.setUsername(userDO.getName());
         user.setMobile(userDO.getMobile());
         user.setPassword(userDO.getPassword());
+        user.setGmtCreate(userDO.getGmtCreate());
 
         return user;
     }

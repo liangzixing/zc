@@ -6,12 +6,14 @@ into with Alibaba.com.*/
 
 package com.zc.controller.dto;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author zixing.liangzx@alibaba-inc.com
  * @version 17/9/14 10:35 1.0.0
  */
+
 public class UserDTO {
 
     private Long id;
@@ -21,6 +23,10 @@ public class UserDTO {
     private String mobile;
 
     private List<RoleDTO> roles;
+
+    private Date GmtCreate;
+
+    private String gmtCreateStr;
 
     public String getUserName() {
         return userName;
@@ -52,5 +58,21 @@ public class UserDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getGmtCreate() {
+        return GmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        GmtCreate = gmtCreate;
+    }
+
+    public String getGmtCreateStr() {
+        return gmtCreateStr;
+    }
+
+    public void setGmtCreateStr(String gmtCreateStr) {
+        this.gmtCreateStr = gmtCreateStr;
     }
 }

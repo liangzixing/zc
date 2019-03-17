@@ -53,8 +53,8 @@
                 }
                 },
                 {
-                    field: 'gmtCreate', title: '创建时间', width: 50, formatter: function (value, row, index) {
-                    return "2017-1-2 11:11:11"
+                    field: 'gmtCreateStr', title: '创建时间', width: 50, formatter: function (value, row, index) {
+                    return value;
                 }
                 }
             ]],

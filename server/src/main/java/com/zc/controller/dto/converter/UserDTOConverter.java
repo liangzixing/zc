@@ -14,6 +14,7 @@ import com.zc.acl.domain.model.Role;
 import com.zc.acl.domain.model.User;
 import com.zc.controller.dto.RoleDTO;
 import com.zc.controller.dto.UserDTO;
+import com.zc.utils.DateUtil;
 import com.zc.utils.ListUtil;
 
 /**
@@ -42,6 +43,8 @@ public class UserDTOConverter {
         userDTO.setUserName(user.getUsername());
         userDTO.setMobile(user.getMobile());
         userDTO.setId(user.getId());
+        userDTO.setGmtCreate(user.getGmtCreate());
+        userDTO.setGmtCreateStr(DateUtil.formatTime(user.getGmtCreate()));
 
         userDTO.setRoles(toRoleDTOs(user.getRoles()));
 

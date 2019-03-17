@@ -6,27 +6,13 @@ into with Alibaba.com.*/
 
 package com.zc.acl.domain.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import javax.annotation.Resource;
-
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.util.StringUtil;
 import com.zc.acl.domain.dao.RoleDOMapper;
 import com.zc.acl.domain.dao.UserDOMapper;
 import com.zc.acl.domain.dao.UserRoleRelationDOMapper;
-import com.zc.acl.domain.dataobject.RoleDO;
-import com.zc.acl.domain.dataobject.RoleDOExample;
-import com.zc.acl.domain.dataobject.UserDO;
-import com.zc.acl.domain.dataobject.UserDOExample;
-import com.zc.acl.domain.dataobject.UserRoleRelationDO;
-import com.zc.acl.domain.dataobject.UserRoleRelationDOExample;
+import com.zc.acl.domain.dataobject.*;
 import com.zc.acl.domain.model.Role;
 import com.zc.acl.domain.model.User;
 import com.zc.acl.domain.model.converter.UserConverter;
@@ -39,6 +25,10 @@ import com.zc.utils.ListUtil;
 import com.zc.utils.NumberUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * @author zixing.liangzx@alibaba-inc.com
@@ -58,7 +48,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
     @Override
     public User getByUserName(String userName) {
-        if (StringUtil.isEmpty(userName)){
+        if (StringUtil.isEmpty(userName)) {
             return null;
         }
 
@@ -78,7 +68,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public User getById(long id) {
 
-        if (NumberUtil.isNotPositive(id)){
+        if (NumberUtil.isNotPositive(id)) {
             return null;
         }
 
@@ -98,11 +88,11 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public List<User> getByIds(List<Long> ids) {
 
-        if(ListUtil.isBlank(ids)){
+        if (ListUtil.isBlank(ids)) {
             return Collections.emptyList();
         }
 
-        List<User> users =  getSimpleUserByIds(ids);
+        List<User> users = getSimpleUserByIds(ids);
 
         fillRoleInfo(users);
 
@@ -112,7 +102,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public List<User> getSimpleUserByIds(List<Long> ids) {
 
-        if(ListUtil.isBlank(ids)){
+        if (ListUtil.isBlank(ids)) {
             return Collections.emptyList();
         }
 
@@ -122,7 +112,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         List<UserDO> userDOS = userDOMapper.selectByExample(userDOExample);
 
-        List<User> users =  UserConverter.toDomainModels(userDOS);
+        List<User> users = UserConverter.toDomainModels(userDOS);
 
         return users;
     }
@@ -199,9 +189,7 @@ public class UserDomainServiceImpl implements UserDomainService {
             userDOExample.getOredCriteria().get(0).andMobileLike(user.getMobile() + "%");
         }
 
-        PageHelper.startPage(currentPage, pageSize, false);
-
-        Page<UserDO> userDOS = userDOMapper.findByPage(userDOExample);
+        List<UserDO> userDOS = userDOMapper.selectByExample(userDOExample);
 
         List<User> users = UserConverter.toDomainModels(userDOS);
 
@@ -225,15 +213,15 @@ public class UserDomainServiceImpl implements UserDomainService {
             userDOExample.createCriteria().andMobileLike(user.getMobile() + "%");
         }
 
-        PageHelper.startPage(currentPage, pageSize, true);
+        Page<UserDO> paged = PageHelper.startPage(currentPage, pageSize, true);
 
-        Page<UserDO> userDOS = userDOMapper.findByPage(userDOExample);
+        List<UserDO> userDOS = userDOMapper.selectByExample(userDOExample);
 
         List<User> users = UserConverter.toDomainModels(userDOS);
 
         fillRoleInfo(users);
 
-        return PagedResult.success(userDOS.getTotal(), users);
+        return PagedResult.success(paged.getTotal(), users);
     }
 
     @Override
@@ -266,9 +254,10 @@ public class UserDomainServiceImpl implements UserDomainService {
             return;
         }
 
-        userRoleRelationDOS.parallelStream().forEach(ur -> DataObjectUtil.beforeInsert(ur, operator));
-
-        userRoleRelationDOMapper.insertBatch(userRoleRelationDOS);
+        userRoleRelationDOS.parallelStream().forEach(ur -> {
+            DataObjectUtil.beforeInsert(ur, operator);
+            userRoleRelationDOMapper.insert(ur);
+        });
     }
 
     @Override
@@ -309,7 +298,7 @@ public class UserDomainServiceImpl implements UserDomainService {
         List<UserRoleRelationDO> oldIgnoreRelations = new ArrayList<>();
         List<UserRoleRelationDO> newIgnoreRelations = new ArrayList<>();
 
-        if (ListUtil.isNotBlank(oldRelations)){
+        if (ListUtil.isNotBlank(oldRelations)) {
             oldRelations.forEach(or -> {
                 newRelations.forEach(nr -> {
                     if (or.getRoleId().equals(nr.getRoleId())) {
@@ -323,8 +312,11 @@ public class UserDomainServiceImpl implements UserDomainService {
         // need insert
         newRelations.removeAll(newIgnoreRelations);
         if (ListUtil.isNotBlank(newRelations)) {
-            newRelations.forEach(x -> DataObjectUtil.beforeInsert(x, operator));
-            userRoleRelationDOMapper.insertBatch(newRelations);
+            newRelations.forEach(x -> {
+                DataObjectUtil.beforeInsert(x, operator);
+                userRoleRelationDOMapper.insert(x);
+            });
+
         }
 
         // need delete

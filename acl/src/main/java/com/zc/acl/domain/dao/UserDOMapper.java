@@ -29,5 +29,4 @@ public interface UserDOMapper {
 
     int updateByPrimaryKey(UserDO record);
 
-    Page<UserDO> findByPage(UserDOExample example);
 }

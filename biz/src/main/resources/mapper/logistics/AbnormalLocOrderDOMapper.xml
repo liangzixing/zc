@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.biz.logistics.domain.dao.AbnormalLocOrderDOMapper">
+  <resultMap id="BaseResultMap" type="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="VARCHAR" property="isDeleted" />
+    <result column="reporter" jdbcType="VARCHAR" property="reporter" />
+    <result column="out_biz_type" jdbcType="VARCHAR" property="outBizType" />
+    <result column="out_biz_order_no" jdbcType="VARCHAR" property="outBizOrderNo" />
+    <result column="out_loc_company" jdbcType="VARCHAR" property="outLocCompany" />
+    <result column="out_loc_order_no" jdbcType="VARCHAR" property="outLocOrderNo" />
+    <result column="urgency_level" jdbcType="VARCHAR" property="urgencyLevel" />
+    <result column="abnormal_type" jdbcType="VARCHAR" property="abnormalType" />
+    <result column="abnormal_info" jdbcType="VARCHAR" property="abnormalInfo" />
+    <result column="consumer_receive_info" jdbcType="VARCHAR" property="consumerReceiveInfo" />
+    <result column="processor" jdbcType="VARCHAR" property="processor" />
+    <result column="process_result" jdbcType="VARCHAR" property="processResult" />
+    <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="attach_file_urls" jdbcType="VARCHAR" property="attachFileUrls" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, creator, modifier, gmt_create, gmt_modified, is_deleted, reporter, out_biz_type, 
+    out_biz_order_no, out_loc_company, out_loc_order_no, urgency_level, abnormal_type, 
+    abnormal_info, consumer_receive_info, processor, process_result, order_status, attach_file_urls, 
+    memo
+  </sql>
+  <select id="selectByExample" parameterType="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from abnormal_loc_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from abnormal_loc_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from abnormal_loc_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDOExample">
+    delete from abnormal_loc_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDO">
+    insert into abnormal_loc_order (id, creator, modifier, 
+      gmt_create, gmt_modified, is_deleted, 
+      reporter, out_biz_type, out_biz_order_no, 
+      out_loc_company, out_loc_order_no, urgency_level, 
+      abnormal_type, abnormal_info, consumer_receive_info, 
+      processor, process_result, order_status, 
+      attach_file_urls, memo)
+    values (#{id,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, 
+      #{reporter,jdbcType=VARCHAR}, #{outBizType,jdbcType=VARCHAR}, #{outBizOrderNo,jdbcType=VARCHAR}, 
+      #{outLocCompany,jdbcType=VARCHAR}, #{outLocOrderNo,jdbcType=VARCHAR}, #{urgencyLevel,jdbcType=VARCHAR}, 
+      #{abnormalType,jdbcType=VARCHAR}, #{abnormalInfo,jdbcType=VARCHAR}, #{consumerReceiveInfo,jdbcType=VARCHAR}, 
+      #{processor,jdbcType=VARCHAR}, #{processResult,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR}, 
+      #{attachFileUrls,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDO">
+    insert into abnormal_loc_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="reporter != null">
+        reporter,
+      </if>
+      <if test="outBizType != null">
+        out_biz_type,
+      </if>
+      <if test="outBizOrderNo != null">
+        out_biz_order_no,
+      </if>
+      <if test="outLocCompany != null">
+        out_loc_company,
+      </if>
+      <if test="outLocOrderNo != null">
+        out_loc_order_no,
+      </if>
+      <if test="urgencyLevel != null">
+        urgency_level,
+      </if>
+      <if test="abnormalType != null">
+        abnormal_type,
+      </if>
+      <if test="abnormalInfo != null">
+        abnormal_info,
+      </if>
+      <if test="consumerReceiveInfo != null">
+        consumer_receive_info,
+      </if>
+      <if test="processor != null">
+        processor,
+      </if>
+      <if test="processResult != null">
+        process_result,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="attachFileUrls != null">
+        attach_file_urls,
+      </if>
+      <if test="memo != null">
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="reporter != null">
+        #{reporter,jdbcType=VARCHAR},
+      </if>
+      <if test="outBizType != null">
+        #{outBizType,jdbcType=VARCHAR},
+      </if>
+      <if test="outBizOrderNo != null">
+        #{outBizOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outLocCompany != null">
+        #{outLocCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="outLocOrderNo != null">
+        #{outLocOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="urgencyLevel != null">
+        #{urgencyLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalType != null">
+        #{abnormalType,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalInfo != null">
+        #{abnormalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerReceiveInfo != null">
+        #{consumerReceiveInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="processor != null">
+        #{processor,jdbcType=VARCHAR},
+      </if>
+      <if test="processResult != null">
+        #{processResult,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="attachFileUrls != null">
+        #{attachFileUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDOExample" resultType="java.lang.Long">
+    select count(*) from abnormal_loc_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update abnormal_loc_order
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reporter != null">
+        reporter = #{record.reporter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outBizType != null">
+        out_biz_type = #{record.outBizType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outBizOrderNo != null">
+        out_biz_order_no = #{record.outBizOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outLocCompany != null">
+        out_loc_company = #{record.outLocCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outLocOrderNo != null">
+        out_loc_order_no = #{record.outLocOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.urgencyLevel != null">
+        urgency_level = #{record.urgencyLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.abnormalType != null">
+        abnormal_type = #{record.abnormalType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.abnormalInfo != null">
+        abnormal_info = #{record.abnormalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.consumerReceiveInfo != null">
+        consumer_receive_info = #{record.consumerReceiveInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processor != null">
+        processor = #{record.processor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processResult != null">
+        process_result = #{record.processResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderStatus != null">
+        order_status = #{record.orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attachFileUrls != null">
+        attach_file_urls = #{record.attachFileUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memo != null">
+        memo = #{record.memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update abnormal_loc_order
+    set id = #{record.id,jdbcType=BIGINT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=VARCHAR},
+      reporter = #{record.reporter,jdbcType=VARCHAR},
+      out_biz_type = #{record.outBizType,jdbcType=VARCHAR},
+      out_biz_order_no = #{record.outBizOrderNo,jdbcType=VARCHAR},
+      out_loc_company = #{record.outLocCompany,jdbcType=VARCHAR},
+      out_loc_order_no = #{record.outLocOrderNo,jdbcType=VARCHAR},
+      urgency_level = #{record.urgencyLevel,jdbcType=VARCHAR},
+      abnormal_type = #{record.abnormalType,jdbcType=VARCHAR},
+      abnormal_info = #{record.abnormalInfo,jdbcType=VARCHAR},
+      consumer_receive_info = #{record.consumerReceiveInfo,jdbcType=VARCHAR},
+      processor = #{record.processor,jdbcType=VARCHAR},
+      process_result = #{record.processResult,jdbcType=VARCHAR},
+      order_status = #{record.orderStatus,jdbcType=VARCHAR},
+      attach_file_urls = #{record.attachFileUrls,jdbcType=VARCHAR},
+      memo = #{record.memo,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDO">
+    update abnormal_loc_order
+    <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="reporter != null">
+        reporter = #{reporter,jdbcType=VARCHAR},
+      </if>
+      <if test="outBizType != null">
+        out_biz_type = #{outBizType,jdbcType=VARCHAR},
+      </if>
+      <if test="outBizOrderNo != null">
+        out_biz_order_no = #{outBizOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outLocCompany != null">
+        out_loc_company = #{outLocCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="outLocOrderNo != null">
+        out_loc_order_no = #{outLocOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="urgencyLevel != null">
+        urgency_level = #{urgencyLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalType != null">
+        abnormal_type = #{abnormalType,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalInfo != null">
+        abnormal_info = #{abnormalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerReceiveInfo != null">
+        consumer_receive_info = #{consumerReceiveInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="processor != null">
+        processor = #{processor,jdbcType=VARCHAR},
+      </if>
+      <if test="processResult != null">
+        process_result = #{processResult,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="attachFileUrls != null">
+        attach_file_urls = #{attachFileUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zc.biz.logistics.domain.dataobject.AbnormalLocOrderDO">
+    update abnormal_loc_order
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      reporter = #{reporter,jdbcType=VARCHAR},
+      out_biz_type = #{outBizType,jdbcType=VARCHAR},
+      out_biz_order_no = #{outBizOrderNo,jdbcType=VARCHAR},
+      out_loc_company = #{outLocCompany,jdbcType=VARCHAR},
+      out_loc_order_no = #{outLocOrderNo,jdbcType=VARCHAR},
+      urgency_level = #{urgencyLevel,jdbcType=VARCHAR},
+      abnormal_type = #{abnormalType,jdbcType=VARCHAR},
+      abnormal_info = #{abnormalInfo,jdbcType=VARCHAR},
+      consumer_receive_info = #{consumerReceiveInfo,jdbcType=VARCHAR},
+      processor = #{processor,jdbcType=VARCHAR},
+      process_result = #{processResult,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=VARCHAR},
+      attach_file_urls = #{attachFileUrls,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

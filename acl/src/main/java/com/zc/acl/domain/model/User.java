@@ -6,6 +6,7 @@ into with Alibaba.com.*/
 
 package com.zc.acl.domain.model;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,8 @@ public class User {
     private String groupName;
 
     private List<Role> roles;
+
+    private Date gmtCreate;
 
     public String getUsername() {
         return username;
@@ -82,5 +85,13 @@ public class User {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

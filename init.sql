@@ -29,7 +29,7 @@ CREATE TABLE `zc_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `zc_user_role_relation` (
-  `id` bigint(20) NOT NULL COMMENT '主键',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `creator` varchar(100) DEFAULT NULL,
   `modifier` varchar(100) DEFAULT NULL,
   `gmt_create` datetime DEFAULT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `zc_user_role_relation` (
   `effect_end_date` datetime DEFAULT NULL,
   `is_long_effect` varchar(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
 CREATE TABLE `customer` (
@@ -104,7 +104,47 @@ CREATE TABLE `customer_tally` (
   `report_date` datetime DEFAULT NULL,
   `display` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `ab_loc_order_oplog` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `creator` varchar(100) DEFAULT NULL,
+  `modifier` varchar(100) DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  `is_deleted` varchar(3) DEFAULT 'n',
+  `ab_loc_order_id` bigint(20) unsigned DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `user_name` varchar(100) DEFAULT NULL,
+  `status_before` varchar(100) DEFAULT NULL,
+  `status_after` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `abnormal_loc_order` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `creator` varchar(100) DEFAULT NULL,
+  `modifier` varchar(100) DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  `is_deleted` varchar(3) DEFAULT 'n',
+  `reporter` varchar(100) DEFAULT NULL,
+  `out_biz_type` varchar(100) DEFAULT NULL,
+  `out_biz_order_no` varchar(100) DEFAULT NULL,
+  `out_loc_company` varchar(100) DEFAULT NULL,
+  `out_loc_order_no` varchar(100) DEFAULT NULL,
+  `urgency_level` varchar(45) DEFAULT NULL,
+  `abnormal_type` varchar(45) DEFAULT NULL,
+  `abnormal_info` varchar(2000) DEFAULT NULL,
+  `consumer_receive_info` varchar(2000) DEFAULT NULL,
+  `processor` varchar(100) DEFAULT NULL,
+  `process_result` varchar(2000) DEFAULT NULL,
+  `order_status` varchar(100) DEFAULT NULL,
+  `attach_file_urls` varchar(1000) DEFAULT NULL,
+  `memo` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 insert  into zc.zc_user value (

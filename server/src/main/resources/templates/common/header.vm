@@ -5,13 +5,13 @@
 <script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
 
 <div class="header">
-    <div class="header-content">
-
-        <span class="welcome">欢迎你，$!sec.getUserName()</span>
+    <div class="header-content" style="padding:4px">
 
         <span class="logout"><a href="#" onclick="logout()">退出登录</a></span>
 
         <span class="modifyPassword"><a href="#" onclick="openResetDlg()">修改密码</a></span>
+
+        <span class="welcome">欢迎你，$!sec.getUserName()</span>
     </div>
 
     <form action="/logout" method="post" id="logout">
