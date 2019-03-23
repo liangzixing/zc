@@ -3,6 +3,7 @@ package com.zc.controller.ablocorder;
 import com.alibaba.fastjson.JSON;
 import com.zc.biz.logistics.domain.consts.AbLocOrderStatusEnum;
 import com.zc.biz.logistics.domain.consts.AbLocOrderTypeEnum;
+import com.zc.biz.logistics.domain.consts.AbLocOrderUrgencyLevelEnum;
 import com.zc.biz.logistics.domain.model.AblLocOrderOperateLog;
 import com.zc.biz.logistics.domain.model.AbnormalLocOrder;
 import com.zc.biz.logistics.service.AbLocOrderOperateLogReadService;
@@ -212,6 +213,7 @@ public class AbnormalLocOrderController extends BaseController {
 
             vo.setAbnormalType(AbLocOrderTypeEnum.getDesc(vo.getAbnormalType()));
             vo.setOrderStatus(AbLocOrderStatusEnum.getDesc(vo.getOrderStatus()));
+            vo.setUrgencyLevel(AbLocOrderUrgencyLevelEnum.getDesc(vo.getUrgencyLevel()));
 
             return vo;
         });
