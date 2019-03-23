@@ -151,8 +151,13 @@ insert  into zc.zc_user value (
   1, "system","system",now(),now(),"n", "admin", "a66abb5684c45962d887564f08346e8d","15158092133","y","n","n"
 );
 
+
 insert into zc.zc_role value (
 	1, "system","system",now(),now(),"n", "admin","admin","admin"
+);
+
+insert into zc.zc_role value (
+	2, "system","system",now(),now(),"n", "worker","worker","worker"
 );
 
 insert into zc.zc_user_role_relation value (1, "system", "system", now(), now(), "n", 1, 1, "admin", null, null, "y");

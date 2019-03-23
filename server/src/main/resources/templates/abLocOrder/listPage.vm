@@ -3,6 +3,9 @@
 <link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.5.3/themes/color.css">
 
 <script type="text/javascript" src="/js/jquery-easyui-1.5.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/js/jquery.fileDownload.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/ab-loc-order-image-upload-style.css"/>
+
 
 <style type="text/css">
 
@@ -31,6 +34,11 @@
     .dl {
         float: left;
         margin-left: 30px;
+    }
+
+    .datagrid-row-selected {
+        background: #f2f2f2;
+        color: black;
     }
 
 </style>
@@ -74,34 +82,65 @@
             pageSize: 40,
             idField: 'id',
             columns: [[
-                {field: 'gmtCreateStr', title: '创建时间', width: 100},
-                {field: 'outBizOrderNO', title: '订单号', width: 80},
-                {field: 'outLocOrderNO', title: '物流单号', width: 80},
+                {field: 'gmtCreateStr', title: '创建时间'},
+                {field: 'outBizOrderNO', title: '订单号'},
+                {field: 'outLocOrderNO', title: '物流单号'},
                 {
-                    field: 'urgencyLevel', title: '紧急级别', width: 40, formatter: function (text) {
+                    field: 'urgencyLevel', title: '紧急级别', formatter: function (text) {
                         return urgencyMap[text];
                     }
                 }, {
-                    field: 'abnormalType', title: '异常类型', width: 80, formatter: function (text) {
+                    field: 'abnormalType', title: '异常类型', formatter: function (text) {
                         return abnormalMap[text];
                     }
-                }, {
-                    field: 'inputReporter', title: '记录人', width: 50
-                }, {
-                    field: 'processor', title: '处理人', width: 50
-                }, {
-                    field: 'orderStatus', title: '单据状态', width: 60, formatter: function (text) {
+                },
+                {field: 'inputReporter', title: '记录人'},
+                {field: 'processor', title: '处理人'},
+                {
+                    field: 'orderStatus', title: '单据状态', formatter: function (text) {
                         return orderStatusMap[text];
+                    }
+                }, {
+                    field: 'attachFileUrl', width: 120, title: '附件', align: "center", formatter: function (text, row) {
+                        var attach = '<table style="padding:0;width:100%">';
+                        if (row.attachFileUrl) {
+
+                            var endIndex = 0;
+
+                            for (var i in row.attachFileUrl) {
+
+                                if (i % 3 == 0) {
+                                    attach += '<tr>'
+                                    endIndex = i + 2;
+                                }
+
+                                var fileName = row.attachFileUrl[i];
+                                var index = i * 1 + 1;
+                                attach += '<td style="padding:3px"><a target="_blank" href="http://zc-ab-loc-order.oss-cn-hangzhou.aliyuncs.com/' + fileName + '">' + "附件" + index + '</a></td>'
+
+                                if (i == endIndex) {
+                                    attach += '</tr>'
+                                }
+                            }
+                        }
+                        attach += '</table>'
+                        return attach;
+                    }
+                }, {
+                    field: 'operate', width: 120, title: '操作', align: "center", formatter: function (text, row) {
+                        return "<span><a onclick='showUploadDialog(" + row.id + ")'>上传附件</a></span>";
                     }
                 }
             ]],
             queryParams: {
                 "_csrf": $("#_csrf").val(),
             },
-
             onBeforeLoad: function (params) {
                 params.currentPage = params.page;
                 params.pageSize = params.rows;
+            },
+            onDblClickRow: function () {
+                editAbLocOrder();
             }
         });
     })
@@ -165,8 +204,10 @@
             </td>
             <td><label>单据状态:</label></td>
             <td>
-                <select id="cc" name="searchOrderStatus" class="easyui-combobox" style="width:195px;" required="true"
+                <select id="searchOrderStatus" name="searchOrderStatus" class="easyui-combobox" style="width:195px;"
+                        required="true"
                         editable="false">
+                    <option value="">-</option>
                     <option value="WAIT_LOC_COMPANY_PROCESS">等待物流公司处理</option>
                     <option value="WAIT_LOC_COMPANY_CONFIRM">等待物流公司确认</option>
                     <option value="WAIT_TP_CONFIRM">等待TP确认</option>
@@ -175,7 +216,9 @@
                 </select>
             </td>
             <td colspan="2" style="text-align: center">
-                <button value="搜索" style="width: 150px; height: 30px" onclick="searchAbLocOrder()">搜索</button>
+                <button value="导出" style="width: 80px; height: 30px" onclick="exportAbLocOrder()">导出</button>
+                <button value="搜索" style="width: 80px; height: 30px; margin-left:5px" onclick="searchAbLocOrder()">搜索
+                </button>
             </td>
         </tr>
     </table>
@@ -185,17 +228,18 @@
 
     <table id="dg" title="异常物流单列表" class="easyui-datagrid data-table"></table>
 
-    <div id="toolbar">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="newAbLocOrder()">新增异常单</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-           onclick="editAbLocOrder()">查看/编辑异常单</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-           onclick="deleteAbLocOrder()">删除</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-tip" plain="true"
-           onclick="showOPLog()">操作日志</a>
+    <div style="display: none">
+        <div id="toolbar">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+               onclick="newAbLocOrder()">新增异常单</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+               onclick="editAbLocOrder()">查看/编辑异常单</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+               onclick="deleteAbLocOrder()">删除</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-tip" plain="true"
+               onclick="showOPLog()">操作日志</a>
+        </div>
     </div>
-
 </div>
 
 <div style="display: none">
@@ -283,30 +327,40 @@
                     <td colspan="3" style="padding: 3px 0"><input class="easyui-textbox" style="width: 580px;"
                                                                   name="memo" multiline="true"/></td>
                 </tr>
-
-            ##                <tr>
-            ##                    <td>附件:</td>
-            ##                    <td colspan="3" style="padding: 3px 0">
-            ##                        <input class="easyui-filebox" style="width:300px"
-            ##                               accept="image/gif,image/jp2,image/jpeg,image/png">
-            ##                    </td>
-            ##                </tr>
-
             </table>
         </form>
     </div>
 
-    <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveAbLocOrder()"
-           style="width:90px">Save</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-           onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    <div style="display: none">
+        <div id="dlg-buttons">
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveAbLocOrder()"
+               style="width:90px">Save</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+               onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+        </div>
     </div>
 </div>
 
 <div id="oplog" style="width:580px" class="easyui-dialog" closed="true">
     <table id="oplogDataTable" class="easyui-datagrid data-table"></table>
 </div>
+
+<div id="attach-manage" style="width:550px; display: none" class="easyui-dialog" closed="true">
+    <div style="padding: 20px">
+        <input type="hidden" id="currentEidtOrderId">
+        <div id="ossfile">你的浏览器不支持flash,Silverlight或者HTML5！</div>
+        <div id="container">
+            <a id="selectfiles" href="javascript:void(0);" class='btn'>选择文件</a>
+            <a id="postfiles" href="javascript:void(0);" class='btn'>开始上传</a>
+        </div>
+        <div id="console"></div>
+        <p>&nbsp;</p>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="/js/plupload-2.1.2/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="/js/ab-loc-order-image-upload.js"></script>
 
 <script type="text/javascript">
 
@@ -351,7 +405,7 @@
         var outLocOrderNO = $("#searcheOutLocOrderId").textbox('getValue');
         var processor = $("#searchProcessor").textbox('getValue');
         var processResult = $("#searchProcessResult").textbox('getValue');
-        var orderStatus = $("#searchOrderStatus").textbox('getValue');
+        var orderStatus = $("#searchOrderStatus").combobox('getValue');
         var createDateBeginStr = $("#searchCreateDateBegin").datetimebox('getValue');
         var createDateEndStr = $("#searchCreateDateEnd").datetimebox('getValue');
 
@@ -382,6 +436,52 @@
                 "createDateEnd": createDateEnd,
             }
         })
+    }
+
+    function exportAbLocOrder() {
+
+        var urgencyLevel = $("#seachUrgencyLevel").combobox('getValue');
+        var abnormalType = $("#searchAbnormalType").combobox('getValue');
+        var abnormalInfo = $("#searchAbnormalInfo").textbox('getValue');
+        var inputReporter = $("#searchInputReporter").textbox('getValue');
+        var outBizOrderNO = $("#searchOutBizOrderId").textbox('getValue');
+        var outLocOrderNO = $("#searcheOutLocOrderId").textbox('getValue');
+        var processor = $("#searchProcessor").textbox('getValue');
+        var processResult = $("#searchProcessResult").textbox('getValue');
+        var orderStatus = $("#searchOrderStatus").combobox('getValue');
+        var createDateBeginStr = $("#searchCreateDateBegin").datetimebox('getValue');
+        var createDateEndStr = $("#searchCreateDateEnd").datetimebox('getValue');
+
+        var createDateBegin;
+        var createDateEnd;
+
+        if (createDateBeginStr) {
+            createDateBegin = Date.parse(createDateBeginStr);
+        }
+
+        if (createDateEndStr) {
+            createDateEnd = Date.parse(createDateEndStr);
+        }
+
+        $.fileDownload("/abnormal/loc/order/exportAbLocOrder", {
+            data: {
+                "_csrf": $("#_csrf").val(),
+                "urgencyLevel": urgencyLevel,
+                "abnormalType": abnormalType,
+                "abnormalInfo": abnormalInfo,
+                "inputReporter": inputReporter,
+                "outBizOrderNO": outBizOrderNO,
+                "outLocOrderNO": outLocOrderNO,
+                "processor": processor,
+                "processResult": processResult,
+                "orderStatus": orderStatus,
+                "createDateBegin": createDateBegin,
+                "createDateEnd": createDateEnd,
+            },
+            failCallback: function (html) {
+                alert("导出失败，未知的异常。");
+            }
+        });
     }
 
     function editAbLocOrder() {
@@ -429,7 +529,6 @@
         }
     }
 
-
     function showOPLog() {
 
         var row = $('#dg').datagrid('getSelected');
@@ -457,7 +556,7 @@
                     {field: 'gmtCreateStr', title: '修改时间', width: 150},
                     {field: 'userName', title: '操作人', width: 100},
                     {
-                        field: 'statusBefore', title: '操作前状态', width: 150,  formatter: function (text) {
+                        field: 'statusBefore', title: '操作前状态', width: 150, formatter: function (text) {
                             return orderStatusMap[text];
                         }
                     },
@@ -469,8 +568,26 @@
                 ]]
             }).datagrid('reload');
 
-            $('#oplog').dialog({modal:true}).dialog('open').dialog('center').dialog('setTitle', '操作日志');
+            $('#oplog').dialog({modal: true}).dialog('open').dialog('center').dialog('setTitle', '操作日志');
         }
+    }
+
+    function showUploadDialog(orderId) {
+
+        if (!orderId) {
+            return;
+        }
+
+        $('#currentEidtOrderId').val(orderId);
+
+        $('#console').html("");
+        $('#ossfile').html("");
+
+        if (abLocAttachUploader.files && abLocAttachUploader.files.length > 0) {
+            abLocAttachUploader.splice(0, abLocAttachUploader.files.length)
+        }
+
+        $('#attach-manage').dialog({modal: true}).dialog('open').dialog('center').dialog('setTitle', '上传附件');
     }
 
 

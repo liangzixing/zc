@@ -1,6 +1,8 @@
 package com.zc.controller.ablocorder;
 
 import com.alibaba.fastjson.JSON;
+import com.zc.biz.logistics.domain.consts.AbLocOrderStatusEnum;
+import com.zc.biz.logistics.domain.consts.AbLocOrderTypeEnum;
 import com.zc.biz.logistics.domain.model.AblLocOrderOperateLog;
 import com.zc.biz.logistics.domain.model.AbnormalLocOrder;
 import com.zc.biz.logistics.service.AbLocOrderOperateLogReadService;
@@ -19,6 +21,7 @@ import com.zc.controller.dto.AjaxResult;
 import com.zc.controller.dto.GridAjaxResult;
 import com.zc.result.PagedResult;
 import com.zc.utils.DateUtil;
+import com.zc.utils.ListUtil;
 import com.zc.utils.NumberUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -83,6 +87,29 @@ public class AbnormalLocOrderController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping("/queryAttach")
+    public AjaxResult<List<String>> queryAttach(Long orderId) {
+        if (NumberUtil.isNotPositive(orderId)) {
+            return AjaxResult.unSuccess("ILLEGAL_PARAM");
+        }
+
+        try {
+
+            AbnormalLocOrder abnormalLocOrder = abnormalLocOrderReadService.queryById(orderId);
+
+            if (abnormalLocOrder == null) {
+                return AjaxResult.success(new ArrayList<>());
+            }
+
+            return AjaxResult.success(abnormalLocOrder.getAttachFileUrl());
+
+        } catch (Exception e) {
+            log.error("QUERY_ATTACH_ERROR|{}", orderId, e);
+            return AjaxResult.unSuccess(e.getMessage());
+        }
+    }
+
+    @ResponseBody
     @RequestMapping("/updateAbLocOrder")
     public AjaxResult<Boolean> updateAbLocOrder(AbLocOrderUpdateParamVO updateParamVO) {
         if (updateParamVO == null || NumberUtil.isNotPositive(updateParamVO.getId())) {
@@ -103,6 +130,23 @@ public class AbnormalLocOrderController extends BaseController {
 
         } catch (Exception e) {
             log.error("UPDATE_ABNORMAL_LOC_ORDER_ERROR|{}", JSON.toJSONString(updateParamVO), e);
+            return AjaxResult.unSuccess(e.getMessage());
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping("/uploadAttach")
+    public AjaxResult<Boolean> uploadAttach(Long orderId, String attachUrl) {
+        if (NumberUtil.isNotPositive(orderId) || StringUtils.isBlank(attachUrl)) {
+            return AjaxResult.unSuccess("ILLEGAL_PARAM");
+        }
+
+        try {
+
+            return AjaxResult.success(abnormalLocOrderWriteService.uploadAttach(orderId, attachUrl));
+
+        } catch (Exception e) {
+            log.error("UPLOAD_ABNORMAL_LOC_ORDER_ATTACH_ERROR|{}|{}", orderId, attachUrl, e);
             return AjaxResult.unSuccess(e.getMessage());
         }
     }
@@ -162,13 +206,24 @@ public class AbnormalLocOrderController extends BaseController {
 
         List<AbnormalLocOrder> orders = abnormalLocOrderReadService.batchQuery(param);
 
+        List<AbnormalLocOrderVO> vos = ListUtil.convert(orders, mo -> {
+            AbnormalLocOrderVO vo = new AbnormalLocOrderVO();
+            BeanUtils.copyProperties(mo, vo);
+
+            vo.setAbnormalType(AbLocOrderTypeEnum.getDesc(vo.getAbnormalType()));
+            vo.setOrderStatus(AbLocOrderStatusEnum.getDesc(vo.getOrderStatus()));
+
+            return vo;
+        });
+
         // 告诉浏览器用什么软件可以打开此文件
         response.setHeader("content-Type", "application/vnd.ms-excel");
         // 下载文件的默认名称
         response.setHeader("Content-Disposition",
             "attachment;filename= " + DateUtil.getCurrentDateStr() + "-abnormal-loc-order.xls");
+        response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 
-        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), AbnormalLocOrderVO.class, orders);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), AbnormalLocOrderVO.class, vos);
 
         workbook.write(response.getOutputStream());
     }

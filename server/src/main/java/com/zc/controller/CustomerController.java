@@ -54,7 +54,7 @@ public class CustomerController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/getById")
-    public AjaxResult<CustomerDTO> getById(Integer id) {
+    public AjaxResult<CustomerDTO> getById(Long id) {
         return AjaxResult.success(CustomerDTOConverter.toDTO(customerService.queryById(id)));
     }
 

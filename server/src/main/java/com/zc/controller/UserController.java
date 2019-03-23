@@ -50,7 +50,7 @@ public class UserController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/user/queryById")
-    public UserDTO queryById(Integer id) {
+    public UserDTO queryById(Long id) {
         return UserDTOConverter.toDTO(userService.getById(id));
     }
 
@@ -144,7 +144,7 @@ public class UserController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/user/resetPassWord")
-    public AjaxResult<Boolean> resetPassWord(Integer id, String oldPassword, String newPassword) {
+    public AjaxResult<Boolean> resetPassWord(Long id, String oldPassword, String newPassword) {
         if (NumberUtil.isNotPositive(id) || StringUtils.isBlank(oldPassword)) {
             return AjaxResult.unSuccess("ILLEGAL PARAM");
         }
@@ -158,7 +158,7 @@ public class UserController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/user/resetPassWordForAdmin")
-    public AjaxResult<Boolean> resetPassWordForAdmin(Integer id) {
+    public AjaxResult<Boolean> resetPassWordForAdmin(Long id) {
         if (NumberUtil.isNotPositive(id)) {
             return AjaxResult.unSuccess("ILLEGAL PARAM");
         }
@@ -170,7 +170,7 @@ public class UserController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/user/delete")
-    public AjaxResult<Boolean> deleteUser(Integer id) {
+    public AjaxResult<Boolean> deleteUser(Long id) {
         if (NumberUtil.isNotPositive(id)) {
             return AjaxResult.unSuccess("ILLEGAL PARAM");
         }

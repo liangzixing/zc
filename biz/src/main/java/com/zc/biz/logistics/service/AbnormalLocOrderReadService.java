@@ -12,4 +12,6 @@ public interface AbnormalLocOrderReadService {
 
     List<AbnormalLocOrder> batchQuery(AbnormalLocOrderQueryParam queryParam);
 
+    AbnormalLocOrder queryById(Long orderId);
+
 }

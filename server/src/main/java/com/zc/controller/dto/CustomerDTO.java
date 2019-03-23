@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class CustomerDTO {
 
-    private Integer id;
+    private Long id;
 
     private String company;
 
@@ -32,15 +32,15 @@ public class CustomerDTO {
 
     private String status;
 
-    private Integer balance;
+    private Long balance;
 
     private List<UserDTO> managers;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -108,11 +108,11 @@ public class CustomerDTO {
         this.status = status;
     }
 
-    public Integer getBalance() {
+    public Long getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(Long balance) {
         this.balance = balance;
     }
 

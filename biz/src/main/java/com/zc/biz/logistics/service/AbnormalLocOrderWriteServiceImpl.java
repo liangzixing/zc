@@ -139,10 +139,6 @@ public class AbnormalLocOrderWriteServiceImpl implements AbnormalLocOrderWriteSe
             oldOrderDO.setProcessResult(updateParam.getProcessResult());
         }
 
-        if (ListUtil.isNotBlank(updateParam.getAttachFileUrl())){
-            oldOrderDO.setAttachFileUrls(updateParam.getAttachFileUrl().stream().collect(Collectors.joining(",")));
-        }
-
         if (StringUtils.isNotBlank(updateParam.getMemo())){
             oldOrderDO.setMemo(updateParam.getMemo());
         }
@@ -192,5 +188,27 @@ public class AbnormalLocOrderWriteServiceImpl implements AbnormalLocOrderWriteSe
         DataObjectUtil.beforeDelete(record, operator);
 
         return abnormalLocOrderDOMapper.updateByExampleSelective(record, example) > 0;
+    }
+
+    @Override
+    public boolean uploadAttach(Long orderId, String attachUrl) {
+
+        if (NumberUtil.isNotPositive(orderId) || StringUtils.isBlank(attachUrl)){
+            throw new IllegalArgumentException("ILLEGAL_PARAM");
+        }
+
+        AbnormalLocOrderDO abnormalLocOrderDO = abnormalLocOrderDOMapper.selectByPrimaryKey(orderId);
+
+        if (abnormalLocOrderDO == null){
+            throw new IllegalArgumentException("CANNOT_FIND_RECORD_BY_ID");
+        }
+
+        if (StringUtils.isBlank(abnormalLocOrderDO.getAttachFileUrls())){
+            abnormalLocOrderDO.setAttachFileUrls(attachUrl);
+        } else {
+            abnormalLocOrderDO.setAttachFileUrls(abnormalLocOrderDO.getAttachFileUrls() + ";" + attachUrl );
+        }
+
+        return abnormalLocOrderDOMapper.updateByPrimaryKey(abnormalLocOrderDO) > 0;
     }
 }

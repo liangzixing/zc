@@ -11,4 +11,5 @@ public interface AbnormalLocOrderWriteService {
 
     boolean deleteUpdateOrder(Long orderId, String operator);
 
+    boolean uploadAttach(Long orderId, String attachUrl);
 }

@@ -12,7 +12,7 @@ package com.zc.controller.param;
  */
 public class CustomerEditDTO {
 
-    private Integer id;
+    private Long id;
 
     private String company;
 
@@ -30,11 +30,11 @@ public class CustomerEditDTO {
 
     private String account;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

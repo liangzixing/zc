@@ -10,6 +10,7 @@ import com.zc.biz.logistics.service.param.AbnormalLocOrderQueryParam;
 import com.zc.result.PagedResult;
 import com.zc.utils.DateUtil;
 import com.zc.utils.ListUtil;
+import com.zc.utils.NumberUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,7 @@ public class AbnormalLocOrderReadServiceImpl implements AbnormalLocOrderReadServ
         abnormalLocOrder.setMemo(orderDO.getMemo());
 
         abnormalLocOrder.setAttachFileUrl(StringUtils.isNotBlank(orderDO.getAttachFileUrls())
-            ? Arrays.asList(orderDO.getAttachFileUrls().split(",")) : new ArrayList<>());
+            ? Arrays.asList(orderDO.getAttachFileUrls().split(";")) : new ArrayList<>());
 
         return abnormalLocOrder;
     }
@@ -96,7 +97,7 @@ public class AbnormalLocOrderReadServiceImpl implements AbnormalLocOrderReadServ
         }
 
         if (StringUtils.isNotBlank(queryParam.getInputReporter())) {
-            criteria.andReporterEqualTo(queryParam.getInputReporter());
+            criteria.andReporterLike("%" + queryParam.getInputReporter() + "%");
         }
 
         if (StringUtils.isNotBlank(queryParam.getAbnormalType())) {
@@ -108,7 +109,7 @@ public class AbnormalLocOrderReadServiceImpl implements AbnormalLocOrderReadServ
         }
 
         if (StringUtils.isNotBlank(queryParam.getProcessor())) {
-            criteria.andProcessorEqualTo(queryParam.getProcessor());
+            criteria.andProcessorLike("%" + queryParam.getProcessor() + "%");
         }
 
         if (StringUtils.isNotBlank(queryParam.getProcessResult())) {
@@ -142,5 +143,21 @@ public class AbnormalLocOrderReadServiceImpl implements AbnormalLocOrderReadServ
         List<AbnormalLocOrderDO> result = abnormalLocOrderDOMapper.selectByExample(example);
 
         return ListUtil.convert(result, this::toModel);
+    }
+
+    @Override
+    public AbnormalLocOrder queryById(Long orderId) {
+        if (NumberUtil.isNotPositive(orderId)){
+            return null;
+        }
+
+
+        AbnormalLocOrderDO abnormalLocOrderDO = abnormalLocOrderDOMapper.selectByPrimaryKey(orderId);
+
+        if (abnormalLocOrderDO == null){
+            return null;
+        }
+
+        return toModel(abnormalLocOrderDO);
     }
 }

@@ -20,7 +20,7 @@ import org.jeecgframework.poi.excel.annotation.ExcelTarget;
 @ExcelTarget("customerTally")
 public class CustomerTallyDTO {
 
-    private Integer id;
+    private Long id;
 
 
     private String customerId;
@@ -68,11 +68,11 @@ public class CustomerTallyDTO {
 
     private String display;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
